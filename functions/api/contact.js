@@ -42,7 +42,7 @@ ${message}
       <body style="font-family: Arial; padding: 40px;">
         <h1>Danke, ${name}!</h1>
         <p>Deine Nachricht wurde erfolgreich gesendet.</p>
-        <a href="/">Zurück zur Startseite</a>
+        <a href="/">zur Startseite</a>
       </body>
     </html>
   `;
@@ -51,4 +51,5 @@ ${message}
     headers: { "Content-Type": "text/html" }
   });
 }
+
 
