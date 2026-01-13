@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tiep Vu Xuan – IAM Freelancer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    :root {
+        --bg: #f4f7fb;
+        --text: #222;
+        --primary: #0a2a43;
+        --accent: #4fa3d1;
+        --card-bg: white;
+    }
+
+    body.dark {
+        --bg: #0a0f14;
+        --text: #e6e6e6;
+        --primary: #4fa3d1;
+        --accent: #7cd3ff;
+        --card-bg: #111820;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+        background: var(--primary);
+        color: white;
+        padding: 60px 40px;
+        text-align: center;
+    }
+    header h1 {
+        font-size: 42px;
+        margin: 0;
+    }
+    header p {
+        font-size: 20px;
+        margin-top: 10px;
+        color: var(--accent);
+    }
+
+    .dark-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .intro {
+        max-width: 1100px;
+        margin: 40px auto;
+        display: flex;
+        gap: 40px;
+        padding: 0 20px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .intro img {
+        width: 260px;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 4px solid var(--primary);
+    }
+    .intro-text {
+        flex: 1;
+        min-width: 260px;
+    }
+    .intro-text h2 {
+        color: var(--primary);
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    section {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    h2 {
+        color: var(--primary);
+        border-left: 5px solid var(--accent);
+        padding-left: 10px;
+        margin-bottom: 15px;
+    }
+
+    .skills {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .skill-box {
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid var(--accent);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .skill-box:hover {
+        transform: translateY(-4px);
+    }
+
+    .job {
+        background: var(--card-bg);
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .job-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--primary);
+    }
+    .job-date {
+        color: var(--accent);
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .social {
+        margin-top: 20px;
+    }
+    .social a {
+        margin-right: 15px;
+        font-size: 22px;
+        text-decoration: none;
+        color: var(--primary);
+    }
+
+    .download-btn {
+        display: inline-block;
+        margin-top: 20px;
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    .contact-form {
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .contact-form label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+    }
+    .contact-form input, .contact-form textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+    .contact-form button {
+        margin-top: 20px;
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        background: var(--primary);
+        color: white;
+        margin-top: 40px;
+    }
+</style>
+</head>
+
+<body>
+
+<button class="dark-toggle" onclick="document.body.classList.toggle('dark')">
+    Dark Mode
+</button>
+
+<header>
+    <h1>Tiep Vu Xuan</h1>
+    <p>IAM‑Spezialist • Azure Entra ID • Active Directory • PowerShell Automation</p>
+</header>
+
+<div class="intro">
+    <img src="C:\Users\vuxua\Documents\TEST\8.PNG" alt="Foto von Tiep Vu Xuan">
+    <div class="intro-text">
+        <h2>Über mich</h2>
+        <p>
+            Ich bin IT‑Applikationsmanager & IAM‑Spezialist mit über 10 Jahren Erfahrung in 
+            Identity & Access Management, Active Directory, Azure Entra ID, Automatisierung 
+            und Applikationsbetrieb.
+        </p>
+
+        <div class="social">
+            <a href="https://www.linkedin.com/vuxuantiep" target="_blank">🔗 LinkedIn</a>
+            <a href="https://www.xing.com/vuxuantiep" target="_blank">💼 Xing</a>
+            <a href="https://github.com/vuxuantiep/tiep-iam-freelancer" target="_blank">🐙 GitHub</a>
+        </div>
+
+        <a class="download-btn" href="C:\Users\vuxua\Documents\TEST\Lebenslauf-TIEP.pdf" download>📄 Lebenslauf herunterladen</a>
+    </div>
+</div>
+
+<section>
+    <h2>Leistungen</h2>
+    <div class="skills">
+        <div class="skill-box"><h3>Identity & Access Management</h3><p>Azure Entra ID, AD‑Hardening, Rollenmodelle, Access Reviews, MFA, Conditional Access.</p></div>
+        <div class="skill-box"><h3>Active Directory & Hybrid Identity</h3><p>OU‑Struktur, GPO, Joiner‑Mover‑Leaver, AD‑Security, AAD Connect.</p></div>
+        <div class="skill-box"><h3>Automatisierung</h3><p>PowerShell‑Skripte, Provisionierung, Deployment‑Automationen.</p></div>
+        <div class="skill-box"><h3>Applikationsbetrieb</h3><p>EGVP, eKP, ELA, Fachanwendungen, 3rd‑Level‑Support.</p></div>
+        <div class="skill-box"><h3>Cloud & Infrastruktur</h3><p>Azure, AWS, Windows Server, Netzwerk & Security.</p></div>
+    </div>
+</section>
+
+<section>
+    <h2>Berufserfahrung</h2>
+
+    <div class="job">
+        <div class="job-title">IT‑Applikationsmanager & IAM‑Spezialist – adesso GmbH</div>
+        <div class="job-date">10/2023 – heute</div>
+        <p>Betrieb von Fachanwendungen, IAM‑Prozesse, Azure/AD‑Integration, PowerShell‑Automatisierung.</p>
+    </div>
+
+    <div class="job">
+        <div class="job-title">IT‑Systemadministrator – Landessozialgericht Hamburg</div>
+        <div class="job-date">10/2020 – 10/2023</div>
+        <p>Windows‑Server‑Administration, GPO, Berechtigungsmanagement, Endpoint Manager.</p>
+    </div>
+
+    <div class="job">
+        <div class="job-title">IT‑Techniker / System Engineer – Wärme Hamburg GmbH</div>
+        <div class="job-date">06/2019 – 03/2020</div>
+        <p>Rollout, SCCM, Asset‑Management, Onsite‑Support.</p>
+    </div>
+</section>
+
+<section>
+    <h2>Kontaktformular</h2>
+    <div class="contact-form">
+        <form action="/api/contact" method="POST">
+            <label>Name</label>
+            <input type="text" name="name" required>
+
+            <label>E-Mail</label>
+            <input type="email" name="email" required>
+
+            <label>Nachricht</label>
+            <textarea name="message" rows="6" required></textarea>
+
+            <button type="submit">Nachricht senden</button>
+        </form>
+    </div>
+</section>
+
+<footer>
+    © 2026 Tiep Vu Xuan – Freelancer IAM & IT‑Services
+</footer>
+
+</body>
+</html>
