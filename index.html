@@ -45,7 +45,54 @@
         margin-top: 10px;
         color: var(--accent);
     }
+    header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.28; /* leicht, subtil */
     
+        background-image:
+    
+            /* leichte Lichtpunkte */
+            radial-gradient(circle at 20% 30%, rgba(255,255,255,0.12) 0%, transparent 60%),
+            radial-gradient(circle at 70% 60%, rgba(255,255,255,0.10) 0%, transparent 70%),
+    
+            /* Identity-Flow + Symbole */
+            url("data:image/svg+xml,%3Csvg width='800' height='500' xmlns='http://www.w3.org/2000/svg'%3E
+                %3Cg stroke='%23ffffff22' stroke-width='1.4' fill='none'%3E
+    
+                %3C!-- Punkte --%3E
+                %3Ccircle cx='100' cy='140' r='4'/%3E
+                %3Ccircle cx='260' cy='80' r='4'/%3E
+                %3Ccircle cx='420' cy='200' r='4'/%3E
+                %3Ccircle cx='650' cy='120' r='4'/%3E
+    
+                %3C!-- Linien --%3E
+                %3Cline x1='100' y1='140' x2='260' y2='80'/%3E
+                %3Cline x1='260' y1='80' x2='420' y2='200'/%3E
+                %3Cline x1='420' y1='200' x2='650' y2='120'/%3E
+    
+                %3C!-- Cloud Symbol --%3E
+                %3Cpath d='M150 300c0-12 10-22 22-22 7 0 13 4 17 10 3-2 6-3 10-3 11 0 20 9 20 20s-9 20-20 20h-49c-9 0-15-6-15-15 0-7 6-13 12-14z' stroke='%23ffffff33'/%3E
+    
+                %3C!-- Schloss Symbol --%3E
+                %3Cpath d='M330 310v-12a12 12 0 0 1 24 0v12h12v32h-48v-32h12z' stroke='%23ffffff33'/%3E
+    
+                %3C!-- User Symbol --%3E
+                %3Ccircle cx='480' cy='300' r='10' stroke='%23ffffff33'/%3E
+                %3Cpath d='M455 340c4-10 12-15 25-15s21 5 25 15' stroke='%23ffffff33'/%3E
+    
+                %3C!-- Laptop Symbol --%3E
+                %3Crect x='600' y='290' width='50' height='28' rx='3' stroke='%23ffffff33'/%3E
+                %3Crect x='594' y='318' width='62' height='8' rx='3' stroke='%23ffffff33'/%3E
+    
+                %3C/g%3E
+            %3C/svg%3E");
+    
+        background-size: cover;
+    }
+
     .dark-toggle {
         position: fixed;
         top: 20px;
@@ -452,6 +499,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
