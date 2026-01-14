@@ -190,9 +190,58 @@
         color: white;
         margin-top: 40px;
     }
+
+    #assistant {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+    }
+    
+    #assistant-icon {
+        font-size: 40px;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    #assistant-window {
+        display: none;
+        width: 260px;
+        background: var(--card-bg);
+        border: 2px solid var(--primary);
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    #assistant-messages {
+        height: 180px;
+        overflow-y: auto;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    #assistant-input {
+        width: 100%;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
 </style>
 </head>
 
+    <div id="assistant">
+    <div id="assistant-icon">📎</div>
+
+    <div id="assistant-window">
+        <div id="assistant-messages"></div>
+
+        <input id="assistant-input" type="text" placeholder="Frag mich etwas...">
+    </div>
+    </div>
+    
 <body>
 
 <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">
@@ -284,6 +333,44 @@
 
 </body>
 </html>
+
+<script>
+const icon = document.getElementById("assistant-icon");
+const windowBox = document.getElementById("assistant-window");
+const input = document.getElementById("assistant-input");
+const messages = document.getElementById("assistant-messages");
+
+icon.onclick = () => {
+    windowBox.style.display = windowBox.style.display === "block" ? "none" : "block";
+};
+
+input.addEventListener("keypress", function(e) {
+    if (e.key === "Enter" && input.value.trim() !== "") {
+        const userText = input.value;
+        addMessage("Du", userText);
+
+        // einfache KI-Antworten
+        let reply = "Ich bin noch klein, aber ich lerne schnell!";
+
+        if (userText.includes("Hallo")) reply = "Hallo Tiep! Wie kann ich dir helfen?";
+        if (userText.includes("IAM")) reply = "IAM ist genau dein Spezialgebiet — starke Sache!";
+        if (userText.includes("Azure")) reply = "Azure Entra ID? Da bist du Profi!";
+        if (userText.includes("Kontakt")) reply = "Du kannst mich jederzeit fragen — ich bin immer da.";
+
+        addMessage("Assistent", reply);
+
+        input.value = "";
+    }
+});
+
+function addMessage(sender, text) {
+    const div = document.createElement("div");
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+}
+</script>
+
 
 
 
