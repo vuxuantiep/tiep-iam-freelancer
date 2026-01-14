@@ -191,6 +191,37 @@
         margin-top: 40px;
     }
 
+    #certifications {
+      padding: 40px 20px;
+      background: #f5f5f5;
+      text-align: center;
+    }
+    
+    #certifications h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    .cert-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .cert-grid img {
+      max-width: 160px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+    
+    .cert-grid img:hover {
+      transform: scale(1.05);
+    }
+
     /* Kontaktformular-Optimierung */
     form {
        background: white; border-radius: 8px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);
@@ -340,6 +371,18 @@
     </div>
 </section>
 
+<section id="certifications">
+  <h2>Zertifikate & Qualifikationen</h2>
+  <div class="cert-grid">
+    <img src="images/aws-cloud-practitioner.png" alt="AWS Certified Cloud Practitioner">
+    <img src="images/mcsa-2012.png" alt="Microsoft MCSA Windows Server 2012">
+    <img src="images/mcsa-2016.png" alt="Microsoft MCSA Windows Server 2016">
+    <img src="images/exam-networking.png" alt="Microsoft Exam Networking">
+    <img src="images/exam-identity.png" alt="Microsoft Exam Identity">
+    <img src="images/exam-compute.png" alt="Microsoft Exam Compute">
+  </div>
+</section>
+ 
 <section>
     <h2>Kontaktformular</h2>
     <div class="contact-form">
@@ -402,6 +445,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
