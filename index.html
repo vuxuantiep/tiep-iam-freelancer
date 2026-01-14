@@ -35,26 +35,17 @@
         color: white;
         padding: 60px 40px;
         text-align: center;
-        position: relative;   /* wichtig für das Overlay */
-        overflow: hidden;     /* verhindert Überlauf */
     }
-    header .container {
-        display: flex;
-        align-items: center;
-        gap: 40px;
-    }
-
     header h1 {
         font-size: 42px;
         margin: 0;
     }
-    
     header p {
         font-size: 20px;
         margin-top: 10px;
         color: var(--accent);
     }
-    
+
     .dark-toggle {
         position: fixed;
         top: 20px;
@@ -77,7 +68,7 @@
         flex-wrap: wrap;
     }
     .intro img {
-        width: 18px;
+        width: 260px;
         height: auto;
         object-fit: contain;
         border-radius: 0px;
@@ -307,8 +298,8 @@
 </head>
 
     <div id="assistant">
-        <div id="assistant-icon">📎 </div> 
-        
+    <div id="assistant-icon">📎</div>
+
     <div id="assistant-window">
         <div id="assistant-messages"></div>
 
@@ -323,20 +314,17 @@
 </button>
 
 <header>
-    <div class="container">
-        <picture>
-          <source srcset="/8-transparent.webp" type="image/webp">
-          <img src="/8-transparent.png" alt="Tiep Vu Xuan" width="260" height="260" loading="lazy">
-        </picture>
-        <div>
-            <h1>Tiep Vu Xuan</h1>
-            <p>IAM Freelancer & Cloud Spezialist</p>
-        </div>
-    </div>
+    
+    <h1>Tiep Vu Xuan</h1>
+    <p>IAM Freelancer & Cloud Spezialist</p>
+    
 </header>
 
 <div class="intro">
-   
+    <picture>
+      <source srcset="/8-transparent.webp" type="image/webp">
+      <img src="/8-transparent.png" alt="Tiep Vu Xuan" width="260" height="260" loading="lazy">
+    </picture>
     <div class="intro-text">
         <h2>Über mich</h2>
         <p>
@@ -464,18 +452,6 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
