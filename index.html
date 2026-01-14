@@ -45,7 +45,14 @@
         margin-top: 10px;
         color: var(--accent);
     }
-
+    header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: url('/images/IAM-Condition-Access.png') no-repeat center/cover;
+        opacity: 0.12; /* subtil, dunkel, flach */
+    }
     .dark-toggle {
         position: fixed;
         top: 20px;
@@ -452,6 +459,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
