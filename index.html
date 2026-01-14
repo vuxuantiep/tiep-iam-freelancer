@@ -353,10 +353,10 @@ input.addEventListener("keypress", function(e) {
         // einfache KI-Antworten
         let reply = "Ich bin noch klein, aber ich lerne schnell!";
 
-        if (userText.includes("Hallo")) reply = "Hallo Tiep! Wie kann ich dir helfen?";
-        if (userText.includes("IAM")) reply = "IAM ist genau dein Spezialgebiet — starke Sache!";
-        if (userText.includes("Azure")) reply = "Azure Entra ID? Da bist du Profi!";
-        if (userText.includes("Kontakt")) reply = "Du kannst mich jederzeit fragen — ich bin immer da.";
+        if (userText.includes("Hallo")) reply = "Hallo! Wie kann ich dir helfen?";
+        if (userText.includes("IAM")) reply = "IAM ist genau Spezialgebiet von Tiep — starke Sache!";
+        if (userText.includes("Azure")) reply = "Azure Entra ID? Da ist Tiep der Profi!";
+        if (userText.includes("Kontakt")) reply = "Du kannst mich jederzeit fragen — ich bin immer da. Oder du kannst Tiep auch direkt unter die Tel. Nr.: 01781868683 erreichen :)";
 
         addMessage("Assistent", reply);
 
@@ -371,6 +371,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
