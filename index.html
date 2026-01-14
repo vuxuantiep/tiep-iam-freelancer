@@ -229,6 +229,77 @@
         border-radius: 6px;
         border: 1px solid #ccc;
     }
+    #clippy {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Clippy Icon Animation */
+    #clippy-icon {
+        font-size: 45px;
+        cursor: pointer;
+        user-select: none;
+        animation: clippyBounce 2s infinite ease-in-out, clippyWiggle 3s infinite ease-in-out;
+    }
+    
+    /* sanftes Hüpfen */
+    @keyframes clippyBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+    
+    /* leichtes Wackeln */
+    @keyframes clippyWiggle {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(6deg); }
+        50% { transform: rotate(0deg); }
+        75% { transform: rotate(-6deg); }
+        100% { transform: rotate(0deg); }
+    }
+    
+    /* Chatfenster */
+    #clippy-window {
+        display: none;
+        width: 280px;
+        background: var(--card-bg);
+        border: 2px solid var(--primary);
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    /* Clippy ASCII blinzelt */
+    #clippy-avatar {
+        font-size: 12px;
+        line-height: 14px;
+        margin: 0 0 10px 0;
+        animation: clippyBlink 4s infinite;
+    }
+    
+    @keyframes clippyBlink {
+        0%, 90%, 100% { opacity: 1; }
+        92%, 94% { opacity: 0; }
+    }
+    
+    /* Chatbereich */
+    #clippy-messages {
+        height: 150px;
+        overflow-y: auto;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    #clippy-input {
+        width: 100%;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
 </style>
 </head>
 
@@ -331,6 +402,25 @@
     © 2026 Tiep Vu Xuan – Freelancer IAM & IT‑Services
 </footer>
 
+<div id="clippy">
+    <div id="clippy-icon">📎</div>
+
+    <div id="clippy-window">
+        <pre id="clippy-avatar">
+   __
+  /  \
+  |  |
+  |  | 
+  \__/ 
+   ||
+        </pre>
+
+        <div id="clippy-messages"></div>
+
+        <input id="clippy-input" type="text" placeholder="Frag Clippy etwas...">
+    </div>
+</div>
+    
 </body>
 </html>
 
@@ -371,6 +461,42 @@ function addMessage(sender, text) {
 }
 </script>
 
+<script>
+const clippyIcon = document.getElementById("clippy-icon");
+const clippyWindow = document.getElementById("clippy-window");
+const clippyInput = document.getElementById("clippy-input");
+const clippyMessages = document.getElementById("clippy-messages");
+
+clippyIcon.onclick = () => {
+    clippyWindow.style.display = clippyWindow.style.display === "block" ? "none" : "block";
+};
+
+clippyInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter" && clippyInput.value.trim() !== "") {
+        const userText = clippyInput.value;
+        addClippyMessage("Du", userText);
+
+        let reply = "Ich bin Clippy! Ich helfe dir gerne weiter.";
+
+        if (userText.includes("Hallo")) reply = "Hallo! Ich bin Clippy, dein virtueller Assistent.";
+        if (userText.includes("IAM")) reply = "IAM? Da bist du der Profi, Tiep!";
+        if (userText.includes("Azure")) reply = "Azure Entra ID? Das ist genau dein Ding!";
+        if (userText.includes("Lebenslauf")) reply = "Dein Lebenslauf sieht schon sehr stark aus!";
+        if (userText.includes("Kontakt")) reply = "Du kannst mich jederzeit fragen.";
+
+        addClippyMessage("Clippy", reply);
+
+        clippyInput.value = "";
+    }
+});
+
+function addClippyMessage(sender, text) {
+    const div = document.createElement("div");
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    clippyMessages.appendChild(div);
+    clippyMessages.scrollTop = clippyMessages.scrollHeight;
+}
+</script>
 
 
 
