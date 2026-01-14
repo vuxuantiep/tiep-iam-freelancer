@@ -191,18 +191,16 @@
         margin-top: 40px;
     }
 
-    #certifications {
-      padding: 20px;
-      background: #f5f5f5;
-      text-align: left;
+    #certifications { 
+       padding-top: 20px; /* vorher vermutlich 40–60px */ 
+       padding-bottom: 20px; 
+       margin-top: 0; /* überschreibt zu große Abstände */ 
+    } 
+    #certifications h2 { 
+        margin-top: 0;                                                                                                                                                              
+        margin-bottom: 20px;
+        color: #333;
     }
-    
-    #certifications h2 {
-      font-size: 24px;
-      margin-bottom: 30px;
-      color: #333;
-    }
-    
     .cert-grid {
       display: flex;
       flex-wrap: wrap;
@@ -446,6 +444,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
