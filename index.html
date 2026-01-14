@@ -59,6 +59,27 @@
         background: url('/images/die_recht.png') no-repeat right;
         opacity: 0.08; /* subtil, dunkel, flach */
     }
+    .header-logo img {
+        width: 120px;   /* kannst du anpassen */
+        height: auto;
+    }
+    .header-inner {
+        display: flex;
+        align-items: center;
+        gap: 30px; /* Abstand zwischen Logo und Text */
+    }
+    @media (max-width: 768px) {
+        .header-inner {
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+        }
+    
+        .header-logo img {
+            width: 100px;
+        }
+    }
+
     .dark-toggle {
         position: fixed;
         top: 20px;
@@ -327,12 +348,15 @@
 </button>
 
 <header>
-    <picture>
+  <div class="header-inner">
+    <picture class="header-logo">
       <img src="/images/iam-icon-10.png" alt="logo" width="180" height="180" loading="lazy">
     </picture>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <h1>Tiep Vu Xuan</h1>
-    <p>IAM‑Spezialist & Applikationsmanager</p>
+    <div class="header-text">
+      <h1>Tiep Vu Xuan</h1>
+      <p>IAM‑Spezialist & Applikationsmanager</p>
+    </div>
+  </div>
 </header>
 
 <div class="intro">
@@ -467,6 +491,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
