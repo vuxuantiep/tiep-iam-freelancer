@@ -302,7 +302,25 @@
 </head>
 
     <div id="assistant">
-    <div id="assistant-icon">📎</div>
+        <!-- Körper <div id="assistant-icon">📎 </div> */ --> 
+        <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <!-- Körper -->
+          <rect x="12" y="26" width="40" height="32" rx="6" fill="#f2c94c" stroke="#333" stroke-width="3"/>
+        
+          <!-- Bügel -->
+          <path d="M20 26v-6a12 12 0 0 1 24 0v6" fill="none" stroke="#333" stroke-width="3"/>
+        
+          <!-- Augen -->
+          <circle cx="26" cy="40" r="3" fill="#333"/>
+          <circle cx="38" cy="40" r="3" fill="#333"/>
+        
+          <!-- Lächeln -->
+          <path d="M26 46 Q32 52 38 46" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+        
+          <!-- Schlüsselloch (optional) -->
+          <circle cx="32" cy="34" r="3" fill="#333"/>
+          <rect x="30" y="34" width="4" height="8" rx="2" fill="#333"/>
+        </svg>
 
     <div id="assistant-window">
         <div id="assistant-messages"></div>
@@ -318,17 +336,18 @@
 </button>
 
 <header>
-    
+
+    <picture>
+      <source srcset="/8-transparent.webp" type="image/webp">
+      <img src="/8-transparent.png" alt="Tiep Vu Xuan" width="260" height="260" loading="lazy">
+    </picture>
     <h1>Tiep Vu Xuan</h1>
     <p>IAM Freelancer & Cloud Spezialist</p>
     
 </header>
 
 <div class="intro">
-    <picture>
-      <source srcset="/8-transparent.webp" type="image/webp">
-      <img src="/8-transparent.png" alt="Tiep Vu Xuan" width="260" height="260" loading="lazy">
-    </picture>
+   
     <div class="intro-text">
         <h2>Über mich</h2>
         <p>
@@ -456,6 +475,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
