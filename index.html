@@ -64,9 +64,11 @@
         height: auto;
     }
     .header-inner {
-        display: flex;
-        align-items: center;
-        gap: 30px; /* Abstand zwischen Logo und Text */
+        display: flex; 
+        flex-direction: column; /* untereinander statt nebeneinander */ 
+        align-items: center; /* horizontal zentrieren */ 
+        text-align: center; /* Text zentrieren */ 
+        gap: 20px; /* Abstand zwischen Logo und Text */
     }
     @media (max-width: 768px) {
         .header-inner {
@@ -491,6 +493,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
