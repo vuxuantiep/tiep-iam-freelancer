@@ -60,14 +60,14 @@
         opacity: 0.08; /* subtil, dunkel, flach */
     }
     .header-logo img {
-        width: 120px;   /* kannst du anpassen */
+        width: 80px;   /* kannst du anpassen */
         height: auto;
     }
     .header-inner {
         display: flex;
         flex-direction: row;     /* nebeneinander */
         align-items: center;     /* vertikal zentriert */
-        justify-content: center; /* horizontal zentriert */
+        justify-content: left; /* horizontal zentriert */
         text-align: left;        /* Text bleibt linksbündig */
         gap: 20px;               /* Abstand zwischen Logo und Text */
     }
@@ -354,7 +354,7 @@
 <header>
   <div class="header-inner">
     <picture class="header-logo">
-      <img src="/images/schutzschild-2.png" alt="logo" width="100" height="100" loading="lazy">
+      <img src="/images/schutzschild-2.png" alt="logo" width="80" height="80" loading="lazy">
     </picture>
     <div class="header-text">
       <h1>Tiep Vu Xuan</h1>
@@ -495,6 +495,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
