@@ -31,6 +31,9 @@
     }
 
     header {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
         background: var(--primary);
         color: white;
         padding: 40px 20px;
@@ -44,6 +47,8 @@
         font-family: 'Inter', sans-serif;
         font-size: 30px;
         margin: 0;
+        justify-self: center; 
+        text-align: center;
     }
     header p {
         font-family: 'Inter', sans-serif;
@@ -61,29 +66,26 @@
         opacity: 0.12; /* subtil, dunkel, flach */
     }
     .header-logo img {
-        width: 80px;   /* kannst du anpassen */
+        width: 70px;   /* kannst du anpassen */
         height: auto;
+        opacity: 0.15; /* 0 = unsichtbar, 1 = voll sichtbar */
     }
     .header-inner {
-        display: flex;
-        flex-direction: row;     /* nebeneinander */
-        align-items: center;     /* vertikal zentriert */
-        justify-content: left; /* horizontal zentriert */
-        text-align: left;        /* Text bleibt linksbündig */
-        gap: 20px;               /* Abstand zwischen Logo und Text */
+        display: grid; 
+        grid-template-columns: 1fr auto 1fr; 
+        align-items: center;
     }
 
     @media (max-width: 768px) {
         .header-inner {
-            flex-direction: column;
-            text-align: center;
+           grid-template-columns: 1fr;
             gap: 20px;
         }
-    
         .header-logo img {
-            width: 100px;
+            justify-self: center;
         }
     }
+    .header-right { justify-self: end; }
 
     .dark-toggle {
         position: fixed;
@@ -355,12 +357,15 @@
 <header>
   <div class="header-inner">
     <picture class="header-logo">
-      <img src="/images/schutzschild-2.png" alt="logo" width="80" height="80" loading="lazy">
+      <img src="/images/schutzschild-2.png" alt="logo" width="50" height="50" loading="lazy">
     </picture>
+  
     <div class="header-text">
       <h1>Tiep Vu Xuan</h1>
       <p>IAM‑Spezialist u. Applikationsmanager</p>
     </div>
+      
+    <div class="header-right"></div>
   </div>
 </header>
 
@@ -497,6 +502,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
