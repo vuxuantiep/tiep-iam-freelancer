@@ -68,7 +68,9 @@
     .header-text {
         justify-self: center;
         text-align: center;
+        position: relative;
     }
+    .header-logo { position: absolute; left: 20px; top: 20px; }
     .header-logo img {
         width: 70px;   /* kannst du anpassen */
         height: auto;
@@ -87,6 +89,7 @@
         }
         .header-logo img {
             justify-self: center;
+            width: 50px;
         }
     }
     .header-right { justify-self: end; }
@@ -504,6 +507,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
