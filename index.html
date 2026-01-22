@@ -207,7 +207,47 @@
       border-radius: 4px;
       font-weight: bold;
     }
-
+    /* Floating Screens – Apple Style */
+    .app-screens {
+      position: relative;
+      width: 360px;
+      margin: 2rem auto;
+      perspective: 1200px;
+    }
+    
+    .app-screens .screen {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      position: absolute;
+      left: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+    
+    /* Vorderstes Bild */
+    .screen-front {
+      z-index: 3;
+      transform: translateY(0) scale(1);
+    }
+    
+    /* Mittleres Bild */
+    .screen-middle {
+      z-index: 2;
+      transform: translateY(25px) scale(0.96);
+      opacity: 0.9;
+    }
+    
+    /* Hinterstes Bild */
+    .screen-back {
+      z-index: 1;
+      transform: translateY(50px) scale(0.92);
+      opacity: 0.8;
+    }
+    
+    /* Hover Effekt – optional */
+    .app-screens:hover .screen-front {
+      transform: translateY(-10px) scale(1.02);
+    }
 
     .job {
         background: var(--card-bg);
@@ -502,8 +542,10 @@
       </ul>
       <a href="https://app.itiep.de" class="cta-button">ImmoManager jetzt starten</a>
     </div>
-    <div class="app-image">
-      <img src="images/immo-preview.png" alt="ImmoManager App Vorschau">
+    <div class="app-screens">
+      <img src="images/immo-preview.png" alt="ImmoManager Screenshot 1" class="screen screen-front">
+      <img src="images/immo-preview-1.png" alt="ImmoManager Screenshot 2" class="screen screen-middle">
+      <img src="images/immo-preview-2.png" alt="ImmoManager Screenshot 3" class="screen screen-back">
     </div>
   </div>
 </section>
@@ -605,6 +647,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
