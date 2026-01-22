@@ -289,25 +289,44 @@
       transform: scale(1.03);
     }
     /* Screenshot-Reihe – mittig und kompakt */
-    /* Vertikale Screenshot-Spalte */
-    .screenshot-row {
+    /* Horizontaler Katalog-Fächer */
+    .screenshot-catalog {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 1.5rem;
+      gap: 0; /* Bilder überlappen leicht */
       margin: 2rem auto;
-      max-width: 360px;
+      position: relative;
     }
     
-    .screenshot-row img {
-      width: 100%;
+    .catalog-img {
+      width: 220px;
       border-radius: 10px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, z-index 0.3s ease;
+      position: relative;
     }
     
-    .screenshot-row img:hover {
-      transform: scale(1.03);
+    /* Leichte Überlappung */
+    .img-left {
+      transform: translateX(40px) rotate(-3deg);
+      z-index: 1;
+    }
+    
+    .img-center {
+      transform: translateX(0) rotate(0deg);
+      z-index: 3;
+    }
+    
+    .img-right {
+      transform: translateX(-40px) rotate(3deg);
+      z-index: 2;
+    }
+    
+    /* Hover-Effekt: Bild tritt nach vorne */
+    .catalog-img:hover {
+      transform: scale(1.05);
+      z-index: 10;
     }
 
     .job {
@@ -603,10 +622,10 @@
       </ul>
       <a href="https://app.itiep.de" class="cta-button">ImmoManager jetzt starten</a>
     </div>
-    <div class="screenshot-row">
-      <img src="images/immo-preview.png" alt="Screenshot 1">
-      <img src="images/immo-preview-1.png" alt="Screenshot 2">
-      <img src="images/immo-preview-2.png" alt="Screenshot 3">
+    <div class="screenshot-catalog">
+      <img src="images/immo-preview.png" alt="Screenshot 1" class="catalog-img img-left">
+      <img src="images/immo-preview-1.png" alt="Screenshot 2" class="catalog-img img-center">
+      <img src="images/immo-preview-2.png" alt="Screenshot 3" class="catalog-img img-right">
     </div>
   </div>
 </section>
@@ -708,6 +727,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
