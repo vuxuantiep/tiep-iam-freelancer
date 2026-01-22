@@ -171,43 +171,35 @@
         transform: translateY(-4px);
     }
     
-    .app-section {
-      max-width: 700px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    #meine-app {
+      margin-top: 2rem;
     }
     
-    .app-section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      text-align: center;
+    .app-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: flex-start;
     }
     
-    .app-section ul {
-      list-style: none;
-      padding: 0;
+    .app-text {
+      flex: 1 1 300px;
     }
     
-    .app-section ul li {
-      margin-bottom: 0.5rem;
-      padding-left: 1.2rem;
-      position: relative;
+    .app-image {
+      flex: 1 1 300px;
+      max-width: 400px;
     }
     
-    .app-section ul li::before {
-      content: "✔";
-      position: absolute;
-      left: 0;
-      color: #0078d4;
+    .app-image img {
+      width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
     
     .cta-button {
-      display: block;
-      width: fit-content;
-      margin: 1.5rem auto 0;
+      display: inline-block;
+      margin-top: 1rem;
       padding: 0.6rem 1.2rem;
       background-color: #0078d4;
       color: white;
@@ -215,6 +207,7 @@
       border-radius: 4px;
       font-weight: bold;
     }
+
 
     .job {
         background: var(--card-bg);
@@ -497,15 +490,22 @@
     </div>
 </section>
 
-<section id="meine-app" class="app-section">
+<section id="meine-app">
   <h2>Meine App</h2>
-  <p><strong>ImmoManager</strong> – die smarte SaaS-Lösung für Vermieter & Immobilieninvestoren.</p>
-  <ul>
-    <li>✔ Mietverwaltung und Objektübersicht auf einen Blick</li>
-    <li>✔ Automatisierte Dokumentenerstellung & Kommunikation</li>
-    <li>✔ Cloudbasiert, sicher & mobil nutzbar</li>
-  </ul>
-  <a href="https://app.itiep.de" class="cta-button">ImmoManager jetzt starten</a>
+  <div class="app-content">
+    <div class="app-text">
+      <p><strong>ImmoManager</strong> – die smarte SaaS-Lösung für Vermieter & Immobilieninvestoren.</p>
+      <ul>
+        <li>✔ Mietverwaltung und Objektübersicht auf einen Blick</li>
+        <li>✔ Automatisierte Dokumentenerstellung & Kommunikation</li>
+        <li>✔ Cloudbasiert, sicher & mobil nutzbar</li>
+      </ul>
+      <a href="https://app.itiep.de" class="cta-button">ImmoManager jetzt starten</a>
+    </div>
+    <div class="app-image">
+      <img src="images/immo-manager-preview.png" alt="ImmoManager App Vorschau">
+    </div>
+  </div>
 </section>
 
 <section>
@@ -605,6 +605,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
