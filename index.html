@@ -248,7 +248,47 @@
     .app-screens:hover .screen-front {
       transform: translateY(-10px) scale(1.02);
     }
-
+    /* Fächer-Stapel – Variante 2 */
+    .app-fan {
+      position: relative;
+      width: 360px;
+      height: 260px;
+      margin: 2rem auto;
+    }
+    
+    .fan-img {
+      position: absolute;
+      width: 70%;
+      top: 0;
+      left: 15%;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    /* Linkes Bild */
+    .img-left {
+      transform: rotate(-8deg) translateX(-40px);
+      z-index: 1;
+    }
+    
+    /* Mittleres Bild */
+    .img-center {
+      transform: rotate(0deg);
+      z-index: 3;
+    }
+    
+    /* Rechtes Bild */
+    .img-right {
+      transform: rotate(8deg) translateX(40px);
+      z-index: 2;
+    }
+    
+    /* Hover-Effekt (optional, aber sehr edel) */
+    .app-fan:hover .img-center {
+      transform: scale(1.03);
+    }
+    
     .job {
         background: var(--card-bg);
         padding: 20px;
@@ -542,10 +582,10 @@
       </ul>
       <a href="https://app.itiep.de" class="cta-button">ImmoManager jetzt starten</a>
     </div>
-    <div class="app-screens">
-      <img src="images/immo-preview.png" alt="ImmoManager Screenshot 1" class="screen screen-front">
-      <img src="images/immo-preview-1.png" alt="ImmoManager Screenshot 2" class="screen screen-middle">
-      <img src="images/immo-preview-2.png" alt="ImmoManager Screenshot 3" class="screen screen-back">
+    <div class="app-fan">
+      <img src="images/immo-preview.png" alt="Screenshot 1" class="fan-img img-left">
+      <img src="images/immo-preview-1.png" alt="Screenshot 2" class="fan-img img-center">
+      <img src="images/immo-preview-2.png" alt="Screenshot 3" class="fan-img img-right">
     </div>
   </div>
 </section>
@@ -647,6 +687,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
