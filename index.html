@@ -289,18 +289,18 @@
       transform: scale(1.03);
     }
     /* Screenshot-Reihe – mittig und kompakt */
+    /* Vertikale Screenshot-Spalte */
     .screenshot-row {
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
       gap: 1.5rem;
       margin: 2rem auto;
-      max-width: 100%;
-      flex-wrap: wrap;
+      max-width: 360px;
     }
     
     .screenshot-row img {
-      width: 200px;
+      width: 100%;
       border-radius: 10px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       transition: transform 0.3s ease;
@@ -708,6 +708,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
