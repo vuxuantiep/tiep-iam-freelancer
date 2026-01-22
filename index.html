@@ -329,6 +329,27 @@
       z-index: 10;
     }
 
+    /* Globale Listen-Umstellung: Punkt → Häkchen */
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    ul li {
+      position: relative;
+      padding-left: 1.6rem;
+      margin-bottom: 0.6rem;
+    }
+    
+    ul li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #0078d4; /* Azure-Blau */
+      font-weight: bold;
+    }
+
     .job {
         background: var(--card-bg);
         padding: 20px;
@@ -727,6 +748,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
