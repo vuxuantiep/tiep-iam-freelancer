@@ -288,7 +288,43 @@
     .app-fan:hover .img-center {
       transform: scale(1.03);
     }
+    /* Variante 1 – Stacked Cards */
+    .screenshot-stack {
+      position: relative;
+      width: 320px; /* kannst du anpassen */
+      margin: 2rem auto;
+    }
     
+    .screenshot-stack img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      position: absolute;
+      left: 0;
+      transition: transform 0.3s ease;
+    }
+    
+    /* Reihenfolge und Versatz */
+    .screenshot-stack img:nth-child(1) {
+      top: 0;
+      z-index: 3;
+    }
+    
+    .screenshot-stack img:nth-child(2) {
+      top: 20px;
+      z-index: 2;
+    }
+    
+    .screenshot-stack img:nth-child(3) {
+      top: 40px;
+      z-index: 1;
+    }
+    
+    /* Optionaler Hover-Effekt */
+    .screenshot-stack:hover img:nth-child(1) {
+      transform: translateY(-5px);
+    }
+
     .job {
         background: var(--card-bg);
         padding: 20px;
@@ -582,10 +618,10 @@
       </ul>
       <a href="https://app.itiep.de" class="cta-button">ImmoManager jetzt starten</a>
     </div>
-    <div class="app-fan">
-      <img src="images/immo-preview.png" alt="Screenshot 1" class="fan-img img-left">
-      <img src="images/immo-preview-1.png" alt="Screenshot 2" class="fan-img img-center">
-      <img src="images/immo-preview-2.png" alt="Screenshot 3" class="fan-img img-right">
+    <div class="screenshot-stack">
+      <img src="images/immo-preview.png" alt="Screenshot 1">
+      <img src="images/immo-preview-1.png" alt="Screenshot 2">
+      <img src="images/immo-preview-2.png" alt="Screenshot 3">
     </div>
   </div>
 </section>
@@ -687,6 +723,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
