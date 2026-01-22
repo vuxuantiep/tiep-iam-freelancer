@@ -172,8 +172,10 @@
     }
     
     .app-section {
-      background-color: #f9f9f9;
+      max-width: 700px;
+      margin: 2rem auto;
       padding: 2rem;
+      background-color: #ffffff;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
@@ -181,6 +183,7 @@
     .app-section h2 {
       font-size: 1.8rem;
       margin-bottom: 1rem;
+      text-align: center;
     }
     
     .app-section ul {
@@ -202,8 +205,9 @@
     }
     
     .cta-button {
-      display: inline-block;
-      margin-top: 1rem;
+      display: block;
+      width: fit-content;
+      margin: 1.5rem auto 0;
       padding: 0.6rem 1.2rem;
       background-color: #0078d4;
       color: white;
@@ -601,6 +605,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
