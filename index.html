@@ -289,29 +289,51 @@
       transform: scale(1.03);
     }
     /* Screenshot-Reihe – mittig und kompakt */
-    /* Smartphone-Optimierung */
-    @media (max-width: 480px) {
-      .screenshot-catalog {
-        gap: 0;
-        margin: 1.5rem auto;
-        transform: scale(0.9); /* macht den ganzen Block kompakter */
-      }
+    /* Horizontaler Katalog-Fächer */
+    .screenshot-catalog {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0; /* Bilder überlappen leicht */
+      margin: 2rem auto;
+      position: relative;
+    }
     
-      .catalog-img {
-        width: 160px; /* kleinere Breite für Smartphones */
-      }
+    .catalog-img {
+      width: 220px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, z-index 0.3s ease;
+      position: relative;
+    }
     
-      .img-left {
-        transform: translateX(25px) rotate(-3deg);
-      }
+    /* Leichte Überlappung */
+    .img-left {
+      transform: translateX(40px) rotate(-3deg);
+      z-index: 1;
+    }
     
-      .img-center {
-        transform: translateX(0) rotate(0deg);
-      }
+    .img-center {
+      transform: translateX(0) rotate(0deg);
+      z-index: 3;
+    }
     
-      .img-right {
-        transform: translateX(-25px) rotate(3deg);
+    .img-right {
+      transform: translateX(-40px) rotate(3deg);
+      z-index: 2;
+    }
+    
+    /* Hover-Effekt: Bild tritt nach vorne */
+    .catalog-img:hover {
+      transform: scale(1.05);
+      z-index: 10;
+    }
+    @media (max-width: 400px) {
+    .catalog-img {
+        width: 180px;
       }
+      .img-left  { transform: translateX(30px) rotate(-3deg); }
+      .img-right { transform: translateX(-30px) rotate(3deg); }
     }
 
     /* Globale Listen-Umstellung: Punkt → Häkchen */
@@ -733,6 +755,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
