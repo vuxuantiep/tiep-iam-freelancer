@@ -109,20 +109,16 @@
         border-radius: 6px;
         cursor: pointer;
     }
-    @media (max-width: 600px) {
-      .dark-toggle {
-        display: none;
-      }
-    }
 
-    /* Intro – Desktop */ 
-    .intro { 
-        max-width: 1100px; 
-        margin: 40px auto; 
-        display: flex; 
-        gap: 40px; 
-        padding: 0 20px; 
-        align-items: center; }
+    .intro {
+        max-width: 1100px;
+        margin: 40px auto;
+        display: flex;
+        gap: 40px;
+        padding: 0 20px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
     .intro img {
         width: 260px;
         height: auto;
@@ -133,7 +129,6 @@
     .intro-text {
         flex: 1;
         min-width: 260px;
-        margin-bottom: 10px;
     }
     .intro-text h2 {
         color: var(--primary);
@@ -397,27 +392,26 @@
     }
 
     .social {
-        display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; margin-top: 10px;
+        margin-top: 20px;
     }
     .social a {
-        margin-right: 10px;
-        margin-top: 10px;
-        font-size: 16px;
+        margin-right: 15px;
+        font-size: 14px;
         text-decoration: none;
         color: var(--primary);
     }
 
     .download-btn {
         display: inline-block;
-        margin-top: 10px;
+        margin-top: 20px;
         background: var(--primary);
         color: white;
         padding: 12px 20px;
         border-radius: 6px;
         text-decoration: none;
-        font-size: 16px;
+        font-size: 14px;
     }
-    
+
     .contact-form {
         background: var(--card-bg);
         padding: 30px;
@@ -521,12 +515,7 @@
         z-index: 9999;
         font-family: Arial, sans-serif;
     }
-    @media (max-width: 600px) {
-      #assistant {
-        display: none;
-      }
-    }
-
+    
     #assistant-icon {
         font-size: 40px;
         cursor: pointer;
@@ -607,12 +596,12 @@
             Ziel ist es, technische Probleme schnell zu beheben, Risiken zu reduzieren 
             und IT für Anwender einfach nutzbar zu machen." 
         </p>
-        <a class="download-btn" href="Lebenslauf-TIEP.pdf" download>📄 Lebenslauf herunterladen</a>
         <div class="social">
             <a href="https://www.linkedin.com/in/tiep-vu-xuan/" target="_blank">🔗 LinkedIn</a>
             <a href="https://www.xing.com/profile/Tiep_Vuxuan/" target="_blank">💼 Xing</a>
             <a href="https://github.com/vuxuantiep/tiep-iam-freelancer" target="_blank">🐙 GitHub</a>
         </div>
+        <a class="download-btn" href="Lebenslauf-TIEP.pdf" download>📄 Lebenslauf herunterladen</a>
     </div>
 </div>
 
@@ -780,21 +769,6 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
