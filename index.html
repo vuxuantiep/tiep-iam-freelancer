@@ -420,12 +420,12 @@
     /* 📱 Smartphone-Optimierung */ 
     @media (max-width: 600px) { 
         .intro { flex-direction: column; /* Bild oben, Text unten */ 
-                text-align: center; /* Alles zentriert */ 
+                text-align: left; /* Alles zentriert */ 
                 gap: 20px; }
         .intro-text { text-align: justify; /* Blocksatz */ margin: 0 auto; max-width: 90%; } 
         .intro-text h2 { text-align: left; /* Überschrift links */ } 
         .intro-text p { text-align: left; /* Absatz im Blocksatz */ }
-        .intro img { width: 200px; /* kleineres Bild */ } 
+        .intro img { width: 250px; text-align: center;/* kleineres Bild */ } 
         .social { margin-left: auto; margin-right: auto; } 
         .download-btn { margin-left: auto; margin-right: auto; } 
     }
@@ -792,6 +792,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
