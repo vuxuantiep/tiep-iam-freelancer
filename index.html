@@ -420,16 +420,22 @@
     /* 📱 Smartphone-Optimierung */ 
    @media (max-width: 600px) {
       .intro {
-        flex-direction: column;
+        padding: 0; /* kein Innenabstand */ 
+        margin: 0; /* kein zentrierter Außenabstand */ 
+        width: 100%; /* volle Breite */ 
+        gap: 1.5rem;
       }
       .intro img {
         max-width: 250px;
-        margin: 0 auto; /* Bild zentriert */
+        width: 100%;
+        display: flex;
+        justify-content: center;
       }
       .intro-text {
         width: 100%;
         max-width: 90%;
         margin: 0 auto;
+        padding: 0 20px;
         text-align: left;
       }
       .intro-text p {
@@ -809,6 +815,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
