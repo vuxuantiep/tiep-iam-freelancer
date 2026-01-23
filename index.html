@@ -418,16 +418,46 @@
         font-size: 16px;
     }
     /* 📱 Smartphone-Optimierung */ 
-    @media (max-width: 600px) { 
-        .intro { flex-direction: column; /* Bild oben, Text unten */ 
-                text-align: left; /* Alles zentriert */ 
-                gap: 20px; }
-        .intro-text { text-align: justify; /* Blocksatz */ margin: 0 auto; max-width: 90%; } 
-        .intro-text h2 { text-align: left; /* Überschrift links */ } 
-        .intro-text p { text-align: left; /* Absatz im Blocksatz */ }
-        .intro img { width: 250px; text-align: center;/* kleineres Bild */ } 
-        .social { margin-left: auto; margin-right: auto; } 
-        .download-btn { margin-left: auto; margin-right: auto; } 
+    @media (max-width: 600px) {
+      /* Bild bleibt oben zentriert */
+      .intro {
+        flex-direction: column;
+        align-items: center;
+      }
+      /* GANZE Textbox links ausrichten */
+      .intro-text {
+        width: 100%;
+        max-width: 90%;
+        margin: 0;                 /* NICHT zentrieren */
+        text-align: left;          /* alles links */
+      }
+      /* Überschrift links */
+      .intro-text h2 {
+        text-align: left;
+      }
+      /* Absätze im Blocksatz */
+      .intro-text p {
+        text-align: justify;
+        margin-bottom: 10px;
+      }
+      /* Bild kleiner, aber zentriert */
+      .intro img {
+        width: 220px;
+        display: block;
+        margin: 0 auto;
+      }
+      /* Button links statt zentriert */
+      .download-btn {
+        margin: 12px 0 10px 0;     /* kein auto-centering */
+        display: inline-block;
+      }
+      /* Social-Icons links statt zentriert */
+      .social {
+        margin-top: 8px;
+        display: flex;
+        justify-content: flex-start;
+        gap: 12px;
+      }
     }
     
     .contact-form {
@@ -792,6 +822,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
