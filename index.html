@@ -388,7 +388,7 @@
     }
     .social a {
         margin-right: 15px;
-        font-size: 14px;
+        font-size: 16px;
         text-decoration: none;
         color: var(--primary);
     }
@@ -407,7 +407,11 @@
     @media (max-width: 600px) { 
         .intro { flex-direction: column; /* Bild oben, Text unten */ 
                 text-align: center; /* Alles zentriert */ 
-                gap: 20px; } 
+                gap: 20px; }
+        .intro-text { text-align: justify; /* Blocksatz */ 
+                     max-width: 90%; /* schöner Rand */ 
+                     margin: 0 auto; /* zentriert */ 
+                    }
         .intro img { width: 180px; /* kleineres Bild */ } 
         .social { justify-content: center; /* Icons mittig */ } 
         .download-btn { margin-left: auto; margin-right: auto; } 
@@ -597,12 +601,12 @@
             Ziel ist es, technische Probleme schnell zu beheben, Risiken zu reduzieren 
             und IT für Anwender einfach nutzbar zu machen." 
         </p>
+        <a class="download-btn" href="Lebenslauf-TIEP.pdf" download>📄 Lebenslauf herunterladen</a>
         <div class="social">
             <a href="https://www.linkedin.com/in/tiep-vu-xuan/" target="_blank">🔗 LinkedIn</a>
             <a href="https://www.xing.com/profile/Tiep_Vuxuan/" target="_blank">💼 Xing</a>
             <a href="https://github.com/vuxuantiep/tiep-iam-freelancer" target="_blank">🐙 GitHub</a>
         </div>
-        <a class="download-btn" href="Lebenslauf-TIEP.pdf" download>📄 Lebenslauf herunterladen</a>
     </div>
 </div>
 
@@ -770,6 +774,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
