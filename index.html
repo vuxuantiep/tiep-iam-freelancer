@@ -109,7 +109,12 @@
         border-radius: 6px;
         cursor: pointer;
     }
-
+    @media (max-width: 600px) {
+      .dark-toggle {
+        display: none;
+      }
+    }
+    
     .intro {
         max-width: 1100px;
         margin: 40px auto;
@@ -515,7 +520,12 @@
         z-index: 9999;
         font-family: Arial, sans-serif;
     }
-    
+    @media (max-width: 600px) {
+      #assistant {
+        display: none;
+      }
+    }
+
     #assistant-icon {
         font-size: 40px;
         cursor: pointer;
@@ -769,6 +779,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
