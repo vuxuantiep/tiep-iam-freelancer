@@ -418,48 +418,36 @@
         font-size: 16px;
     }
     /* 📱 Smartphone-Optimierung */ 
-    @media (max-width: 600px) {
-      /* Bild bleibt oben zentriert */
+   @media (max-width: 600px) {
       .intro {
         flex-direction: column;
-        align-items: center;
+        gap: 1.5rem;
       }
-      /* GANZE Textbox links ausrichten */
+      .intro img {
+        max-width: 250px;
+        margin: 0 auto; /* Bild zentriert */
+      }
       .intro-text {
         width: 100%;
         max-width: 90%;
-        margin: 0;                 /* NICHT zentrieren */
-        text-align: left;          /* alles links */
-      }
-      /* Überschrift links */
-      .intro-text h2 {
+        margin: 0 auto;
         text-align: left;
       }
-      /* Absätze im Blocksatz */
       .intro-text p {
         text-align: justify;
-        margin-bottom: 10px;
       }
-      /* Bild kleiner, aber zentriert */
-      .intro img {
-        width: 220px;
-        display: block;
-        margin: 0 auto;
-      }
-      /* Button links statt zentriert */
       .download-btn {
-        margin: 12px 0 10px 0;     /* kein auto-centering */
+        margin: 12px 0 10px 0;
         display: inline-block;
       }
-      /* Social-Icons links statt zentriert */
       .social {
-        margin-top: 8px;
         display: flex;
         justify-content: flex-start;
         gap: 12px;
+        margin-top: 8px;
       }
     }
-    
+
     .contact-form {
         background: var(--card-bg);
         padding: 30px;
@@ -822,6 +810,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
