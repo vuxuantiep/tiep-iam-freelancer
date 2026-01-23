@@ -154,6 +154,49 @@
         margin-bottom: 15px;
     }
 
+    .social-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 2rem auto;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-icons a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .cv-button {
+      background-color: #0078d4;
+      color: white;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+    
+    .cv-button:hover {
+      background-color: #005fa3;
+    }
+    @media (max-width: 480px) {
+      .social-row {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    
     .skills {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -581,12 +624,16 @@
             Ziel ist es, technische Probleme schnell zu beheben, Risiken zu reduzieren 
             und IT für Anwender einfach nutzbar zu machen." 
         </p>
-        <div class="social">
-            <a href="https://www.linkedin.com/in/tiep-vu-xuan/" target="_blank">🔗 LinkedIn</a>
-            <a href="https://www.xing.com/profile/Tiep_Vuxuan/" target="_blank">💼 Xing</a>
-            <a href="https://github.com/vuxuantiep/tiep-iam-freelancer" target="_blank">🐙 GitHub</a>
+        <div class="social-row">
+          <div class="social-icons">
+            <a href="https://linkedin.com/in/..." target="_blank"><i class="fab fa-linkedin"></i>🔗LinkedIn</a>
+            <a href="https://xing.com/profile/..." target="_blank"><i class="fab fa-xing"></i>💼Xing</a>
+            <a href="https://github.com/..." target="_blank"><i class="fab fa-github"></i>🐙GitHub</a>
+          </div>
+          <a href="Lebenslauf.pdf" class="cv-button" download>
+            <i class="fas fa-file-download"></i> Lebenslauf herunterladen
+          </a>
         </div>
-
         <a class="download-btn" href="Lebenslauf-TIEP.pdf" download>📄 Lebenslauf herunterladen</a>
     </div>
 </div>
@@ -755,6 +802,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
