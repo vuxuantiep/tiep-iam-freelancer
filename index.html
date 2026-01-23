@@ -328,12 +328,27 @@
       transform: scale(1.05);
       z-index: 10;
     }
-    @media (max-width: 400px) {
-    .catalog-img {
-        width: 180px;
+    @media (max-width: 480px) {
+      .screenshot-catalog {
+        flex-wrap: wrap;
+        justify-content: center;
+        transform: scale(0.9);
+        margin-top: 1rem;
+        margin-bottom: 1rem;
       }
-      .img-left  { transform: translateX(30px) rotate(-3deg); }
-      .img-right { transform: translateX(-30px) rotate(3deg); }
+    
+      .catalog-img {
+        max-width: 160px;
+        width: 100%;
+      }
+    
+      .img-left {
+        transform: translateX(20px) rotate(-2deg);
+      }
+    
+      .img-right {
+        transform: translateX(-20px) rotate(2deg);
+      }
     }
 
     /* Globale Listen-Umstellung: Punkt → Häkchen */
@@ -754,6 +769,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
