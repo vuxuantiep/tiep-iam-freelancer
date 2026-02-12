@@ -557,7 +557,34 @@
         border-radius: 6px;
         border: 1px solid #ccc;
     }
+
+    .sidebar {
+    width: 320px;
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    }
     
+    @media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        text-align: center;
+    }
+
+    .sidebar img {
+        width: 140px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 </style>
 </head>
 
@@ -780,6 +807,7 @@ function addMessage(sender, text) {
     messages.scrollTop = messages.scrollHeight;
 }
 </script>
+
 
 
 
