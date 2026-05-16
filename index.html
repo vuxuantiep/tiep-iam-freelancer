@@ -2,1001 +2,1103 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Tiep Vu Xuan – IAM Freelancer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Tiep Vu Xuan – KI-Automatisierung & Enterprise Lösungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-    :root {
-        --bg: #f4f7fb;
-        --text: #222;
-        --primary: #0a2a43;
-        --accent: #4fa3d1;
-        --card-bg: white;
-    }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body.dark {
-        --bg: #0a0f14;
-        --text: #e6e6e6;
-        --primary: #4fa3d1;
-        --accent: #7cd3ff;
-        --card-bg: #111820;
-    }
+  :root {
+    --bg: #fafbfc;
+    --bg2: #f3f5f7;
+    --text-dark: #1a2332;
+    --text-muted: #556b7d;
+    --border: #d8dfe6;
+    --accent: #1e5a96;
+    --accent2: #2d7fb8;
+    --success: #2d8a6f;
+    --card-bg: #ffffff;
+    --display: 'Playfair Display', serif;
+    --body: 'Inter', sans-serif;
+  }
 
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        transition: background 0.3s, color 0.3s;
-    }
+  html { scroll-behavior: smooth; }
 
-    header {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        align-items: center;
-        background: var(--primary);
-        color: white;
-        padding: 40px 20px;
-        text-align: center;
-        font-family: 'Inter', sans-serif;
-        position: relative; 
-        overflow: hidden;
-    }
-    :root { --primary: #1a2a3a; /* Beispiel: dunkleres Blau */ }
-    header h1 {
-        font-family: 'Inter', sans-serif;
-        font-size: 30px;
-        margin: 0;
-        justify-self: center; 
-        text-align: center;
-    }
-    header p {
-        font-family: 'Inter', sans-serif;
-        font-size: 18px;
-        margin-top: 10px;
-        color: var(--accent);
-    }
-    header::before {
-        content: "";
-        position: absolute;
-        inset: 0;  
-        pointer-events: none;
-        background: url('/images/trans-recht-2.png') no-repeat right center;
-        
-        opacity: 0.06; /* subtil, dunkel, flach */
-    }
-    .header-text {
-        justify-self: center;
-        text-align: center;
-        position: relative;
-    }
-    .header-logo { position: absolute; left: 20px; top: 20px;}
-    .header-logo img {
-        width: 60px;   /* kannst du anpassen */
-        height: auto;
-        opacity: 0.10; /* 0 = unsichtbar, 1 = voll sichtbar */
-    }
-    .header-inner {
-        display: grid; 
-        grid-template-columns: 1fr auto 1fr; 
-        align-items: center;
-    }
+  body {
+    background: var(--bg);
+    color: var(--text-dark);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
 
-    @media (max-width: 768px) {
-        .header-inner {
-           grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        .header-logo img {
-            justify-self: center;
-            width: 50px;
-        }
-        header::before { 
-            background: none; 
-            opacity: 0; /* optional, falls du es komplett unsichtbar willst */ 
-        }
-    }
-    .header-right { justify-self: end; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
 
-    .dark-toggle {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-    @media (max-width: 600px) {
-      .dark-toggle {
-        display: none;
-      }
-    }
-    
-    .intro {
-        max-width: 1100px;
-        margin: 40px auto;
-        display: flex;
-        gap: 40px;
-        padding: 0 20px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-    .intro img {
-        width: 260px;
-        height: auto;
-        object-fit: contain;
-        border-radius: 0px;
-        border: none; /* du wolltest keinen Rahmen */
-    }
-   
-    .intro-text {
-        flex: 1;
-        min-width: 260px;
-    }
-    .intro-text h2 {
-        color: var(--primary);
-        font-size: 28px;
-        margin-bottom: 10px;
-    }
-    
-    .hero-title {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 72px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
 
-    section {
-        max-width: 1100px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-    h2 {
-        color: var(--primary);
-        border-left: 5px solid var(--accent);
-        padding-left: 10px;
-        margin-bottom: 15px;
-    }
+  .nav-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--display); font-weight: 700; font-size: 1.25rem;
+    color: var(--text-dark); text-decoration: none; letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); }
 
-    .skills {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-    }
-    .skill-box {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 8px;
-        border-left: 4px solid var(--accent);
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        transition: transform 0.2s;
-    }
-    .skill-box:hover {
-        transform: translateY(-4px);
-    }
-    
-    #meine-app {
-      margin-top: 2rem;
-    }
-    
-    .app-content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      align-items: flex-start;
-    }
-    
-    .app-text {
-      flex: 1 1 300px;
-    }
-    
-    .app-image {
-      flex: 1 1 300px;
-      max-width: 400px;
-    }
-    
-    .app-image img {
-      width: 100%;
-      border-radius: 6px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-    }
-    
-    .cta-button {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      background-color: #0078d4;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-    /* Floating Screens – Apple Style */
-    .app-screens {
-      position: relative;
-      width: 360px;
-      margin: 2rem auto;
-      perspective: 1200px;
-    }
-    
-    .app-screens .screen {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-      position: absolute;
-      left: 0;
-      transition: transform 0.4s ease, opacity 0.4s ease;
-    }
-    
-    /* Vorderstes Bild */
-    .screen-front {
-      z-index: 3;
-      transform: translateY(0) scale(1);
-    }
-    
-    /* Mittleres Bild */
-    .screen-middle {
-      z-index: 2;
-      transform: translateY(25px) scale(0.96);
-      opacity: 0.9;
-    }
-    
-    /* Hinterstes Bild */
-    .screen-back {
-      z-index: 1;
-      transform: translateY(50px) scale(0.92);
-      opacity: 0.8;
-    }
-    
-    /* Hover Effekt – optional */
-    .app-screens:hover .screen-front {
-      transform: translateY(-10px) scale(1.02);
-    }
-    /* Fächer-Stapel – Variante 2 */
-    .app-fan {
-      position: relative;
-      width: 360px;
-      height: 260px;
-      margin: 2rem auto;
-    }
-    
-    .fan-img {
-      position: absolute;
-      width: 70%;
-      top: 0;
-      left: 15%;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
-    }
-    
-    /* Linkes Bild */
-    .img-left {
-      transform: rotate(-8deg) translateX(-40px);
-      z-index: 1;
-    }
-    
-    /* Mittleres Bild */
-    .img-center {
-      transform: rotate(0deg);
-      z-index: 3;
-    }
-    
-    /* Rechtes Bild */
-    .img-right {
-      transform: rotate(8deg) translateX(40px);
-      z-index: 2;
-    }
-    
-    /* Hover-Effekt (optional, aber sehr edel) */
-    .app-fan:hover .img-center {
-      transform: scale(1.03);
-    }
-    /* Screenshot-Reihe – mittig und kompakt */
-    /* Horizontaler Katalog-Fächer */
-    .screenshot-catalog {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0; /* Bilder überlappen leicht */
-      margin: 2rem auto;
-      position: relative;
-    }
-    
-    .catalog-img {
-      width: 220px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease, z-index 0.3s ease;
-      position: relative;
-    }
-    
-    /* Leichte Überlappung */
-    .img-left {
-      transform: translateX(40px) rotate(-3deg);
-      z-index: 1;
-    }
-    
-    .img-center {
-      transform: translateX(0) rotate(0deg);
-      z-index: 3;
-    }
-    
-    .img-right {
-      transform: translateX(-40px) rotate(3deg);
-      z-index: 2;
-    }
-    
-    /* Hover-Effekt: Bild tritt nach vorne */
-    .catalog-img:hover {
-      transform: scale(1.05);
-      z-index: 10;
-    }
-    @media (max-width: 480px) {
-      .screenshot-catalog {
-        flex-wrap: wrap;
-        justify-content: center;
-        transform: scale(0.9);
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-      }
-    
-      .catalog-img {
-        max-width: 160px;
-        width: 100%;
-      }
-    
-      .img-left {
-        transform: translateX(20px) rotate(-2deg);
-      }
-    
-      .img-right {
-        transform: translateX(-20px) rotate(2deg);
-      }
-    }
+  .nav-links { display: flex; gap: 2.8rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--body); font-weight: 500; font-size: 0.9rem;
+    color: var(--text-muted); text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--accent); }
 
-    /* Globale Listen-Umstellung: Punkt → Häkchen */
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    
-    ul li {
-      position: relative;
-      padding-left: 1.6rem;
-      margin-bottom: 0.6rem;
-    }
-    
-    ul li::before {
-      content: "✔";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: #0078d4; /* Azure-Blau */
-      font-weight: bold;
-    }
+  .nav-cta {
+    font-family: var(--body); font-size: 0.85rem; font-weight: 600;
+    background: var(--accent); color: white;
+    padding: 10px 24px; border: none; border-radius: 6px;
+    cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+  }
+  .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
 
-    .job {
-        background: var(--card-bg);
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        border-left: 4px solid var(--primary);
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .job-title {
-        font-size: 18px;
-        font-weight: bold;
-        color: var(--primary);
-    }
-    .job-date {
-        color: var(--accent);
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
+  /* ─── LAYOUT ─── */
+  section { padding: 100px 5vw; }
+  .container { max-width: 1080px; margin: 0 auto; }
 
-    .social {
-        margin-top: 10px;
-    }
-    .social a {
-        margin-right: 10px;
-        font-size: 16px;
-        text-decoration: none;
-        color: var(--primary);
-    }
+  .tag {
+    font-family: var(--body); font-size: 0.75rem; font-weight: 600;
+    color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 16px; display: block;
+  }
 
-    .download-btn {
-        display: inline-block;
-        margin-top: 10px;
-        background: var(--primary);
-        color: white;
-        padding: 12px 10px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 16px;
-    }
+  h2.section-title {
+    font-family: var(--display); font-weight: 700; font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.2; margin-bottom: 20px; color: var(--text-dark);
+  }
+  h2.section-title em { font-style: normal; color: var(--accent); }
 
-    .contact-form {
-        background: var(--card-bg);
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .contact-form label {
-        font-weight: bold;
-        display: block;
-        margin-top: 15px;
-    }
-    .contact-form input, .contact-form textarea {
-        width: 100%;
-        padding: 12px;
-        margin-top: 5px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-    }
-    .contact-form button {
-        margin-top: 20px;
-        background: var(--primary);
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+  .section-lead {
+    font-size: 1.05rem; color: var(--text-muted);
+    max-width: 600px; margin-bottom: 60px; line-height: 1.8;
+  }
 
-    footer {
-        text-align: center;
-        padding: 20px;
-        background: var(--primary);
-        color: white;
-        margin-top: 40px;
-    }
+  /* ─── HERO ─── */
+  #home {
+    min-height: 100vh; display: flex; align-items: center;
+    padding-top: 140px; position: relative;
+  }
 
-    #certifications { 
-       padding-top: 10px; /* vorher vermutlich 40–60px */ 
-       padding-bottom: 10px; 
-       margin-top: 0; /* überschreibt zu große Abstände */ 
-    } 
-    #certifications h2 { 
-        margin-top: 0;                                                                                                                                                              
-        margin-bottom: 15px;
-        color: #333;
-    }
-    .cert-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-    
-    .cert-grid img {
-      max-width: 120px;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-    
-    .cert-grid img:hover {
-      transform: scale(1.05);
-    }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
 
-    /* Kontaktformular-Optimierung */
-    form {
-       background: white; border-radius: 8px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
-    
-    form input,
-    form textarea {
-        width: 100%;
-        padding: 12px 15px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background: #f9f9f9;
-        font-size: 16px;
-        box-sizing: border-box;
-    }
-    
-    form button {
-        width: 100%;
-        padding: 12px;
-        margin-top: 15px;
-        background: #0078ff;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 18px;
-        cursor: pointer;
-    }
+  .hero-eyebrow {
+    font-family: var(--body); font-size: 0.8rem; color: var(--accent);
+    letter-spacing: 0.5px; margin-bottom: 24px;
+  }
 
-    #assistant {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 9999;
-        font-family: Arial, sans-serif;
-    }
-    @media (max-width: 600px) {
-      #assistant {
-        display: none;
-      }
-    }
+  .hero-name {
+    font-family: var(--display); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4.5rem);
+    line-height: 1.1; margin-bottom: 12px; color: var(--text-dark); letter-spacing: -1px;
+  }
 
-    #assistant-icon {
-        font-size: 40px;
-        cursor: pointer;
-        user-select: none;
-    }
-    
-    #assistant-window {
-        display: none;
-        width: 260px;
-        background: var(--card-bg);
-        border: 2px solid var(--primary);
-        border-radius: 10px;
-        padding: 10px;
-        margin-top: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-    
-    #assistant-messages {
-        height: 180px;
-        overflow-y: auto;
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
-    
-    #assistant-input {
-        width: 100%;
-        padding: 8px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-    }
+  .hero-role {
+    font-family: var(--body); font-weight: 500; font-size: 1.2rem;
+    color: var(--text-muted); margin-bottom: 32px;
+  }
 
-    .sidebar {
-    width: 320px;
-    max-width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    }
-    
-    @media (max-width: 768px) {
-    .layout {
-        flex-direction: column;
-    }
+  .hero-desc {
+    font-size: 1.05rem; color: var(--text-muted); line-height: 1.85;
+    max-width: 520px; margin-bottom: 40px;
+  }
 
-    .sidebar {
-        width: 100%;
-        text-align: center;
-    }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: var(--body); font-size: 0.9rem; font-weight: 600;
+    background: var(--accent); color: white;
+    padding: 14px 32px; border: none; border-radius: 6px;
+    cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(30,90,150,0.2); }
 
-    .sidebar img {
-        width: 140px;
-    }
+  .btn-outline {
+    font-family: var(--body); font-size: 0.9rem; font-weight: 600;
+    background: transparent; color: var(--accent);
+    padding: 14px 32px; border: 2px solid var(--accent);
+    border-radius: 6px; cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+  }
+  .btn-outline:hover { background: var(--accent); color: white; }
 
-    .buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-}
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 56px; padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: var(--display); font-weight: 700; font-size: 2rem;
+    color: var(--accent); display: block;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
 
+  .hero-right { display: flex; justify-content: center; }
+  .hero-photo-wrap {
+    width: 340px; height: 420px; border-radius: 8px;
+    overflow: hidden; box-shadow: 0 20px 60px rgba(26,35,50,0.08);
+  }
+  .hero-photo-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  /* ─── SERVICES ─── */
+  #services { background: var(--bg2); }
+
+  .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .service-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 40px 32px;
+    transition: all 0.3s ease;
+  }
+  .service-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px rgba(30,90,150,0.08);
+  }
+
+  .service-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+  .service-card h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.3rem;
+    margin-bottom: 12px; color: var(--text-dark);
+  }
+  .service-card p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 16px; }
+  .service-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .service-tag {
+    font-size: 0.75rem; color: var(--accent); background: rgba(30,90,150,0.06);
+    padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(30,90,150,0.15);
+  }
+
+  /* ─── KI SOLUTIONS ─── */
+  #ki-loesungen { background: var(--bg); }
+
+  .ki-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-bottom: 80px; }
+  .ki-features { display: flex; flex-direction: column; gap: 20px; }
+  .ki-feature {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 24px; background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .ki-feature-icon {
+    font-size: 1.4rem; flex-shrink: 0; margin-top: 2px;
+  }
+  .ki-feature h4 {
+    font-family: var(--display); font-weight: 600; font-size: 1.05rem;
+    margin-bottom: 6px; color: var(--text-dark);
+  }
+  .ki-feature p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* BERATUNGSMODELL */
+  .consulting-box {
+    background: linear-gradient(135deg, #f3f5f7, #eef1f5);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 40px; margin-top: 60px;
+  }
+  .consulting-box h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.4rem;
+    margin-bottom: 16px; color: var(--text-dark);
+  }
+  .consulting-box p {
+    font-size: 0.95rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.8;
+  }
+  .benefits { list-style: none; margin-top: 20px; }
+  .benefits li {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.9rem; color: var(--text-dark); margin-bottom: 8px;
+  }
+  .benefits li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+
+  /* ─── PORTFOLIO ─── */
+  #portfolio { background: var(--bg2); }
+
+  .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .port-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .port-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px rgba(30,90,150,0.08);
+  }
+
+  .port-header {
+    padding: 28px 28px 20px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .port-badge {
+    font-size: 0.7rem; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 4px; white-space: nowrap;
+    letter-spacing: 0.5px; font-weight: 600;
+  }
+  .badge-green { background: rgba(45,138,111,0.1); color: var(--success); border: 1px solid rgba(45,138,111,0.2); }
+  .badge-blue  { background: rgba(30,90,150,0.1); color: var(--accent); border: 1px solid rgba(30,90,150,0.2); }
+
+  .port-body { padding: 28px; }
+  .port-body h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.2rem;
+    margin-bottom: 10px; color: var(--text-dark);
+  }
+  .port-body p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
+  .port-specs { display: flex; flex-direction: column; gap: 10px; }
+  .port-spec { font-size: 0.85rem; color: var(--text-dark); }
+  .port-spec::before { content: '—'; color: var(--accent); margin-right: 8px; font-weight: 600; }
+  .port-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .stack-tag {
+    font-size: 0.75rem; color: var(--accent); background: rgba(30,90,150,0.06);
+    padding: 4px 10px; border-radius: 4px;
+  }
+
+  /* ─── EXPERIENCE ─── */
+  #experience { background: var(--bg); }
+
+  .exp-timeline { display: flex; flex-direction: column; gap: 24px; }
+  .exp-item {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 28px;
+    border-left: 4px solid var(--accent);
+  }
+  .exp-period {
+    font-size: 0.8rem; color: var(--text-muted);
+    margin-bottom: 8px; letter-spacing: 0.5px;
+  }
+  .exp-item h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.15rem;
+    margin-bottom: 4px; color: var(--text-dark);
+  }
+  .exp-company { font-size: 0.9rem; color: var(--accent); margin-bottom: 12px; font-weight: 500; }
+  .exp-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+  .certs-grid { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+  .cert-badge {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--text-muted);
+  }
+  .cert-badge img { height: 26px; width: auto; }
+
+  /* ─── KONTAKT ─── */
+  #kontakt { background: var(--bg2); }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+  .contact-info h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.3rem;
+    margin-bottom: 16px; color: var(--text-dark);
+  }
+  .contact-info p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 28px; line-height: 1.8; }
+
+  .contact-detail {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+    font-size: 0.9rem;
+  }
+  .contact-icon {
+    width: 40px; height: 40px; background: rgba(30,90,150,0.08);
+    border: 1px solid var(--border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1rem;
+  }
+
+  /* ─── FORM ─── */
+  .contact-form { display: flex; flex-direction: column; gap: 18px; }
+  .form-group { display: flex; flex-direction: column; gap: 7px; }
+  .form-group label {
+    font-family: var(--body); font-size: 0.85rem; font-weight: 600;
+    color: var(--text-dark); letter-spacing: 0.3px;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px;
+    font-family: var(--body); font-size: 0.9rem; color: var(--text-dark);
+    transition: border-color 0.3s ease; outline: none; resize: vertical;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--accent);
+  }
+  .form-group textarea { min-height: 120px; }
+  .form-group select { appearance: none; cursor: pointer; padding-right: 30px; }
+
+  .form-submit {
+    display: block; text-align: center; text-decoration: none;
+    font-family: var(--body); font-size: 0.9rem; font-weight: 600;
+    padding: 14px; border-radius: 6px; border: none;
+    background: var(--accent); color: white;
+    cursor: pointer; transition: all 0.3s ease; letter-spacing: 0.3px;
+  }
+  .form-submit:hover { background: var(--accent2); transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 36px 5vw;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+    background: var(--card-bg);
+  }
+  .footer-logo { font-family: var(--display); font-weight: 700; font-size: 1.05rem; }
+  .footer-logo span { color: var(--accent); }
+  footer p { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .ki-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-stats { flex-wrap: wrap; gap: 32px; }
+  }
 </style>
 </head>
-
-    <div id="assistant">
-    <div id="assistant-icon">📎</div>
-
-    <div id="assistant-window">
-        <div id="assistant-messages"></div>
-
-        <input id="assistant-input" type="text" placeholder="Frag mich etwas...">
-    </div>
-    </div>
-    
 <body>
 
-<button class="dark-toggle" onclick="document.body.classList.toggle('dark')">
-    Dark Mode
-</button>
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">itiep<span>.de</span></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#ki-loesungen">KI Lösungen</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#experience">Team</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="#kontakt" class="nav-cta">Beratung anfragen</a>
+</nav>
 
-<header>
-  <div class="header-inner">
-    <picture class="header-logo">
-      <img src="/images/schutzschild-2.png" alt="logo" width="50" height="50" loading="lazy">
-    </picture>
+<!-- HERO -->
+<section id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div style="animation: fadeUp 0.8s ease both;">
+        <div class="hero-eyebrow">IAM · KI-Automatisierung · Enterprise Lösungen</div>
+        <h1 class="hero-name">Mehr Kunden. Weniger <span style="color:var(--accent);">manuelle Arbeit</span>.</h1>
+        <p class="hero-role">KI-Automatisierung & sichere Enterprise Systeme für KMU</p>
+        <p class="hero-desc">
+          Ich helfe Ihrem Unternehmen, automatisch qualifizierte Leads zu gewinnen und IT-Prozesse intelligent zu automatisieren – sicher, datenschutzkonform und zukunftsorientiert.
+        </p>
+        <div class="hero-btns">
+          <a href="#kontakt" class="btn-primary">Kostenlose Erstanalyse buchen</a>
+          <a href="#ki-loesungen" class="btn-outline">Unsere Lösungen ansehen</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <span class="stat-num">7+</span>
+            <div class="stat-label">Jahre IT-Erfahrung</div>
+          </div>
+          <div>
+            <span class="stat-num">3</span>
+            <div class="stat-label">Core Lösungen</div>
+          </div>
+          <div>
+            <span class="stat-num">100%</span>
+            <div class="stat-label">Datenschutz-konform</div>
+          </div>
+        </div>
+      </div>
 
-  </div>
-    <div class="header-text">
-      <h1>Tiep Vu Xuan</h1>
-      <p>Identity u. Applikationsmanager</p>
+      <div class="hero-right" style="animation: fadeUp 0.8s ease both 0.2s backwards;">
+        <div class="hero-photo-wrap">
+          <img src="https://itiep.de/8-transparent.png" alt="Tiep Vu Xuan">
+        </div>
+      </div>
     </div>
-</header>
+  </div>
+</section>
 
-<div class="intro">
-    <picture>
-      <source srcset="/8-transparent.webp" type="image/webp">
-      <img src="/8-transparent.png" alt="Tiep Vu Xuan" width="260" height="260" loading="lazy">
-    </picture>
-    <div class="intro-text">
-        <h2>Über mich</h2>
-        <p>
-            „Ich bin IT-Spezialist mit über 7 Jahren Erfahrung im IT-Umfeld, 
-            Applikationsbetrieb und in der Benutzer- und Rechteverwaltung.“
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <span class="tag">Services</span>
+    <h2 class="section-title">Was ich für Sie <em>löse</em></h2>
+    <p class="section-lead">Von sicherem Identity Management bis zur intelligenten KI-Vertriebsautomatisierung.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🛡️</div>
+        <h3>Identity & Zugriffssicherheit</h3>
+        <p>Sichere Benutzerverwaltung, Zero-Trust-Architekturen und RBAC-Modelle für Enterprise-Systeme.</p>
+        <div class="service-tags">
+          <span class="service-tag">Azure Entra ID</span>
+          <span class="service-tag">Active Directory</span>
+          <span class="service-tag">Zero Trust</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>KI-Vertriebsautomatisierung</h3>
+        <p>Automatisches Lead-Finding, Kundenbewertung und Follow-up-Systeme für mehr Verkäufe.</p>
+        <div class="service-tags">
+          <span class="service-tag">Lead Automation</span>
+          <span class="service-tag">CRM Agent</span>
+          <span class="service-tag">KI-Scoring</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📦</div>
+        <h3>Software Modernisierung</h3>
+        <p>Containerisierung von Legacy-Anwendungen, Cloud-Migration und sichere KI-Integration.</p>
+        <div class="service-tags">
+          <span class="service-tag">Docker/Kubernetes</span>
+          <span class="service-tag">Cloud-Migration</span>
+          <span class="service-tag">ERP Modernisierung</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🔗</div>
+        <h3>Automatisierung & Integration</h3>
+        <p>Workflow-Automatisierung, API-Integration und datenschutzkonforme Prozesse.</p>
+        <div class="service-tags">
+          <span class="service-tag">n8n Workflows</span>
+          <span class="service-tag">API Integration</span>
+          <span class="service-tag">DSGVO-konform</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KI SOLUTIONS -->
+<section id="ki-loesungen">
+  <div class="container">
+    <span class="tag">KI Lösungen</span>
+    <h2 class="section-title">Intelligente Systeme für <em>nachhaltiges Wachstum</em></h2>
+    <p class="section-lead">Automatisierte Kundengewinnung und KI-gestützte Entscheidungsprozesse – sicher und in Ihrer Kontrolle.</p>
+
+    <div class="ki-grid">
+      <div>
+        <p style="font-size:1.05rem; color:var(--text-muted); line-height:1.85; margin-bottom:24px;">
+          Mit KI-Automatisierung gewinnen Sie täglich neue, qualifizierte Leads – ganz ohne manuelle Recherche. Das System arbeitet kontinuierlich, bewertet Chancen intelligent und nutzt KI-gestützte Insights für bessere Entscheidungen.
         </p>
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:8px; padding:28px;">
+          <p style="font-size:0.85rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:12px; font-weight:600;">TYPISCHE RESULTS</p>
+          <ul style="list-style:none;">
+            <li style="display:flex; align-items:center; gap:10px; margin-bottom:10px; color:var(--text-dark); font-size:0.95rem;">
+              <span style="color:var(--success); font-weight:700;">✓</span> 2–5× mehr qualifizierte Leads/Monat
+            </li>
+            <li style="display:flex; align-items:center; gap:10px; margin-bottom:10px; color:var(--text-dark); font-size:0.95rem;">
+              <span style="color:var(--success); font-weight:700;">✓</span> 80% weniger manuelle Recherche
+            </li>
+            <li style="display:flex; align-items:center; gap:10px; color:var(--text-dark); font-size:0.95rem;">
+              <span style="color:var(--success); font-weight:700;">✓</span> Schnellere Reaktionszeiten & bessere Conversion
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ki-features">
+        <div class="ki-feature">
+          <div class="ki-feature-icon">🔍</div>
+          <div>
+            <h4>Automatisches Lead-Finding</h4>
+            <p>KI sucht täglich nach neuen, relevanten Interessenten – vollautomatisch und kontinuierlich.</p>
+          </div>
+        </div>
+        <div class="ki-feature">
+          <div class="ki-feature-icon">⭐</div>
+          <div>
+            <h4>Intelligente Bewertung</h4>
+            <p>Jeder Lead wird automatisch priorisiert – Sie fokussieren sich auf die besten Chancen.</p>
+          </div>
+        </div>
+        <div class="ki-feature">
+          <div class="ki-feature-icon">📬</div>
+          <div>
+            <h4>Personalisierte Outreach</h4>
+            <p>KI generiert maßgeschneiderte Nachrichten zum richtigen Zeitpunkt – ganz automatisch.</p>
+          </div>
+        </div>
+        <div class="ki-feature">
+          <div class="ki-feature-icon">📊</div>
+          <div>
+            <h4>Intelligente Reports & Insights</h4>
+            <p>Tägliche Analysen zeigen Ihnen, welche Strategien funktionieren und wo Sie optimieren können.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BERATUNGSMODELL -->
+    <div class="consulting-box">
+      <h3>Flexible Lösungen nach Ihren Bedürfnissen</h3>
+      <p>
+        Jedes Unternehmen ist unterschiedlich. Deshalb arbeite ich nicht mit Standardpaketen, sondern entwickle
+        <strong>maßgeschneiderte Lösungen</strong> basierend auf Ihrem spezifischen Anforderungen und Budget.
+      </p>
+      <p style="margin-top:12px;">
+        In einem kostenlosen Erstgespräch (30-45 Min.) analysiere ich Ihre Situation und zeige Ihnen konkrete Möglichkeiten auf.
+        <strong>Preise werden transparent nach Ihrer Anforderung abgestimmt</strong> – nicht umgekehrt.
+      </p>
+      <ul class="benefits">
+        <li>Kostenlose Erstanalyse Ihrer Situation</li>
+        <li>Transparente Preisgestaltung nach echtem Umfang</li>
+        <li>Keine versteckten Kosten oder Lock-ins</li>
+        <li>Flexible Zusammenarbeit und Skalierbarkeit</li>
+        <li>Regelmäßige Optimierung basierend auf Ihren Ergebnissen</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="container">
+    <span class="tag">Portfolio</span>
+    <h2 class="section-title">Implementierte <em>Lösungen</em></h2>
+    <p class="section-lead">Real-world Projekte für unterschiedliche Branchen und Anforderungen.</p>
+
+    <div class="portfolio-grid">
+      <!-- Lead Finder -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">KI-AUTOMATISIERUNG</div>
+            <span class="port-badge badge-blue">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>KI Lead Finder System</h3>
+          <p>Automatisches System, das täglich neue, qualifizierte Leads sammelt, bewertet und priorisiert.</p>
+          <div class="port-specs">
+            <div class="port-spec">Tägliches Scraping aus 3+ Quellen (LinkedIn, Jobportale, Web)</div>
+            <div class="port-spec">KI-basiertes Scoring & Priorisierung</div>
+            <div class="port-spec">REST API & automatische CRM-Integration</div>
+            <div class="port-spec">Tägliche, detaillierte Lead-Reports</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">FastAPI</span>
+            <span class="stack-tag">PostgreSQL</span>
+            <span class="stack-tag">OpenAI</span>
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">n8n</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM Agent -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">KI-AUTOMATISIERUNG</div>
+            <span class="port-badge badge-blue">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>AI CRM Agent & Sales Automation</h3>
+          <p>Intelligenter Agent, der Leads automatisch priorisiert und personalisierte Follow-ups übernimmt.</p>
+          <div class="port-specs">
+            <div class="port-spec">Automatische Lead-Priorisierung und Segmentierung</div>
+            <div class="port-spec">KI-generierte, personalisierte Follow-up-Nachrichten</div>
+            <div class="port-spec">Zeitgesteuerte Outreach-Kampagnen</div>
+            <div class="port-spec">Performance-Tracking und A/B-Testing</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">OpenAI API</span>
+            <span class="stack-tag">n8n</span>
+            <span class="stack-tag">HubSpot</span>
+            <span class="stack-tag">Grafana</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERP Modernisierung -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">MODERNISIERUNG</div>
+            <span class="port-badge badge-blue">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>Enterprise ERP Containerisierung & Modernisierung</h3>
+          <p>Sichere Migration und Containerisierung von Legacy-ERP-Systemen in moderne, skalierbare Infrastruktur.</p>
+          <div class="port-specs">
+            <div class="port-spec">Containerisierung (Docker/Kubernetes) mit Zero-Downtime-Migration</div>
+            <div class="port-spec">Hybrid-Cloud-Setup (On-Prem + Cloud)</div>
+            <div class="port-spec">KI-gestützte Prozessoptimierung und Datenanalyse</div>
+            <div class="port-spec">DSGVO-konforme Datenverwaltung und Verschlüsselung</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">Kubernetes</span>
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">Azure</span>
+            <span class="stack-tag">Traefik</span>
+            <span class="stack-tag">DSGVO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- IAM -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">SICHERHEIT</div>
+            <span class="port-badge badge-green">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>Zero-Trust IAM & Sicherheitsinfrastruktur</h3>
+          <p>Aufbau moderner, sicherer Identity Management Systeme mit Zero-Trust Prinzipien.</p>
+          <div class="port-specs">
+            <div class="port-spec">Azure Entra ID Rollout & Hybrid-Szenarien</div>
+            <div class="port-spec">RBAC & JIT/JEA Zugriffssteuerung</div>
+            <div class="port-spec">PowerShell-Automatisierung für Onboarding</div>
+            <div class="port-spec">Compliance & Auditberichte (ISO 27001, DSGVO)</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">Azure Entra ID</span>
+            <span class="stack-tag">PowerShell</span>
+            <span class="stack-tag">Intune</span>
+            <span class="stack-tag">Zero Trust</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <span class="tag">Hintergrund</span>
+    <h2 class="section-title">Mein <em>Werdegang</em></h2>
+    <p class="section-lead">Über 7 Jahre Erfahrung in IT-Infrastruktur, IAM und Enterprise Modernisierung.</p>
+
+    <div class="exp-timeline">
+      <div class="exp-item">
+        <div class="exp-period">2023 – Heute</div>
+        <h3>IT-Applikationsmanager (adesso GmbH)</h3>
+        <div class="exp-company">Betrieb · IAM · Cloud</div>
+        <p>Betrieb kritischer Fachanwendungen, IAM-Prozessdesign, Azure/AD-Integration und PowerShell-Automatisierung für Großunternehmen.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-period">2020 – 2023</div>
+        <h3>IT-Systemadministrator (Landessozialgericht Hamburg)</h3>
+        <div class="exp-company">Infrastruktur · Sicherheit</div>
+        <p>Windows-Server-Administration, GPO-Management, Berechtigungskonzepte und Endpoint Manager für Behörde mit hohen Compliance-Anforderungen.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-period">2019 – 2020</div>
+        <h3>IT-Techniker / System Engineer (Wärme Hamburg GmbH)</h3>
+        <div class="exp-company">IT-Operations</div>
+        <p>Systemrollout, SCCM-Management, Asset-Management und On-Site Support für mittelständisches Energieunternehmen.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-period">Seit 2024</div>
+        <h3>KI-Automatisierungs­experte (itiep.de)</h3>
+        <div class="exp-company">Beratung & Lösungsentwicklung</div>
+        <p>Spezialisierung auf KI-Vertriebsautomatisierung, sichere Enterprise-Lösungen und Datenschutzkonforme Systeme für KMU.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:60px;">
+      <p style="font-family:var(--display); font-weight:600; font-size:1.1rem; color:var(--text-dark); margin-bottom:20px;">Zertifizierungen</p>
+      <div class="certs-grid">
+        <div class="cert-badge">
+          <img src="https://itiep.de/images/aws-cloud-practitioner.png" alt="AWS">
+          AWS Cloud Practitioner
+        </div>
+        <div class="cert-badge">
+          <img src="https://itiep.de/images/Azure-Admin.png" alt="Azure">
+          Azure Administrator
+        </div>
+        <div class="cert-badge">
+          <img src="https://itiep.de/images/mcsa-2016.png" alt="MCSA">
+          MCSA Windows Server 2016
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="container">
+    <span class="tag">Kontakt</span>
+    <h2 class="section-title">Kostenlose <em>Erstanalyse</em> buchen</h2>
+    <p class="section-lead">Lassen Sie uns in einem kurzen Gespräch Ihre Situation analysieren und konkrete Möglichkeiten aufzeigen.</p>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Lasst uns sprechen</h3>
         <p>
-            "Mein Fokus liegt auf klaren Strukturen, zuverlässigen Abläufen 
-            und einer ruhigen, lösungsorientierten Unterstützung im Alltag. 
-            Ziel ist es, technische Probleme schnell zu beheben, Risiken zu reduzieren 
-            und IT für Anwender einfach nutzbar zu machen." 
+          Ich antworte in der Regel innerhalb von 24 Stunden. In einem kostenlosen Erstgespräch (30-45 Min.)
+          analysiere ich Ihre Herausforderungen und zeige konkrete, maßgeschneiderte Lösungen auf.
         </p>
-        <a class="download-btn" href="Lebenslauf-TIEP.pdf" download>📄 Lebenslauf herunterladen</a>
-        <!--<div class="social">
-            <a href="https://www.linkedin.com/in/tiep-vu-xuan/" target="_blank">🔗 LinkedIn</a>
-            <a href="https://www.xing.com/profile/Tiep_Vuxuan/" target="_blank">💼 Xing</a>
-            <a href="https://github.com/vuxuantiep/tiep-iam-freelancer" target="_blank">🐙 GitHub</a>
-        </div>--->   
+
+        <div class="contact-detail">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Standort</div>
+            <div style="font-weight:500;">Hamburg, Deutschland</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">💼</div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Fokus</div>
+            <div style="font-weight:500;">KMU, Mittelstand, Enterprise</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">🔒</div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Datenschutz</div>
+            <div style="font-weight:500;">100% DSGVO-konform</div>
+          </div>
+        </div>
+
+        <div style="background:rgba(30,90,150,0.05); border:1px solid var(--border); border-radius:8px; padding:20px; margin-top:28px;">
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">
+            <strong style="color:var(--text-dark);">💡 Sie sind nicht allein:</strong> Viele KMU verlieren täglich Leads durch manuelle Prozesse. Eine automatisierte Lösung kann alles ändern.
+          </p>
+        </div>
+      </div>
+
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label>Ihr Name</label>
+          <input type="text" placeholder="Max Mustermann" required>
+        </div>
+        <div class="form-group">
+          <label>Ihre E-Mail</label>
+          <input type="email" placeholder="max@beispiel.de" required>
+        </div>
+        <div class="form-group">
+          <label>Ihr Unternehmen</label>
+          <input type="text" placeholder="Beispiel GmbH">
+        </div>
+        <div class="form-group">
+          <label>Interessiert Sie besonders:</label>
+          <select required>
+            <option value="">Bitte auswählen…</option>
+            <option>KI-Vertriebsautomatisierung & Lead Generation</option>
+            <option>Software Modernisierung & Containerisierung</option>
+            <option>Identity Management & Sicherheit</option>
+            <option>Workflow-Automatisierung & KI-Integration</option>
+            <option>Kostenlose Beratung (alle Themen)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ihre Nachricht / Herausforderung</label>
+          <textarea placeholder="Beschreiben Sie kurz Ihre Situation oder Herausforderung…" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Erstanalyse anfragen</button>
+        <div id="form-success" style="display:none; text-align:center; padding:14px; background:rgba(45,138,111,0.08); border:1px solid rgba(45,138,111,0.25); border-radius:6px; color:var(--success); font-weight:600; font-size:0.9rem;">
+          ✓ Anfrage gesendet! Ich melde mich innerhalb von 24 Stunden bei Ihnen.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">itiep<span>.de</span></div>
+    <p>© 2026 Tiep Vu Xuan – KI & Enterprise Lösungen</p>
+  </div>
+  <div style="text-align:right;">
+    <p style="margin-bottom:8px; font-size:0.85rem;"><strong>Kontakt:</strong> <a href="mailto:hello@itiep.de" style="color:var(--accent); text-decoration:none;">hello@itiep.de</a></p>
+    <p><a href="https://itiep.de/Lebenslauf-TIEP.pdf" style="color:var(--text-muted); text-decoration:none; font-size:0.8rem;">Lebenslauf herunterladen →</a></p>
+  </div>
+</footer>
+
+<script>
+  // Smooth nav
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+    });
+    links.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+    });
+  });
+
+  // Form
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
+    setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+  }
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    obs.observe(el);
+  });
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Haupt-Container für das gesamte Widget unten rechts platziert */
+    #portfolio-assistant {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 10000;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    /* Das kompakte Chat-Fenster (Standardmäßig unsichtbar) */
+    #assistant-window {
+        display: none; 
+        width: 360px;
+        max-width: calc(100vw - 40px);
+        height: 500px;
+        background: var(--card-bg, #ffffff);
+        border: 1px solid var(--border, #d8dfe6);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        box-shadow: 0 12px 40px rgba(26, 35, 50, 0.15);
+        flex-direction: column;
+        transition: all 0.3s ease;
+    }
+
+    /* Eleganter Header des Chatfensters */
+    .asst-header {
+        background: var(--accent, #1e5a96);
+        color: #ffffff;
+        padding: 16px 20px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px;
+    }
+    .asst-header .close-icon {
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+    .asst-header .close-icon:hover { opacity: 1; }
+
+    /* Bereich für den Nachrichtenverlauf */
+    #asst-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        background: var(--bg2, #f3f5f7);
+    }
+
+    /* Stil der einzelnen Sprechblasen */
+    .asst-msg {
+        padding: 12px 16px;
+        border-radius: 14px;
+        max-width: 85%;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+    /* Sprechblase vom Besucher */
+    .asst-msg.user {
+        background: var(--accent, #1e5a96);
+        color: #ffffff;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+    }
+    /* Sprechblase von der KI */
+    .asst-msg.bot {
+        background: var(--card-bg, #ffffff);
+        color: var(--text-dark, #1a2332);
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+        border: 1px solid var(--border, #d8dfe6);
+    }
+    /* Lade-Indikator */
+    .asst-msg.loading {
+        background: transparent;
+        color: var(--text-muted, #556b7d);
+        font-style: italic;
+        align-self: flex-start;
+        padding: 0;
+    }
+
+    /* Unterer Eingabebereich */
+    .asst-footer {
+        padding: 12px;
+        background: var(--card-bg, #ffffff);
+        border-top: 1px solid var(--border, #d8dfe6);
+        display: flex;
+        gap: 10px;
+    }
+    #asst-input {
+        flex: 1;
+        padding: 10px 16px;
+        border-radius: 24px;
+        border: 1px solid var(--border, #d8dfe6);
+        background: var(--bg, #fafbfc);
+        color: var(--text-dark, #1a2332);
+        outline: none;
+        font-size: 14px;
+    }
+
+    /* Der runde schwebende Start-Button */
+    #asst-toggle-btn {
+        width: 60px;
+        height: 60px;
+        background: var(--accent, #1e5a96);
+        color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(30, 90, 150, 0.3);
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    #asst-toggle-btn:hover { transform: scale(1.08); }
+</style>
+
+<div id="portfolio-assistant">
+    <div id="assistant-window">
+        <div class="asst-header">
+            <span><i class="fas fa-robot"></i> Tiep's Projekt-Assistent</span>
+            <span class="close-icon" id="asst-close"><i class="fas fa-times"></i></span>
+        </div>
+        <div id="asst-messages">
+            <div class="asst-msg bot">Hallo! Ich bin Tieps Projekt-Assistent. Gerne beantworte ich dir Fragen zu seinen aktuellen AI-Avatar-Lösungen oder maßgeschneiderten ERP/CRM-Systemen für KMU. Wie kann ich helfen?</div>
+        </div>
+        <div class="asst-footer">
+            <input id="asst-input" type="text" placeholder="Frage zu Tieps Projekten..." autocomplete="off">
+        </div>
+    </div>
+
+    <div id="asst-toggle-btn">
+        <i class="fas fa-comment-code" id="asst-icon-state"></i>
     </div>
 </div>
 
-<section>
-    <h2>Leistungen</h2>
-        <div class="skills">
-          <div class="skill-box">
-            <!-- Das ist ein HTML‑Kommentar <div class="icon">🛡️</div>-->
-            <h3>Identity & Zugriffssicherheit</h3>
-            <ul>
-              <li>Benutzerzugänge sicher & strukturiert verwalten</li>
-              <li>Rollen klar definieren, Risiken reduzieren</li>   
-            </ul>
-              (Active Directory, Azure Entra ID, RBAC, JIT/JEA, Zero Trust-Modell)
-          </div>
-        
-          <div class="skill-box">
-            <!-- Das ist ein HTML‑Kommentar <div class="icon">⚙️</div> -->
-            <h3>Applikationen & Systembetrieb</h3>
-            <ul>
-              <li>Stabile Fachanwendungen & IT-Systeme</li>
-              <li>Schnelle Problemlösung bei technischen Fragen</li>
-            </ul>
-              (Windows Server, Blue-Green Deployment, Eureka/eIP, 3rd-Level Support)
-          </div>
-        
-          <div class="skill-box">
-            <!-- Das ist ein HTML‑Kommentar <div class="icon">☁️</div> -->
-            <h3>Automatisierung & Cloud</h3>
-            <ul>
-              <li>Wiederkehrende Aufgaben automatisieren</li>
-              <li>Effiziente & stabile IT-Abläufe schaffen</li>
-            </ul>
-              (PowerShell, IaC, Azure, AWS, Cloudflare, n8n)
-          </div>
-        
-          <div class="skill-box">
-             <!-- Das ist ein HTML‑Kommentar <div class="icon">🤝</div> -->
-            <h3>Anwenderbetreuung</h3>
-            <ul>
-              <li>Unterstützung für Mitarbeiter & kleine Unternehmen</li>
-              <li>Geduldig & verständlich – auch für Nicht-Techniker</li>
-            </ul>
-              (Ticketsysteme, Remote- u. Tel. Support, Dokumentation)
-          </div>
-
-        </div>
-    </div>
-</section>
-<!--
-<section id="meine-app">
-  <h2>Meine App</h2>
-  <div class="app-content">
-    <div class="app-text">
-      <p>Ich entwickle zurzeit den <strong>ImmoManager</strong> – eine smarte SaaS-Lösung für Vermieter & Immobilieninvestoren.</p>
-      <ul>
-        <li>Mietverwaltung und Objektübersicht auf einen Blick</li>
-        <li>Automatisierte Dokumentenerstellung & Kommunikation</li>
-        <li>Cloudbasiert, sicher & mobil nutzbar</li>
-      </ul>
-      <a href="https://app.itiep.de" class="download-btn">🏘 ImmoManager-Demo jetzt starten</a>
-    </div>
-    <div class="screenshot-catalog">
-      <img src="images/immo-preview.png" alt="Screenshot 1" class="catalog-img img-left">
-      <img src="images/immo-preview-1.png" alt="Screenshot 2" class="catalog-img img-center">
-      <img src="images/immo-preview-2.png" alt="Screenshot 3" class="catalog-img img-right">
-    </div>
-  </div>
-</section>
--->
-<section>
-    <h2>Berufserfahrung</h2>
-
-    <div class="job">
-        <div class="job-title">IT‑Applikationsmanager – adesso GmbH</div>
-        <div class="job-date">10/2023 – heute</div>
-        <p>Betrieb von Fachanwendungen, IAM‑Prozesse, Azure/AD‑Integration, PowerShell‑Automatisierung.</p>
-    </div>
-
-    <div class="job">
-        <div class="job-title">IT‑Systemadministrator – Landessozialgericht Hamburg</div>
-        <div class="job-date">10/2020 – 10/2023</div>
-        <p>Windows‑Server‑Administration, GPO, Berechtigungsmanagement, Endpoint Manager.</p>
-    </div>
-
-    <div class="job">
-        <div class="job-title">IT‑Techniker / System Engineer – Wärme Hamburg GmbH</div>
-        <div class="job-date">06/2019 – 03/2020</div>
-        <p>Rollout, SCCM, Asset‑Management, Onsite‑Support.</p>
-    </div>
-</section>
-
-<section id="certifications">
-  <h2>Zertifikate & Qualifikationen</h2>
-  <div class="cert-grid">
-    <img src="images/aws-cloud-practitioner.png" alt="AWS Certified Cloud Practitioner">
-    <img src="images/Azure-Admin.png" alt="Azure Certified Cloud Administration">
-    <img src="images/mcsa-2016.png" alt="Microsoft MCSA Windows Server 2016">
-    <img src="images/exam-networking.png" alt="Microsoft Exam Networking">
-    <img src="images/exam-identity.png" alt="Microsoft Exam Identity">
-    <img src="images/exam-compute.png" alt="Microsoft Exam Compute">
-    <img src="images/Software-Entwickler.png" alt="Microsoft Software Developer C#.Net">
-  </div>
-</section>
- 
-<section>
-    <h2>„ Jetzt Kontakt aufnehmen “</h2>
-    <div class="contact-form">
-        <form action="https://formspree.io/f/mwvvkdyd" method="POST">
-            
-            <label>Name</label>
-            <input type="text" name="name" required>
-
-            <label>E-Mail</label>
-            <input type="email" name="email" required>
-
-            <label>Nachricht</label>
-            <textarea name="message" rows="6" required></textarea>
-
-            <button type="submit">✉ Nachricht senden</button>
-        </form>
-    </div>
-</section>
-
-<footer>
-    © 2026 Tiep Vu Xuan – Freelancer IAM & IT‑Services
-</footer>
-    
-</body>
-</html>
-
 <script>
-const icon = document.getElementById("assistant-icon");
-const windowBox = document.getElementById("assistant-window");
-const input = document.getElementById("assistant-input");
-const messages = document.getElementById("assistant-messages");
+// 🌟 DEPLOYMENT-HINWEIS: Ersetze "http://localhost:8787" mit deiner echten Cloudflare Worker URL, sobald live!
+const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev"; 
 
-icon.onclick = () => {
-    windowBox.style.display = windowBox.style.display === "block" ? "none" : "block";
-};
+const toggleBtn = document.getElementById("asst-toggle-btn");
+const iconState = document.getElementById("asst-icon-state");
+const chatWin = document.getElementById("assistant-window");
+const chatInput = document.getElementById("asst-input");
+const msgContainer = document.getElementById("asst-messages");
+const closeBtn = document.getElementById("asst-close");
 
-input.addEventListener("keypress", function(e) {
-    if (e.key === "Enter" && input.value.trim() !== "") {
-        const userText = input.value;
-        addMessage("Du", userText);
+// Steuert das Auf- und Zuklappen des Chatfensters
+function toggleAssistant() {
+    if (chatWin.style.display === "flex") {
+        chatWin.style.display = "none";
+        iconState.className = "fas fa-comment-code"; // Standard-Icon zurücksetzen
+    } else {
+        chatWin.style.display = "flex";
+        iconState.className = "fas fa-chevron-down"; // Schließen-Pfeil anzeigen
+        chatInput.focus();
+    }
+}
 
-        // einfache KI-Antworten
-        let reply = "Ich bin noch klein, aber ich lerne schnell!";
+toggleBtn.onclick = toggleAssistant;
+closeBtn.onclick = toggleAssistant;
 
-        if (userText.includes("Hallo")) reply = "Hallo! Wie kann ich dir helfen?";
-        if (userText.includes("IAM")) reply = "IAM ist genau Spezialgebiet von Tiep — starke Sache!";
-        if (userText.includes("Azure")) reply = "Azure Entra ID? Da ist Tiep der Profi!";
-        if (userText.includes("Kontakt")) reply = "Du kannst mich jederzeit fragen — ich bin immer da. Oder du kannst Tiep auch direkt unter die Tel. Nr.: 01781868683 erreichen :)";
+// Verarbeitet das Drücken der ENTER-Taste im Eingabefeld
+chatInput.addEventListener("keypress", async function(event) {
+    if (event.key === "Enter" && chatInput.value.trim() !== "") {
+        const queryText = chatInput.value.trim();
+        
+        // 1. Nutzernachricht sofort im Chatverlauf einblenden
+        appendBubble("user", queryText);
+        chatInput.value = "";
 
-        addMessage("Assistent", reply);
+        // 2. Animierten Lade-Indikator einblenden
+        showLoader();
 
-        input.value = "";
+        try {
+            // 3. POST-Anfrage an den Cloudflare Worker senden
+            const networkResponse = await fetch(COMPUTE_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: queryText })
+            });
+            const responseData = await networkResponse.json();
+            
+            // Lade-Indikator entfernen und Antwort ausgeben
+            hideLoader();
+            appendBubble("bot", responseData.reply);
+        } catch (err) {
+            hideLoader();
+            appendBubble("bot", "Entschuldigung, die Verbindung zum KI-Modell ist fehlgeschlagen.");
+            console.error("Worker Connection Error:", err);
+        }
     }
 });
 
-function addMessage(sender, text) {
-    const div = document.createElement("div");
-    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+// Funktion zum flexiblen Erzeugen von Chat-Sprechblasen
+function appendBubble(role, text) {
+    const bubble = document.createElement("div");
+    bubble.className = `asst-msg ${role}`;
+    bubble.innerText = text;
+    msgContainer.appendChild(bubble);
+    msgContainer.scrollTop = msgContainer.scrollHeight; // Auto-Scroll zum neuesten Text
+}
+
+// Funktionen zur Verwaltung des Lade-Zustands
+function showLoader() {
+    const loader = document.createElement("div");
+    loader.id = "asst-loader";
+    loader.className = "asst-msg loading";
+    loader.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> Analysiere Projektdaten...';
+    msgContainer.appendChild(loader);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+function hideLoader() {
+    const loader = document.getElementById("asst-loader");
+    if (loader) loader.remove();
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</body>
+</html>
