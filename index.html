@@ -371,6 +371,107 @@
     .nav-links { display: none; }
     .hero-stats { flex-wrap: wrap; gap: 32px; }
   }
+
+  /* ====================================================================
+    📱 REPSONSIVE OPTIMIERUNG (HEADER, SCHRIFTEN & HAMBURGER MENÜ)
+    ==================================================================== */
+
+  /* Der Hamburger-Button ist auf dem Desktop standardmäßig unsichtbar */
+  .hamburger-menu {
+    display: none;
+    font-size: 22px;
+    color: var(--text-dark);
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    z-index: 101;
+  }
+
+  @media (max-width: 768px) {
+    /* 1. Hamburger-Menü aktivieren und Navigations-Links einklappen */
+    .hamburger-menu {
+      display: block; /* Zeigt den Button auf Smartphones an */
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      padding: 24px 0;
+      gap: 1.2rem;
+      width: 100%;
+      transform: translateY(-150%); /* Schiebt das Menü unsichtbar nach oben */
+      transition: transform 0.4s ease-in-out;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    /* Wird per JS ausgelöst: Lässt das Menü sanft von oben hineingleiten */
+    .nav-links.active {
+      transform: translateY(0);
+    }
+
+    /* 2. Header-Bereich & Schriften optisch verkleinern (Schluss mit Riesen-Text) */
+    #home {
+      padding-top: 100px !important; /* Verringert den riesigen oberen Abstand auf Mobile */
+      min-height: auto !important;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem !important;
+      letter-spacing: 0.5px !important;
+      margin-bottom: 12px !important;
+    }
+
+    .hero-name {
+      font-size: 2.2rem !important; /* Begrenzt die enorme Größe deines Namens */
+      line-height: 1.2 !important;
+      letter-spacing: -0.5px !important;
+      margin-bottom: 10px !important;
+    }
+
+    .hero-role {
+      font-size: 1.05rem !important; /* Passt die Unterüberschrift harmonisch an */
+      line-height: 1.4 !important;
+      margin-bottom: 20px !important;
+    }
+
+    .hero-desc {
+      font-size: 0.95rem !important; /* Optimale Lesegröße für Smartphone-Fließtext */
+      line-height: 1.6 !important;
+      margin-bottom: 30px !important;
+    }
+
+    /* Buttons nebeneinander oder sauber untereinander */
+    .hero-btns {
+      gap: 12px !important;
+    }
+    .btn-primary, .btn-outline {
+      padding: 12px 24px !important;
+      font-size: 0.85rem !important;
+      flex: 1; /* Lässt Buttons den Platz gleichmäßig aufteilen */
+      text-align: center;
+    }
+
+    /* 3. Statistiken für Mobile kompakter bauen */
+    .hero-stats {
+      margin-top: 35px !important;
+      padding-top: 25px !important;
+      gap: 24px !important; /* Verringert den Abstand zwischen den Zahlen */
+    }
+    .stat-num {
+      font-size: 1.6rem !important;
+    }
+    .stat-label {
+      font-size: 0.75rem !important;
+    }
+  }
+
 </style>
 </head>
 <body>
