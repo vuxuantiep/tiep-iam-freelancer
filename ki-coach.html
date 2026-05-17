@@ -312,14 +312,25 @@
 <div id="overlay"></div>
 
 <div id="sidebar" class="flex flex-col h-full">
-    <div class="p-5 border-b" style="border-color:var(--border)">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-briefcase text-white text-xs"></i>
+    <!-- Erklärungs-Kommentar: Flex-Container mit flex-row und flex-nowrap verhindert jeglichen Zeilenumbruch. Das Logo bleibt fest links, das Schließen-Kreuz fest rechts. -->
+    <div class="p-4 border-b flex flex-row flex-nowrap justify-between items-center gap-2 flex-shrink-0" style="border-color:var(--border)">
+        
+        <!-- LINKER BEREICH: Das gesamte Logo mit Beschreibung in einer umbruchsgeschützten Box -->
+        <div class="flex-1 min-w-0 overflow-hidden">
+            <div class="flex items-center gap-2 flex-nowrap">
+                <div class="w-7 h-7 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-briefcase text-white text-[10px]"></i>
+                </div>
+                <span class="g-text text-base font-medium truncate whitespace-nowrap" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
             </div>
-            <span class="g-text text-lg" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
+            <p class="text-[11px] mt-0.5 truncate whitespace-nowrap" style="color:var(--text-muted)">KI Karriereberatung</p>
         </div>
-        <p class="text-xs mt-1" style="color:var(--text-muted)">KI Karriereberatung</p>
+        
+        <!-- RECHTER BEREICH: Der Schließen-Button ist absolut geschützt vor Verschiebungen -->
+        <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors flex-shrink-0" title="Menü schließen">
+            <i class="fas fa-times"></i>
+        </button>
+        
     </div>
 
     <div class="p-4 space-y-3 flex-1 overflow-y-auto">
