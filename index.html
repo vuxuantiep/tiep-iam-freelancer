@@ -1,264 +1,1346 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tiep Coach Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
-    <style>
-        body { background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        
-        .gemini-gradient {
-            background: linear-gradient(92deg, #4285f4 0%, #1a73e8 25%, #34a853 50%, #4285f4 100%);
-            background-size: 200% auto;
-            animation: flow 4s linear infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiep Vu Xuan – KI-Automatisierung & Enterprise Lösungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .gemini-bg-gradient {
-            background: linear-gradient(92deg, #4285f4 0%, #1a73e8 50%, #34a853 100%);
-            background-size: 200% auto;
-            animation: flow 4s linear infinite;
-        }
+  :root {
+    --bg: #fafbfc;
+    --bg2: #f3f5f7;
+    --text-dark: #1a2332;
+    --text-muted: #556b7d;
+    --border: #d8dfe6;
+    --accent: #1e5a96;
+    --accent2: #2d7fb8;
+    --success: #2d8a6f;
+    --card-bg: #ffffff;
+    --display: 'Playfair Display', serif;
+    --body: 'Inter', sans-serif;
+  }
 
-        @keyframes flow { to { background-position: 200% center; } }
+  html { scroll-behavior: smooth; }
 
-        /* Sidebar Anpassung für flüssige Bedienung */
-        .sidebar { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 0; overflow: hidden; background-color: #1e1f20; z-index: 50; }
-        .sidebar.open { width: 280px; }
-        
-        .chat-container { max-width: 800px; margin: 0 auto; width: 100%; }
-        
-        .input-area { 
-            background-color: #1e1f20; 
-            border-radius: 32px; 
-            padding: 10px 20px; 
-            border: 1px solid #3c4043; 
-            transition: border-color 0.2s, box-shadow 0.2s; 
-        }
-        .input-area:focus-within { border-color: #4285f4; box-shadow: 0 0 0 1px #4285f4; }
+  body {
+    background: var(--bg);
+    color: var(--text-dark);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
 
-        .msg-bubble { line-height: 1.6; border-radius: 20px; word-wrap: break-word; }
-        
-        .logo-glow {
-            color: #4285f4;
-            filter: drop-shadow(0 0 8px rgba(66, 133, 244, 0.4));
-        }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
 
-        #chat-scroll::-webkit-scrollbar { width: 8px; }
-        #chat-scroll::-webkit-scrollbar-track { background: transparent; }
-        #chat-scroll::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 10px; }
-    </style>
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 72px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--display); font-weight: 700; font-size: 1.25rem;
+    color: var(--text-dark); text-decoration: none; letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 2.8rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--body); font-weight: 500; font-size: 0.9rem;
+    color: var(--text-muted); text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    font-family: var(--body); font-size: 0.85rem; font-weight: 600;
+    background: var(--accent); color: white;
+    padding: 10px 24px; border: none; border-radius: 6px;
+    cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+  }
+  .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  /* ─── LAYOUT ─── */
+  section { padding: 100px 5vw; }
+  .container { max-width: 1080px; margin: 0 auto; }
+
+  .tag {
+    font-family: var(--body); font-size: 0.75rem; font-weight: 600;
+    color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 16px; display: block;
+  }
+
+  h2.section-title {
+    font-family: var(--display); font-weight: 700; font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.2; margin-bottom: 20px; color: var(--text-dark);
+  }
+  h2.section-title em { font-style: normal; color: var(--accent); }
+
+  .section-lead {
+    font-size: 1.05rem; color: var(--text-muted);
+    max-width: 600px; margin-bottom: 60px; line-height: 1.8;
+  }
+
+  /* ─── HERO ─── */
+  #home {
+    min-height: 100vh; display: flex; align-items: center;
+    padding-top: 140px; position: relative;
+  }
+
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+  .hero-eyebrow {
+    font-family: var(--body); font-size: 0.8rem; color: var(--accent);
+    letter-spacing: 0.5px; margin-bottom: 24px;
+  }
+
+  .hero-name {
+    font-family: var(--display); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4.5rem);
+    line-height: 1.1; margin-bottom: 12px; color: var(--text-dark); letter-spacing: -1px;
+  }
+
+  .hero-role {
+    font-family: var(--body); font-weight: 500; font-size: 1.2rem;
+    color: var(--text-muted); margin-bottom: 32px;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem; color: var(--text-muted); line-height: 1.85;
+    max-width: 520px; margin-bottom: 40px;
+  }
+
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: var(--body); font-size: 0.9rem; font-weight: 600;
+    background: var(--accent); color: white;
+    padding: 14px 32px; border: none; border-radius: 6px;
+    cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(30,90,150,0.2); }
+
+  .btn-outline {
+    font-family: var(--body); font-size: 0.9rem; font-weight: 600;
+    background: transparent; color: var(--accent);
+    padding: 14px 32px; border: 2px solid var(--accent);
+    border-radius: 6px; cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+  }
+  .btn-outline:hover { background: var(--accent); color: white; }
+
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 56px; padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: var(--display); font-weight: 700; font-size: 2rem;
+    color: var(--accent); display: block;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+
+  .hero-right { display: flex; justify-content: center; }
+  .hero-photo-wrap {
+    width: 340px; height: 420px; border-radius: 8px;
+    overflow: hidden; box-shadow: 0 20px 60px rgba(26,35,50,0.08);
+  }
+  .hero-photo-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  /* ─── SERVICES ─── */
+  #services { background: var(--bg2); }
+
+  .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .service-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 40px 32px;
+    transition: all 0.3s ease;
+  }
+  .service-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px rgba(30,90,150,0.08);
+  }
+
+  .service-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+  .service-card h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.3rem;
+    margin-bottom: 12px; color: var(--text-dark);
+  }
+  .service-card p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 16px; }
+  .service-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .service-tag {
+    font-size: 0.75rem; color: var(--accent); background: rgba(30,90,150,0.06);
+    padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(30,90,150,0.15);
+  }
+
+  /* ─── KI SOLUTIONS ─── */
+  #ki-loesungen { background: var(--bg); }
+
+  .ki-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-bottom: 80px; }
+  .ki-features { display: flex; flex-direction: column; gap: 20px; }
+  .ki-feature {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 24px; background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .ki-feature-icon {
+    font-size: 1.4rem; flex-shrink: 0; margin-top: 2px;
+  }
+  .ki-feature h4 {
+    font-family: var(--display); font-weight: 600; font-size: 1.05rem;
+    margin-bottom: 6px; color: var(--text-dark);
+  }
+  .ki-feature p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* BERATUNGSMODELL */
+  .consulting-box {
+    background: linear-gradient(135deg, #f3f5f7, #eef1f5);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 40px; margin-top: 60px;
+  }
+  .consulting-box h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.4rem;
+    margin-bottom: 16px; color: var(--text-dark);
+  }
+  .consulting-box p {
+    font-size: 0.95rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.8;
+  }
+  .benefits { list-style: none; margin-top: 20px; }
+  .benefits li {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.9rem; color: var(--text-dark); margin-bottom: 8px;
+  }
+  .benefits li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+
+  /* ─── PORTFOLIO ─── */
+  #portfolio { background: var(--bg2); }
+
+  .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .port-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .port-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 12px 40px rgba(30,90,150,0.08);
+  }
+
+  .port-header {
+    padding: 28px 28px 20px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .port-badge {
+    font-size: 0.7rem; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 4px; white-space: nowrap;
+    letter-spacing: 0.5px; font-weight: 600;
+  }
+  .badge-green { background: rgba(45,138,111,0.1); color: var(--success); border: 1px solid rgba(45,138,111,0.2); }
+  .badge-blue  { background: rgba(30,90,150,0.1); color: var(--accent); border: 1px solid rgba(30,90,150,0.2); }
+
+  .port-body { padding: 28px; }
+  .port-body h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.2rem;
+    margin-bottom: 10px; color: var(--text-dark);
+  }
+  .port-body p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
+  .port-specs { display: flex; flex-direction: column; gap: 10px; }
+  .port-spec { font-size: 0.85rem; color: var(--text-dark); }
+  .port-spec::before { content: '—'; color: var(--accent); margin-right: 8px; font-weight: 600; }
+  .port-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .stack-tag {
+    font-size: 0.75rem; color: var(--accent); background: rgba(30,90,150,0.06);
+    padding: 4px 10px; border-radius: 4px;
+  }
+
+  /* ─── EXPERIENCE ─── */
+  #experience { background: var(--bg); }
+
+  .exp-timeline { display: flex; flex-direction: column; gap: 24px; }
+  .exp-item {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 28px;
+    border-left: 4px solid var(--accent);
+  }
+  .exp-period {
+    font-size: 0.8rem; color: var(--text-muted);
+    margin-bottom: 8px; letter-spacing: 0.5px;
+  }
+  .exp-item h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.15rem;
+    margin-bottom: 4px; color: var(--text-dark);
+  }
+  .exp-company { font-size: 0.9rem; color: var(--accent); margin-bottom: 12px; font-weight: 500; }
+  .exp-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+  .certs-grid { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+  .cert-badge {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--text-muted);
+  }
+  .cert-badge img { height: 26px; width: auto; }
+
+  /* ─── KONTAKT ─── */
+  #kontakt { background: var(--bg2); }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+  .contact-info h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.3rem;
+    margin-bottom: 16px; color: var(--text-dark);
+  }
+  .contact-info p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 28px; line-height: 1.8; }
+
+  .contact-detail {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+    font-size: 0.9rem;
+  }
+  .contact-icon {
+    width: 40px; height: 40px; background: rgba(30,90,150,0.08);
+    border: 1px solid var(--border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1rem;
+  }
+
+  /* ─── FORM ─── */
+  .contact-form { display: flex; flex-direction: column; gap: 18px; }
+  .form-group { display: flex; flex-direction: column; gap: 7px; }
+  .form-group label {
+    font-family: var(--body); font-size: 0.85rem; font-weight: 600;
+    color: var(--text-dark); letter-spacing: 0.3px;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px;
+    font-family: var(--body); font-size: 0.9rem; color: var(--text-dark);
+    transition: border-color 0.3s ease; outline: none; resize: vertical;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--accent);
+  }
+  .form-group textarea { min-height: 120px; }
+  .form-group select { appearance: none; cursor: pointer; padding-right: 30px; }
+
+  .form-submit {
+    display: block; text-align: center; text-decoration: none;
+    font-family: var(--body); font-size: 0.9rem; font-weight: 600;
+    padding: 14px; border-radius: 6px; border: none;
+    background: var(--accent); color: white;
+    cursor: pointer; transition: all 0.3s ease; letter-spacing: 0.3px;
+  }
+  .form-submit:hover { background: var(--accent2); transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 36px 5vw;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+    background: var(--card-bg);
+  }
+  .footer-logo { font-family: var(--display); font-weight: 700; font-size: 1.05rem; }
+  .footer-logo span { color: var(--accent); }
+  footer p { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .ki-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-stats { flex-wrap: wrap; gap: 32px; }
+  }
+
+  /* ====================================================================
+    📱 REPSONSIVE OPTIMIERUNG (HEADER, SCHRIFTEN & HAMBURGER MENÜ)
+    ==================================================================== */
+
+  /* Der Hamburger-Button ist auf dem Desktop standardmäßig unsichtbar */
+  .hamburger-menu {
+    display: none;
+    font-size: 22px;
+    color: var(--text-dark);
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    z-index: 101;
+  }
+
+  @media (max-width: 768px) {
+    /* 1. Hamburger-Menü aktivieren und Navigations-Links einklappen */
+    .hamburger-menu {
+      display: block; /* Zeigt den Button auf Smartphones an */
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      padding: 24px 0;
+      gap: 1.2rem;
+      width: 100%;
+      transform: translateY(-150%); /* Schiebt das Menü unsichtbar nach oben */
+      transition: transform 0.4s ease-in-out;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    /* Wird per JS ausgelöst: Lässt das Menü sanft von oben hineingleiten */
+    .nav-links.active {
+      transform: translateY(0);
+    }
+
+    /* 2. Header-Bereich & Schriften optisch verkleinern (Schluss mit Riesen-Text) */
+    #home {
+      padding-top: 100px !important; /* Verringert den riesigen oberen Abstand auf Mobile */
+      min-height: auto !important;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem !important;
+      letter-spacing: 0.5px !important;
+      margin-bottom: 12px !important;
+    }
+
+    .hero-name {
+      font-size: 2.2rem !important; /* Begrenzt die enorme Größe deines Namens */
+      line-height: 1.2 !important;
+      letter-spacing: -0.5px !important;
+      margin-bottom: 10px !important;
+    }
+
+    .hero-role {
+      font-size: 1.05rem !important; /* Passt die Unterüberschrift harmonisch an */
+      line-height: 1.4 !important;
+      margin-bottom: 20px !important;
+    }
+
+    .hero-desc {
+      font-size: 0.95rem !important; /* Optimale Lesegröße für Smartphone-Fließtext */
+      line-height: 1.6 !important;
+      margin-bottom: 30px !important;
+    }
+
+    /* Buttons nebeneinander oder sauber untereinander */
+    .hero-btns {
+      gap: 12px !important;
+    }
+    .btn-primary, .btn-outline {
+      padding: 12px 24px !important;
+      font-size: 0.85rem !important;
+      flex: 1; /* Lässt Buttons den Platz gleichmäßig aufteilen */
+      text-align: center;
+    }
+
+    /* 3. Statistiken für Mobile kompakter bauen */
+    .hero-stats {
+      margin-top: 35px !important;
+      padding-top: 25px !important;
+      gap: 24px !important; /* Verringert den Abstand zwischen den Zahlen */
+    }
+    .stat-num {
+      font-size: 1.6rem !important;
+    }
+    .stat-label {
+      font-size: 0.75rem !important;
+    }
+  }
+
+</style>
 </head>
-<body class="flex h-screen overflow-hidden relative">
+<body>
 
-    <div id="sidebar" class="sidebar flex flex-col h-full border-r border-gray-800 absolute lg:relative">
-        <div class="p-6 border-b border-gray-800">
-            <span class="gemini-gradient text-2xl">Tiep Tools</span>
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">Vu Xuan<span>Tiep</span></a>
+  <button class="hamburger-menu" id="hamburger-toggle" aria-label="Menü öffnen">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <ul class="nav-links" id="nav-menu">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#ki-loesungen">KI Lösungen</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#experience">Team</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="#kontakt" class="nav-cta">Beratung anfragen</a>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div style="animation: fadeUp 0.8s ease both;">
+        <div class="hero-eyebrow">IAM · KI-Automatisierung · Enterprise Lösungen</div>
+        <h1 class="hero-name">Mehr Kunden. Weniger <span style="color:var(--accent);">manuelle Arbeit</span>.</h1>
+        <p class="hero-role">KI-Automatisierung & sichere Enterprise Systeme für KMU</p>
+        <p class="hero-desc">
+          Ich helfe Ihrem Unternehmen, automatisch qualifizierte Leads zu gewinnen und IT-Prozesse intelligent zu automatisieren – sicher, datenschutzkonform und zukunftsorientiert.
+        </p>
+        <div class="hero-btns">
+          <a href="#kontakt" class="btn-primary">Kostenlose Erstanalyse buchen</a>
+          <a href="#ki-loesungen" class="btn-outline">Unsere Lösungen ansehen</a>
         </div>
-        <div class="p-6 space-y-6 flex-1">
-            <div class="bg-[#2b2b2b] p-5 rounded-2xl border border-gray-700">
-                <label class="block mb-3 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Lebenslauf hochladen</label>
-                <input type="file" id="resume-upload" accept=".docx,.txt" class="block w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-600 file:text-white cursor:pointer hover:file:bg-blue-500 transition-all">
-                <button id="analyze-btn" class="w-full mt-4 gemini-bg-gradient text-white text-sm py-3 rounded-xl font-bold transition-all hidden shadow-lg uppercase tracking-tight">Analyse starten</button>
-            </div>
-            <button id="ikigai-btn" class="w-full text-left p-4 bg-gray-800/40 hover:bg-gray-800 rounded-xl text-sm border border-gray-700 flex items-center gap-4 transition-all">
-                <i class="fas fa-dharmachakra text-blue-400 text-lg"></i>
-                <span class="font-medium text-gray-300">Ikigai Analyse</span>
-            </button>
+        <div class="hero-stats">
+          <div>
+            <span class="stat-num">10+</span>
+            <div class="stat-label">Jahre IT-Erfahrung</div>
+          </div>
+          <div>
+            <span class="stat-num">3</span>
+            <div class="stat-label">Core Lösungen</div>
+          </div>
+          <div>
+            <span class="stat-num">100%</span>
+            <div class="stat-label">Datenschutz-konform</div>
+          </div>
         </div>
-        <div class="p-6 text-[10px] text-gray-600 border-t border-gray-800 italic uppercase">Tiep Intelligence v2.5</div>
+      </div>
+
+      <div class="hero-right" style="animation: fadeUp 0.8s ease both 0.2s backwards;">
+        <div class="hero-photo-wrap">
+          <img src="https://itiep.de/8-transparent.png" alt="Tiep Vu Xuan">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <span class="tag">Services</span>
+    <h2 class="section-title">Was ich für Sie <em>löse</em></h2>
+    <p class="section-lead">Von sicherem Identity Management bis zur intelligenten KI-Vertriebsautomatisierung.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🛡️</div>
+        <h3>Identity & Zugriffssicherheit</h3>
+        <p>Sichere Benutzerverwaltung, Zero-Trust-Architekturen und RBAC-Modelle für Enterprise-Systeme.</p>
+        <div class="service-tags">
+          <span class="service-tag">Azure Entra ID</span>
+          <span class="service-tag">Active Directory</span>
+          <span class="service-tag">Zero Trust</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>KI-Vertriebsautomatisierung</h3>
+        <p>Automatisches Lead-Finding, Kundenbewertung und Follow-up-Systeme für mehr Verkäufe.</p>
+        <div class="service-tags">
+          <span class="service-tag">Lead Automation</span>
+          <span class="service-tag">CRM Agent</span>
+          <span class="service-tag">KI-Scoring</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📦</div>
+        <h3>Software Modernisierung</h3>
+        <p>Containerisierung von Legacy-Anwendungen, Cloud-Migration und sichere KI-Integration.</p>
+        <div class="service-tags">
+          <span class="service-tag">Docker/Kubernetes</span>
+          <span class="service-tag">Cloud-Migration</span>
+          <span class="service-tag">ERP Modernisierung</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🔗</div>
+        <h3>Automatisierung & Integration</h3>
+        <p>Workflow-Automatisierung, API-Integration und datenschutzkonforme Prozesse.</p>
+        <div class="service-tags">
+          <span class="service-tag">n8n Workflows</span>
+          <span class="service-tag">API Integration</span>
+          <span class="service-tag">DSGVO-konform</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KI SOLUTIONS -->
+<section id="ki-loesungen">
+  <div class="container">
+    <span class="tag">KI Lösungen</span>
+    <h2 class="section-title">Intelligente Systeme für <em>nachhaltiges Wachstum</em></h2>
+    <p class="section-lead">Automatisierte Kundengewinnung und KI-gestützte Entscheidungsprozesse – sicher und in Ihrer Kontrolle.</p>
+
+    <div class="ki-grid">
+      <div>
+        <p style="font-size:1.05rem; color:var(--text-muted); line-height:1.85; margin-bottom:24px;">
+          Mit KI-Automatisierung gewinnen Sie täglich neue, qualifizierte Leads – ganz ohne manuelle Recherche. Das System arbeitet kontinuierlich, bewertet Chancen intelligent und nutzt KI-gestützte Insights für bessere Entscheidungen.
+        </p>
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:8px; padding:28px;">
+          <p style="font-size:0.85rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:12px; font-weight:600;">TYPISCHE RESULTS</p>
+          <ul style="list-style:none;">
+            <li style="display:flex; align-items:center; gap:10px; margin-bottom:10px; color:var(--text-dark); font-size:0.95rem;">
+              <span style="color:var(--success); font-weight:700;">✓</span> 2–5× mehr qualifizierte Leads/Monat
+            </li>
+            <li style="display:flex; align-items:center; gap:10px; margin-bottom:10px; color:var(--text-dark); font-size:0.95rem;">
+              <span style="color:var(--success); font-weight:700;">✓</span> 80% weniger manuelle Recherche
+            </li>
+            <li style="display:flex; align-items:center; gap:10px; color:var(--text-dark); font-size:0.95rem;">
+              <span style="color:var(--success); font-weight:700;">✓</span> Schnellere Reaktionszeiten & bessere Conversion
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ki-features">
+        <div class="ki-feature">
+          <div class="ki-feature-icon">🔍</div>
+          <div>
+            <h4>Automatisches Lead-Finding</h4>
+            <p>KI sucht täglich nach neuen, relevanten Interessenten – vollautomatisch und kontinuierlich.</p>
+          </div>
+        </div>
+        <div class="ki-feature">
+          <div class="ki-feature-icon">⭐</div>
+          <div>
+            <h4>Intelligente Bewertung</h4>
+            <p>Jeder Lead wird automatisch priorisiert – Sie fokussieren sich auf die besten Chancen.</p>
+          </div>
+        </div>
+        <div class="ki-feature">
+          <div class="ki-feature-icon">📬</div>
+          <div>
+            <h4>Personalisierte Outreach</h4>
+            <p>KI generiert maßgeschneiderte Nachrichten zum richtigen Zeitpunkt – ganz automatisch.</p>
+          </div>
+        </div>
+        <div class="ki-feature">
+          <div class="ki-feature-icon">📊</div>
+          <div>
+            <h4>Intelligente Reports & Insights</h4>
+            <p>Tägliche Analysen zeigen Ihnen, welche Strategien funktionieren und wo Sie optimieren können.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="flex-1 flex flex-col bg-[#131314] h-full relative">
-        <header class="p-4 flex items-center justify-between border-b border-gray-800/50 bg-[#131314] z-10">
-            <button id="menu-btn" class="text-xl p-2 hover:bg-gray-800 rounded-full transition-colors"><i class="fas fa-bars"></i></button>
-            <h1 class="text-2xl gemini-gradient">Tiep Coach</h1>
-            
-            <div class="flex items-center gap-4">
-                <button id="toggle-audio-btn" class="flex items-center gap-3 px-4 py-2 rounded-full bg-gray-800/60 border border-gray-700 hover:border-blue-500 transition-all group">
-                    <span id="audio-label" class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Audio: An</span>
-                    <div id="audio-visualizer" class="flex gap-1 items-center h-3">
-                        <div class="w-0.5 h-full bg-blue-500 rounded-full"></div>
-                        <div class="w-0.5 h-2 bg-blue-400 rounded-full"></div>
-                        <div class="w-0.5 h-3 bg-blue-500 rounded-full"></div>
-                    </div>
-                </button>
-                <i class="fas fa-briefcase logo-glow text-xl"></i>
-            </div>
-        </header>
+    <!-- BERATUNGSMODELL -->
+    <div class="consulting-box">
+      <h3>Flexible Lösungen nach Ihren Bedürfnissen</h3>
+      <p>
+        Jedes Unternehmen ist unterschiedlich. Deshalb arbeite ich nicht mit Standardpaketen, sondern entwickle
+        <strong>maßgeschneiderte Lösungen</strong> basierend auf Ihrem spezifischen Anforderungen und Budget.
+      </p>
+      <p style="margin-top:12px;">
+        In einem kostenlosen Erstgespräch (30-45 Min.) analysiere ich Ihre Situation und zeige Ihnen konkrete Möglichkeiten auf.
+        <strong>Preise werden transparent nach Ihrer Anforderung abgestimmt</strong> – nicht umgekehrt.
+      </p>
+      <ul class="benefits">
+        <li>Kostenlose Erstanalyse Ihrer Situation</li>
+        <li>Transparente Preisgestaltung nach echtem Umfang</li>
+        <li>Keine versteckten Kosten oder Lock-ins</li>
+        <li>Flexible Zusammenarbeit und Skalierbarkeit</li>
+        <li>Regelmäßige Optimierung basierend auf Ihren Ergebnissen</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-        <div id="chat-scroll" class="flex-1 overflow-y-auto p-4 md:p-6 pb-28">
-            <div id="chat-history" class="chat-container space-y-6 py-4">
-                <div class="flex gap-4">
-                    <div class="w-10 h-10 rounded-full gemini-bg-gradient flex-shrink-0 flex items-center justify-center shadow-lg"><i class="fas fa-robot text-white text-sm"></i></div>
-                    <div class="p-5 bg-[#1e1f20] border border-gray-800 text-gray-200 msg-bubble max-w-[85%] shadow-sm text-sm md:text-base">
-                        Hallo! Ich bin dein **Tiep Coach**. Ich bin bereit, deinen Lebenslauf auf Top-Niveau zu optimieren oder dein Ikigai zu entschlüsseln. Lad ein Dokument hoch, um loszulegen!
-                    </div>
-                </div>
-            </div>
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="container">
+    <span class="tag">Portfolio</span>
+    <h2 class="section-title">Implementierte <em>Lösungen</em></h2>
+    <p class="section-lead">Real-world Projekte für unterschiedliche Branchen und Anforderungen.</p>
+
+    <div class="portfolio-grid">
+      <!-- Lead Finder -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">KI-AUTOMATISIERUNG</div>
+            <span class="port-badge badge-blue">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>KI Lead Finder System</h3>
+          <p>Automatisches System, das täglich neue, qualifizierte Leads sammelt, bewertet und priorisiert.</p>
+          <div class="port-specs">
+            <div class="port-spec">Tägliches Scraping aus 3+ Quellen (LinkedIn, Jobportale, Web)</div>
+            <div class="port-spec">KI-basiertes Scoring & Priorisierung</div>
+            <div class="port-spec">REST API & automatische CRM-Integration</div>
+            <div class="port-spec">Tägliche, detaillierte Lead-Reports</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">FastAPI/Langgraph</span>
+            <span class="stack-tag">PostgreSQL</span>
+            <span class="stack-tag">OpenAi; Ollama; Openrouter</span>
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">n8n</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRM Agent -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">KI-AUTOMATISIERUNG</div>
+            <span class="port-badge badge-blue">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>AI CRM Agent & Sales Automation</h3>
+          <p>Intelligenter Agent, der Leads automatisch priorisiert und personalisierte Follow-ups übernimmt.</p>
+          <div class="port-specs">
+            <div class="port-spec">Automatische Lead-Priorisierung und Segmentierung</div>
+            <div class="port-spec">KI-generierte, personalisierte Follow-up-Nachrichten</div>
+            <div class="port-spec">Zeitgesteuerte Outreach-Kampagnen</div>
+            <div class="port-spec">Performance-Tracking und A/B-Testing</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">OpenAI API</span>
+            <span class="stack-tag">n8n</span>
+            <span class="stack-tag">Dolibarr/AgorumCore</span>
+            <span class="stack-tag">Grafana</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERP Modernisierung -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">MODERNISIERUNG</div>
+            <span class="port-badge badge-blue">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>Enterprise ERP Containerisierung & Modernisierung</h3>
+          <p>Sichere Migration und Containerisierung von Legacy-ERP-Systemen in moderne, skalierbare Infrastruktur.</p>
+          <div class="port-specs">
+            <div class="port-spec">Containerisierung (Docker/Kubernetes) mit Zero-Downtime-Migration</div>
+            <div class="port-spec">Hybrid-Cloud-Setup (On-Prem + Cloud)</div>
+            <div class="port-spec">KI-gestützte Prozessoptimierung und Datenanalyse</div>
+            <div class="port-spec">DSGVO-konforme Datenverwaltung und Verschlüsselung</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">Kubernetes</span>
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">Azure</span>
+            <span class="stack-tag">Traefik</span>
+            <span class="stack-tag">DSGVO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- IAM -->
+      <div class="port-card">
+        <div class="port-header">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); letter-spacing:0.5px; margin-bottom:6px;">SICHERHEIT</div>
+            <span class="port-badge badge-green">Implementiert</span>
+          </div>
+        </div>
+        <div class="port-body">
+          <h3>Zero-Trust IAM & Sicherheitsinfrastruktur</h3>
+          <p>Aufbau moderner, sicherer Identity Management Systeme mit Zero-Trust Prinzipien.</p>
+          <div class="port-specs">
+            <div class="port-spec">Azure Entra ID Rollout & Hybrid-Szenarien</div>
+            <div class="port-spec">RBAC & JIT/JEA Zugriffssteuerung</div>
+            <div class="port-spec">IaC-Automatisierung für Onboarding</div>
+            <div class="port-spec">Compliance & Auditberichte (ISO 27001, DSGVO)</div>
+          </div>
+          <div class="port-stack">
+            <span class="stack-tag">Azure Entra ID</span>
+            <span class="stack-tag">PowerShell/Ansible</span>
+            <span class="stack-tag">Intune</span>
+            <span class="stack-tag">Zero Trust(CloudFlare,Tailscale,Authentik)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <span class="tag">Hintergrund</span>
+    <h2 class="section-title">Mein <em>Werdegang</em></h2>
+    <p class="section-lead">Über 7 Jahre Erfahrung in IT-Infrastruktur, IAM und Enterprise Modernisierung.</p>
+
+    <div class="exp-timeline">
+      <div class="exp-item">
+        <div class="exp-period">2023 – Heute</div>
+        <h3>IT-Applikationsmanager (adesso GmbH)</h3>
+        <div class="exp-company">Betrieb · IAM · Cloud</div>
+        <p>Betrieb kritischer Fachanwendungen, IAM-Prozessdesign, Azure/AD-Integration und PowerShell-Automatisierung für Großunternehmen.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-period">2020 – 2023</div>
+        <h3>IT-Systemadministrator (Landessozialgericht Hamburg)</h3>
+        <div class="exp-company">Infrastruktur · Sicherheit</div>
+        <p>Windows-Server-Administration, GPO-Management, Berechtigungskonzepte und Endpoint Manager für Behörde mit hohen Compliance-Anforderungen.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-period">2019 – 2020</div>
+        <h3>IT-Techniker / System Engineer (Wärme Hamburg GmbH)</h3>
+        <div class="exp-company">IT-Operations</div>
+        <p>Systemrollout, SCCM-Management, Asset-Management und On-Site Support für mittelständisches Energieunternehmen.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-period">Seit 2024</div>
+        <h3>KI-Automatisierungs­experte (itiep.de)</h3>
+        <div class="exp-company">Beratung & Lösungsentwicklung</div>
+        <p>Spezialisierung auf KI-Vertriebsautomatisierung, sichere Enterprise-Lösungen und Datenschutzkonforme Systeme für KMU.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:60px;">
+      <p style="font-family:var(--display); font-weight:600; font-size:1.1rem; color:var(--text-dark); margin-bottom:20px;">Zertifizierungen</p>
+      <div class="certs-grid">
+        <div class="cert-badge">
+          <img src="https://itiep.de/images/aws-cloud-practitioner.png" alt="AWS">
+          AWS Cloud Practitioner
+        </div>
+        <div class="cert-badge">
+          <img src="https://itiep.de/images/Azure-Admin.png" alt="Azure">
+          Azure Administrator
+        </div>
+        <div class="cert-badge">
+          <img src="https://itiep.de/images/mcsa-2016.png" alt="MCSA">
+          MCSA Windows Server 2016
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="container">
+    <span class="tag">Kontakt</span>
+    <h2 class="section-title">Kostenlose <em>Erstanalyse</em> buchen</h2>
+    <p class="section-lead">Lassen Sie uns in einem kurzen Gespräch Ihre Situation analysieren und konkrete Möglichkeiten aufzeigen.</p>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Lasst uns sprechen</h3>
+        <p>
+          Ich antworte in der Regel innerhalb von 24 Stunden. In einem kostenlosen Erstgespräch (30-45 Min.)
+          analysiere ich Ihre Herausforderungen und zeige konkrete, maßgeschneiderte Lösungen auf.
+        </p>
+
+        <div class="contact-detail">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Standort</div>
+            <div style="font-weight:500;">Hamburg, Deutschland</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">💼</div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Fokus</div>
+            <div style="font-weight:500;">KMU, Mittelstand, Enterprise</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">🔒</div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Datenschutz</div>
+            <div style="font-weight:500;">100% DSGVO-konform</div>
+          </div>
         </div>
 
-        <div class="fixed bottom-0 left-0 right-0 p-4 bg-[#131314] border-t border-gray-800/60 z-20">
-            <div class="chat-container">
-                <div class="input-area flex items-center gap-3 shadow-xl">
-                    <input type="text" id="user-input" class="flex-1 bg-transparent outline-none text-white text-base py-1 placeholder-gray-500" placeholder="Schreibe eine Nachricht..." autocomplete="off">
-                    <button id="send-btn" class="text-blue-500 text-xl hover:scale-110 active:scale-95 transition-all p-2">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
+        <div style="background:rgba(30,90,150,0.05); border:1px solid var(--border); border-radius:8px; padding:20px; margin-top:28px;">
+          <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">
+            <strong style="color:var(--text-dark);">💡 Sie sind nicht allein:</strong> Viele KMU verlieren täglich Leads durch manuelle Prozesse. Eine automatisierte Lösung kann alles ändern.
+          </p>
+        </div>
+      </div>
+
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label>Ihr Name</label>
+          <input type="text" placeholder="Max Mustermann" required>
+        </div>
+        <div class="form-group">
+          <label>Ihre E-Mail</label>
+          <input type="email" placeholder="max@beispiel.de" required>
+        </div>
+        <div class="form-group">
+          <label>Ihr Unternehmen</label>
+          <input type="text" placeholder="Beispiel GmbH">
+        </div>
+        <div class="form-group">
+          <label>Interessiert Sie besonders:</label>
+          <select required>
+            <option value="">Bitte auswählen…</option>
+            <option>KI-Vertriebsautomatisierung & Lead Generation</option>
+            <option>Software Modernisierung & Containerisierung</option>
+            <option>Identity Management & Sicherheit</option>
+            <option>Workflow-Automatisierung & KI-Integration</option>
+            <option>Kostenlose Beratung (alle Themen)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ihre Nachricht / Herausforderung</label>
+          <textarea placeholder="Beschreiben Sie kurz Ihre Situation oder Herausforderung…" required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Erstanalyse anfragen</button>
+        <div id="form-success" style="display:none; text-align:center; padding:14px; background:rgba(45,138,111,0.08); border:1px solid rgba(45,138,111,0.25); border-radius:6px; color:var(--success); font-weight:600; font-size:0.9rem;">
+          ✓ Anfrage gesendet! Ich melde mich innerhalb von 24 Stunden bei Ihnen.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">itiep<span>.de</span></div>
+    <p>© 2026 Tiep Vu Xuan – KI & Enterprise Lösungen</p>
+  </div>
+  <div style="text-align:right;">
+    <p style="margin-bottom:8px; font-size:0.85rem;"><strong>Kontakt:</strong> <a href="mailto:vuxuantiep@gmail.com" style="color:var(--accent); text-decoration:none;">vuxuantiep@gmail.com</a></p>
+    <p><a href="https://itiep.de/Lebenslauf-TIEP.pdf" style="color:var(--text-muted); text-decoration:none; font-size:0.8rem;">Lebenslauf herunterladen →</a></p>
+  </div>
+</footer>
+
+<script>
+  // Smooth nav
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+    });
+    links.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+    });
+  });
+
+  // Form
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
+    setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+  }
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    obs.observe(el);
+  });
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Haupt-Container links unten positioniert */
+    #portfolio-assistant {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 10000;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Das kompakte Chat-Fenster */
+    #assistant-window {
+        display: none; 
+        width: 330px;
+        max-width: calc(100vw - 40px);
+        height: 440px;
+        background: var(--card-bg, #ffffff);
+        border: 1px solid var(--border, #d8dfe6);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        box-shadow: 0 10px 35px rgba(26, 35, 50, 0.15);
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Eleganter Header mit Platz für das minimierte KI-Gesicht */
+    .asst-header {
+        background: var(--accent, #1e5a96);
+        color: #ffffff;
+        padding: 10px 14px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        position: relative;
+    }
+
+    /* Container für Titel und Mini-Avatar im Header */
+    .asst-header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Das KI-Gesicht im Header (wird erst sichtbar, wenn Chat offen ist) */
+    #asst-header-avatar {
+        width: 0px; /* Startet bei 0 für die Einblend-Animation */
+        height: 0px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        object-fit: cover;
+    }
+    /* Klasse wird via JavaScript vergeben, wenn geöffnet */
+    #asst-header-avatar.visible {
+        width: 28px;
+        height: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .asst-header .close-icon {
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+    .asst-header .close-icon:hover { opacity: 1; }
+
+    /* Nachrichten-Verlauf */
+    #asst-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        font-size: 13.5px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: var(--bg2, #f3f5f7);
+    }
+
+    .asst-msg {
+        padding: 10px 14px;
+        border-radius: 12px;
+        max-width: 85%;
+        line-height: 1.4;
+    }
+    .asst-msg.user {
+        background: var(--accent, #1e5a96);
+        color: #ffffff;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+    }
+    .asst-msg.bot {
+        background: var(--card-bg, #ffffff);
+        color: var(--text-dark, #1a2332);
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+        border: 1px solid var(--border, #d8dfe6);
+    }
+
+    /* Unterer Eingabebereich */
+    .asst-footer {
+        padding: 10px;
+        background: var(--card-bg, #ffffff);
+        border-top: 1px solid var(--border, #d8dfe6);
+        display: flex;
+        gap: 8px;
+    }
+    #asst-input {
+        flex: 1;
+        padding: 8px 14px;
+        border-radius: 20px;
+        border: 1px solid var(--border, #d8dfe6);
+        background: var(--bg, #fafbfc);
+        color: var(--text-dark, #1a2332);
+        outline: none;
+        font-size: 13.5px;
+    }
+
+    /* 🌟 DER NEUE SCHWEBENDE BUTTON (Ersetzt den blauen Kreis) */
+    #asst-toggle-btn {
+        width: 56px;
+        height: 56px;
+        background: #ffffff; /* Weißer oder transparenter Hintergrund für das Logo */
+        border: 2px solid var(--accent, #1e5a96);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 6px 16px rgba(26, 35, 50, 0.2);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+    }
+
+    /* Das Bild der KI im schwebenden Zustand */
+    #asst-toggle-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    /* Hover-Effekt: Das Gesicht bewegt sich leicht */
+    #asst-toggle-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 8px 20px rgba(30, 90, 150, 0.3);
+    }
+    #asst-toggle-btn:hover img {
+        transform: scale(1.05);
+    }
+
+    /* Wenn der Chat geöffnet ist, schrumpft der Hauptbutton zusammen */
+    #asst-toggle-btn.shrunk {
+        width: 32px;
+        height: 32px;
+        opacity: 0.5;
+        border-color: var(--border);
+    }
+    #asst-toggle-btn.shrunk:hover {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Lade-Indikator */
+    .asst-msg.loading {
+        background: transparent;
+        color: var(--text-muted, #556b7d);
+        font-style: italic;
+        align-self: flex-start;
+        padding: 0;
+    }
+    .animate-spin {
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<div id="portfolio-assistant">
+    <div id="assistant-window">
+        <div class="asst-header">
+            <div class="asst-header-title">
+                <img id="asst-header-avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="iTiep-Ki">
+                <span>iTiep-Ki Assistentin</span>
             </div>
+            <span class="close-icon" id="asst-close"><i class="fas fa-times"></i></span>
+        </div>
+        <div id="asst-messages">
+            <div class="asst-msg bot">Hallo! Ich bin iTiep-Ki. 🤖 Ich unterstütze Tiep bei seinen Projekten. Frag mich gerne zu seinem Raspberry Pi Prototyp, Dokploy oder ERP/CRM Automatisierungen!</div>
+        </div>
+        <div class="asst-footer">
+            <input id="asst-input" type="text" placeholder="Frage zu Tieps Tech-Stack..." autocomplete="off">
         </div>
     </div>
 
-    <script>
-        const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
-        let extractedText = "";
-        let audioActive = true;
+    <div id="asst-toggle-btn">
+        <img id="asst-main-avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="iTiep-Ki Logo">
+    </div>
+</div>
 
-        const menuBtn = document.getElementById('menu-btn');
-        const sidebar = document.getElementById('sidebar');
-        const fileInput = document.getElementById('resume-upload');
-        const analyzeBtn = document.getElementById('analyze-btn');
-        const ikigaiBtn = document.getElementById('ikigai-btn');
-        const chatHistory = document.getElementById('chat-history');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const scroll = document.getElementById('chat-scroll');
-        const audioBtn = document.getElementById('toggle-audio-btn');
-        const audioLabel = document.getElementById('audio-label');
-        const audioVisualizer = document.getElementById('audio-visualizer');
+<script>
+// ====================================================================
+// 📱 NEU: STEUERUNG FÜR DAS HAMBURGER MENÜ (MOBIL)
+// ====================================================================
+const hamburgerToggle = document.getElementById('hamburger-toggle');
+const navMenu = document.getElementById('nav-menu');
+const navLinksList = document.querySelectorAll('.nav-links a');
 
-        menuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
+if (hamburgerToggle && navMenu) {
+  // Erklärungs-Kommentar: Öffnet oder schließt das Menü beim Klick auf das Icon
+  hamburgerToggle.addEventListener('click', (e) => {
+    e.stopPropagation(); // Verhindert Fehler bei Klick-Überlagerungen
+    navMenu.classList.toggle('active');
+    
+    // Optisches Feedback: Ändert das Drei-Striche-Icon zu einem 'X' wenn geöffnet
+    const icon = hamburgerToggle.querySelector('i');
+    if (navMenu.classList.contains('active')) {
+      icon.className = 'fas fa-times';
+    } else {
+      icon.className = 'fas fa-bars';
+    }
+  });
 
-        audioBtn.addEventListener('click', () => {
-            audioActive = !audioActive;
-            audioLabel.innerText = audioActive ? "Audio: An" : "Audio: Aus";
-            audioLabel.style.color = audioActive ? "#9ca3af" : "#ef4444";
-            audioVisualizer.style.opacity = audioActive ? "1" : "0.2";
-            if(!audioActive) window.speechSynthesis.cancel();
-        });
+  // Erklärungs-Kommentar: Schließt das Menü automatisch, wenn ein Link angeklickt wird
+  navLinksList.forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('active');
+      hamburgerToggle.querySelector('i').className = 'fas fa-bars';
+    });
+  });
 
-        fileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    if (file.name.endsWith('.docx')) {
-                        const result = await mammoth.extractRawText({arrayBuffer: event.target.result});
-                        extractedText = result.value;
-                    } else {
-                        extractedText = event.target.result;
-                    }
-                    analyzeBtn.classList.remove('hidden');
-                    addMessage('ai', "Dokument erfolgreich geladen! Klicke jetzt im Menü auf **'Analyse starten'**.");
-                };
-                if (file.name.endsWith('.docx')) reader.readAsArrayBuffer(file);
-                else reader.readAsText(file);
-            }
-        });
+  // Schließt das Menü, wenn irgendwo außerhalb geklickt wird
+  document.addEventListener('click', (e) => {
+    if (!navMenu.contains(e.target) && !hamburgerToggle.contains(e.target)) {
+      navMenu.classList.remove('active');
+      hamburgerToggle.querySelector('i').className = 'fas fa-bars';
+    }
+  });
+}
 
-        function showThinkingIndicator() {
-            const div = document.createElement('div');
-            div.id = "thinking-indicator";
-            div.className = "flex gap-4 animate-pulse";
-            div.innerHTML = `
-                <div class="w-10 h-10 rounded-full gemini-bg-gradient flex-shrink-0 flex items-center justify-center shadow-lg"><i class="fas fa-robot text-white text-sm"></i></div>
-                <div class="p-5 bg-[#1e1f20] border border-gray-800 text-gray-400 msg-bubble max-w-[85%] flex items-center gap-3 shadow-sm text-sm">
-                    <i class="fas fa-circle-notch animate-spin text-blue-500"></i>
-                    <span>Tiep Coach analysiert...</span>
-                </div>
-            `;
-            chatHistory.appendChild(div);
-            scroll.scrollTop = scroll.scrollHeight;
-        }
+// ====================================================================
+// OBERER SCROLL-EFFEKT (Bestehender Code von dir)
+// ====================================================================
+const sections = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+  });
+  links.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+  });
+});
 
-        function removeThinkingIndicator() {
-            const indicator = document.getElementById('thinking-indicator');
-            if (indicator) indicator.remove();
-        }
+// FORMULAR-SUBMIT (Bestehender Code von dir)
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('form-success').style.display = 'block';
+  e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
+  setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+}
 
-        function speak(text) {
-            if (!audioActive) return;
-            window.speechSynthesis.cancel();
-            let cleanText = text.replace(/[\*\#\_]/g, " ").replace(/[-•]\s+/g, ". ").replace(/\s+/g, " ").trim();
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            const voices = window.speechSynthesis.getVoices();
-            const bestVoice = voices.find(v => v.lang.startsWith('de') && (v.name.includes('Google') || v.name.includes('Natural'))) || voices.find(v => v.lang.startsWith('de'));
-            utterance.voice = bestVoice;
-            utterance.rate = 0.97;
-            window.speechSynthesis.speak(utterance);
-        }
+// FADE-IN EFFEKT BEIM SCROLLEN (Bestehender Code von dir)
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
 
-        function addMessage(role, text) {
-            const div = document.createElement('div');
-            div.className = "flex gap-4 " + (role === 'user' ? "justify-end" : "");
-            const avatar = role === 'user' 
-                ? '<div class="w-10 h-10 rounded-full bg-gray-700 border border-gray-600 flex-shrink-0 flex items-center justify-center text-[10px] font-bold">DU</div>'
-                : '<div class="w-10 h-10 rounded-full gemini-bg-gradient flex-shrink-0 flex items-center justify-center shadow-lg"><i class="fas fa-robot text-white text-sm"></i></div>';
-            const content = `<div class="p-5 msg-bubble ${role === 'user' ? 'bg-[#2b2b2b] text-gray-100 shadow-inner' : 'bg-[#1e1f20] border border-gray-800 text-gray-200'} max-w-[85%] shadow-sm text-sm md:text-base">${text}</div>`;
-            div.innerHTML = role === 'user' ? content + avatar : avatar + content;
-            chatHistory.appendChild(div);
-            setTimeout(() => { scroll.scrollTop = scroll.scrollHeight; }, 50);
-        }
+document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  obs.observe(el);
+});
 
-        async function askAI(msg, systemMsg) {
-            showThinkingIndicator();
-            const finalPrompt = extractedText ? `Hier ist der Lebenslauf des Nutzers:\n${extractedText}\n\nAnfrage/Frage: ${msg}` : msg;
-            try {
-                const res = await fetch(`${WORKER_URL}/chat`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        "model": "openrouter/free",
-                        "messages": [{"role": "system", "content": systemMsg}, {"role": "user", "content": finalPrompt}]
-                    })
-                });
-                const data = await res.json();
-                const reply = data.choices[0].message.content;
-                removeThinkingIndicator();
-                addMessage('ai', reply);
-                speak(reply);
-            } catch (e) { 
-                removeThinkingIndicator();
-                addMessage('ai', "Problem bei der Verarbeitung. Bitte erneut versuchen."); 
-            }
-        }
+// ====================================================================
+// CHATBOT WIDGET STEUERUNG (Bestehender Code von dir)
+// ====================================================================
+const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev"; 
 
-        function handleSend() {
-            const message = userInput.value.trim();
-            if (message) {
-                addMessage('user', message);
-                userInput.value = "";
-                askAI(message, "Du bist Tiep Coach, ein erfahrener Karriereberater. Antworte präzise auf Deutsch.");
-            }
-        }
+const toggleBtn = document.getElementById("asst-toggle-btn");
+const mainAvatar = document.getElementById("asst-main-avatar");
+const headerAvatar = document.getElementById("asst-header-avatar");
+const chatWin = document.getElementById("assistant-window");
+const chatInput = document.getElementById("asst-input");
+const msgContainer = document.getElementById("asst-messages");
+const closeBtn = document.getElementById("asst-close");
 
-        sendBtn.addEventListener('click', handleSend);
-        userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSend();
-            }
-        });
+function toggleAssistant() {
+    if (chatWin.style.display === "flex") {
+        chatWin.style.display = "none";
+        toggleBtn.classList.remove("shrunk");
+        headerAvatar.classList.remove("visible");
+    } else {
+        chatWin.style.display = "flex";
+        toggleBtn.classList.add("shrunk");
+        headerAvatar.classList.add("visible");
+        chatInput.focus();
+    }
+}
 
-        analyzeBtn.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            addMessage('user', "Bitte führe eine umfassende Lebenslauf-Optimierung durch.");
-            askAI("Führe die Premium-Lebenslauf-Analyse durch.", "Du bist HR-Coach. Analysiere den CV strukturiert nach Stärken und ATS-Lesbarkeit.");
-        });
+if(toggleBtn) toggleBtn.onclick = toggleAssistant;
+if(closeBtn) closeBtn.onclick = toggleAssistant;
 
-        ikigaiBtn.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            addMessage('user', "Ich möchte meine Ikigai-Berufung finden.");
-            askAI("Starte die Ikigai-Analyse.", "Du bist Ikigai-Master. Stelle kurze, prägnante Einzelfragen.");
-        });
+if(chatInput) {
+  chatInput.addEventListener("keypress", async function(event) {
+      if (event.key === "Enter" && chatInput.value.trim() !== "") {
+          const queryText = chatInput.value.trim();
+          
+          appendBubble("user", queryText);
+          chatInput.value = "";
+          showLoader();
 
-        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
-    </script>
+          try {
+              const networkResponse = await fetch(COMPUTE_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ message: queryText })
+              });
+              const responseData = await networkResponse.json();
+              
+              hideLoader();
+              appendBubble("bot", responseData.reply);
+          } catch (err) {
+              hideLoader();
+              appendBubble("bot", "Verbindung zur Cloud unterbrochen.");
+              console.error(err);
+          }
+      }
+  });
+}
+
+function appendBubble(role, text) {
+    const bubble = document.createElement("div");
+    bubble.className = `asst-msg ${role}`;
+    bubble.innerText = text;
+    msgContainer.appendChild(bubble);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+function showLoader() {
+    const loader = document.createElement("div");
+    loader.id = "asst-loader";
+    loader.className = "asst-msg loading";
+    loader.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> iTiep-Ki analysiert...';
+    msgContainer.appendChild(loader);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+function hideLoader() {
+    const loader = document.getElementById("asst-loader");
+    if (loader) loader.remove();
+}
+</script>
 </body>
 </html>
