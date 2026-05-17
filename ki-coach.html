@@ -391,20 +391,20 @@
 
 <div id="sidebar" class="flex flex-col h-full">
     <!-- ERKLÄRUNG: Flex-Container mit flex-row, justify-between und items-center platziert das Logo ganz links und das Schließ-Kreuz ganz rechts auf eine perfekte gemeinsame Linie. -->
-    <div class="p-5 border-b flex flex-row justify-between items-center gap-4 flex-shrink-0" style="border-color:var(--border)">
+    <div class="p-4 border-b flex flex-row flex-nowrap justify-between items-center gap-2 flex-shrink-0" style="border-color:var(--border)">
         
-        <!-- LINKER BEREICH: Das gesamte Logo mit Beschreibung in einer geschlossenen Box -->
-        <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-briefcase text-white text-xs"></i>
+        <!-- LINKER BEREICH: Logo und Beschreibungen in einer umbruchsgeschützten Box -->
+        <div class="flex-1 min-w-0 overflow-hidden">
+            <div class="flex items-center gap-2 flex-nowrap">
+                <div class="w-7 h-7 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-briefcase text-white text-[10px]"></i>
                 </div>
-                <span class="g-text text-lg truncate" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
+                <span class="g-text text-base font-medium truncate whitespace-nowrap" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
             </div>
-            <p class="text-xs mt-0.5 truncate" style="color:var(--text-muted)">KI Karriereberatung</p>
+            <p class="text-[11px] mt-0.5 truncate whitespace-nowrap" style="color:var(--text-muted)">KI Karriereberatung</p>
         </div>
         
-        <!-- RECHTER BEREICH: Der Schließen-Button steht als eigenständiges Element rechts daneben -->
+        <!-- RECHTER BEREICH: Der Schließen-Button ist durch flex-shrink-0 und die übergeordnete flex-nowrap Klasse absolut geschützt vor Zeilenumbrüchen -->
         <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors flex-shrink-0" title="Menü schließen">
             <i class="fas fa-times"></i>
         </button>
