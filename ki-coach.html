@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tiep Coach – KI Karriereberatung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #0f0f10;
+            --bg-card: #191a1b;
+            --bg-input: #1e1f21;
+            --border: #2a2b2e;
+            --border-hover: #3c4043;
+            --accent: #4285f4;
+            --accent-2: #34a853;
+            --text-primary: #e8e8e8;
+            --text-secondary: #9aa0a6;
+            --text-muted: #5f6368;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* ── Gradient text ── */
+        .g-text {
+            background: linear-gradient(120deg, #4285f4 0%, #1a73e8 40%, #34a853 100%);
+            background-size: 200% auto;
+            animation: flow 5s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        .g-bg {
+            background: linear-gradient(120deg, #4285f4 0%, #1a73e8 50%, #34a853 100%);
+            background-size: 200% auto;
+            animation: flow 5s linear infinite;
+        }
+        @keyframes flow { to { background-position: 200% center; } }
+
+        /* ── Sidebar ── */
+        #sidebar {
+            width: 0;
+            overflow: hidden;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+            flex-shrink: 0;
+            z-index: 100;
+        }
+        #sidebar.open { width: 280px; }
+
+        /* Mobile: sidebar overlays */
+        @media (max-width: 767px) {
+            #sidebar {
+                position: fixed;
+                top: 0; left: 0; bottom: 0;
+                height: 100%;
+            }
+            #overlay {
+                display: none;
+                position: fixed; inset: 0;
+                background: rgba(0,0,0,0.6);
+                z-index: 90;
+            }
+            #overlay.show { display: block; }
+        }
+
+        /* ── Chat bubble prose ── */
+        .prose-bubble h1, .prose-bubble h2, .prose-bubble h3 {
+            font-family: 'DM Serif Display', serif;
+            color: #c5d5f5;
+            margin: 0.75rem 0 0.35rem;
+        }
+        .prose-bubble h2 { font-size: 1.05rem; }
+        .prose-bubble h3 { font-size: 0.95rem; }
+        .prose-bubble p { margin: 0.4rem 0; }
+        .prose-bubble ul, .prose-bubble ol {
+            padding-left: 1.25rem;
+            margin: 0.4rem 0;
+        }
+        .prose-bubble li { margin: 0.2rem 0; }
+        .prose-bubble strong { color: #c8d8ff; font-weight: 600; }
+        .prose-bubble em { color: #a8c8a0; font-style: italic; }
+        .prose-bubble code {
+            background: #25272b;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.85em;
+            color: #89b4fa;
+            font-family: 'Courier New', monospace;
+        }
+        .prose-bubble hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0.75rem 0;
+        }
+        .prose-bubble blockquote {
+            border-left: 3px solid var(--accent);
+            padding-left: 0.75rem;
+            color: var(--text-secondary);
+            margin: 0.5rem 0;
+        }
+
+        /* ── Input area ── */
+        .input-wrap {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1.5px rgba(66,133,244,0.3);
+        }
+
+        /* ── Thinking dots ── */
+        .dot-pulse span {
+            display: inline-block;
+            width: 7px; height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: dotBounce 1.2s ease-in-out infinite;
+        }
+        .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+        .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotBounce {
+            0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ── Live Coach CTA ── */
+        #live-coach-cta {
+            display: none;
+            animation: fadeSlideUp 0.5s ease both;
+        }
+        #live-coach-cta.show { display: flex; }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Scrollbar ── */
+        #chat-scroll::-webkit-scrollbar { width: 5px; }
+        #chat-scroll::-webkit-scrollbar-track { background: transparent; }
+        #chat-scroll::-webkit-scrollbar-thumb { background: #2a2b2e; border-radius: 10px; }
+
+        /* ── Sidebar buttons ── */
+        .sidebar-btn {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 12px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .sidebar-btn:hover { background: #25272b; border-color: var(--border-hover); }
+        .sidebar-btn.active { border-color: var(--accent); background: rgba(66,133,244,0.08); }
+
+        /* ── Stage pills (Ikigai) ── */
+        .stage-pill {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(66,133,244,0.12);
+            border: 1px solid rgba(66,133,244,0.3);
+            color: #7ab3f8;
+            font-weight: 500;
+        }
+
+        /* ── Model badge ── */
+        .model-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: rgba(52,168,83,0.1);
+            border: 1px solid rgba(52,168,83,0.25);
+            color: #5bba6f;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        /* ── Message fade-in ── */
+        .msg-enter {
+            animation: msgFade 0.35s ease both;
+        }
+        @keyframes msgFade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Mic active ── */
+        @keyframes micPulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+        }
+        #mic-btn.recording {
+            background: rgba(239,68,68,0.15) !important;
+            animation: micPulse 1.5s ease-in-out infinite;
+        }
+        #mic-btn.recording i { color: #ef4444 !important; }
+
+        /* ── Upload zone ── */
+        .upload-zone {
+            border: 1.5px dashed var(--border-hover);
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(66,133,244,0.04); }
+        .upload-zone.has-file { border-color: var(--accent-2); background: rgba(52,168,83,0.05); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden relative">
+
+<div id="overlay"></div>
+
+<div id="sidebar" class="flex flex-col h-full">
+
+    <div class="p-5 border-b" style="border-color:var(--border)">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-briefcase text-white text-xs"></i>
+            </div>
+            <span class="g-text text-lg" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
+        </div>
+        <p class="text-xs mt-1" style="color:var(--text-muted)">KI Karriereberatung</p>
+    </div>
+
+    <div class="p-4 space-y-3 flex-1 overflow-y-auto">
+        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--text-muted)">Werkzeuge</p>
+
+        <div>
+            <label for="resume-upload" class="upload-zone" id="upload-zone">
+                <i class="fas fa-file-alt text-2xl mb-2" style="color:var(--text-muted)"></i>
+                <p class="text-sm font-medium" style="color:var(--text-secondary)">Lebenslauf hochladen</p>
+                <p class="text-xs mt-1" style="color:var(--text-muted)">.docx oder .txt</p>
+            </label>
+            <input type="file" id="resume-upload" accept=".docx,.txt" class="hidden">
+            <p id="file-name" class="text-xs mt-2 text-center hidden" style="color:#5bba6f"></p>
+        </div>
+
+        <button id="analyze-btn" class="sidebar-btn hidden" style="border-color:var(--accent);background:rgba(66,133,244,0.08)">
+            <i class="fas fa-search-plus" style="color:var(--accent)"></i>
+            <span>Lebenslauf analysieren</span>
+        </button>
+
+        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
+
+        <button id="ikigai-btn" class="sidebar-btn">
+            <i class="fas fa-dharmachakra" style="color:#a78bfa"></i>
+            <span>Ikigai entdecken</span>
+        </button>
+
+        <button id="clear-btn" class="sidebar-btn">
+            <i class="fas fa-rotate-left" style="color:var(--text-muted)"></i>
+            <span style="color:var(--text-secondary)">Gespräch zurücksetzen</span>
+        </button>
+    </div>
+
+    <div class="p-4 border-t" style="border-color:var(--border)">
+        <div class="flex items-center gap-2 mb-2">
+            <span class="model-badge">KI-Modell: kostenlos</span>
+        </div>
+        <p class="text-xs" style="color:var(--text-muted)">Tiep Intelligence v3.0</p>
+    </div>
+</div>
+
+<div class="flex-1 flex flex-col h-full min-w-0" style="background:var(--bg-main)">
+
+    <header class="flex items-center justify-between px-4 py-3 border-b flex-shrink-0" style="border-color:var(--border);background:var(--bg-main)">
+        <button id="menu-btn" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors">
+            <i class="fas fa-bars" style="color:var(--text-secondary)"></i>
+        </button>
+
+        <div class="flex items-center gap-2">
+            <span id="mode-label" class="stage-pill hidden">💼 Lebenslauf-Modus</span>
+        </div>
+
+        <button id="toggle-audio-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors border" style="border-color:var(--border)">
+            <i id="audio-icon" class="fas fa-volume-up text-sm" style="color:var(--accent)"></i>
+            <span id="audio-label" class="text-xs" style="color:var(--text-secondary)">Audio</span>
+        </button>
+    </header>
+
+    <div id="chat-scroll" class="flex-1 overflow-y-auto px-4 py-6">
+        <div id="chat-history" class="max-w-2xl mx-auto space-y-6">
+
+            <div class="msg-enter">
+                <div class="flex gap-3 items-start">
+                    <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                        <i class="fas fa-robot text-white text-xs"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span>
+                            <span class="text-xs" style="color:var(--text-muted)">jetzt</span>
+                        </div>
+                        <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble" style="background:var(--bg-card);border:1px solid var(--border)">
+                            <p>Willkommen! Ich bin dein <strong>Tiep Coach</strong> – dein KI-Karrierebegleiter.</p>
+                            <p style="margin-top:0.5rem">Ich helfe dir bei:</p>
+                            <ul>
+                                <li>📄 <strong>Lebenslauf-Optimierung</strong> – lade dein Dokument hoch</li>
+                                <li>☯️ <strong>Ikigai-Analyse</strong> – finde deine Berufung</li>
+                                <li>💬 <strong>Karriereberatung</strong> – stell mir deine Fragen</li>
+                            </ul>
+                            <p style="margin-top:0.5rem;color:#9aa0a6;font-size:0.875rem">Bei tiefgreifenden Themen vermittle ich dich gerne an einen <strong style="color:#5bba6f">echten Coach</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="live-coach-cta" class="max-w-2xl mx-auto px-4 py-2 w-full">
+        <div class="rounded-2xl p-4 flex items-center gap-4" style="background:rgba(52,168,83,0.08);border:1px solid rgba(52,168,83,0.25)">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center" style="background:rgba(52,168,83,0.15)">
+                <i class="fas fa-user-tie" style="color:#5bba6f"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold" style="color:#5bba6f">Bereit für den nächsten Schritt?</p>
+                <p class="text-xs mt-0.5" style="color:var(--text-secondary)">Ein echter Coach kann dir noch gezielter helfen.</p>
+            </div>
+            <a href="mailto:coach@tiep.de" class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold text-white transition-opacity hover:opacity-80" style="background:linear-gradient(120deg,#34a853,#1a73e8)">
+                Jetzt buchen
+            </a>
+        </div>
+    </div>
+
+    <div class="px-4 pb-4 pt-2 flex-shrink-0" style="background:var(--bg-main)">
+        <div class="max-w-2xl mx-auto">
+            <div class="input-wrap flex items-end gap-2 px-4 py-3">
+                <textarea
+                    id="user-input"
+                    rows="1"
+                    class="flex-1 bg-transparent outline-none resize-none text-sm"
+                    style="color:var(--text-primary);max-height:120px;overflow-y:auto;line-height:1.5"
+                    placeholder="Schreibe eine Nachricht…"
+                ></textarea>
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <button id="mic-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
+                        <i class="fas fa-microphone text-sm" style="color:var(--text-muted)"></i>
+                    </button>
+                    <button id="send-btn" class="w-9 h-9 g-bg rounded-full flex items-center justify-center hover:opacity-90 transition-opacity">
+                        <i class="fas fa-arrow-up text-white text-sm"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="text-center text-xs mt-1.5" style="color:var(--text-muted)">Enter zum Senden • KI-Karriereberatung • Keine Speicherung</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// ════════ CONFIG (Optimierte Systemprompts für wärmere Tonalität) ════════
+const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
+const SYSTEM_DEFAULT = "Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown. Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden emotionalen Hürden ein echter Coach wertvolle Unterstützung bieten kann.";
+const SYSTEM_CV = "Du bist ein empathischer HR-Coach. Analysiere den Lebenslauf wertschätzend und konstruktiv auf Deutsch. Starte mit einer positiven Gesamteinschätzung, gefolgt von Stärken und klaren, ermutigenden Optimierungstipps für ATS und Struktur.";
+const SYSTEM_IKIGAI = "Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutzer feinfühlig Schritt für Schritt. Stelle immer nur GENAU EINE Frage auf einmal, um den Nutzer nicht zu überfordern. Sei herzlich, reagiere auf die Antworten eingehend und bestärkend.";
+
+// ════════ STATE ════════
+let conversationHistory = [];
+let extractedText = "";
+let audioActive = true;
+let currentMode = "default";  
+let messageCount = 0;
+let recognizing = false;
+let recognition = null;
+
+// ════════ DOM ════════
+const menuBtn      = document.getElementById('menu-btn');
+const sidebar      = document.getElementById('sidebar');
+const overlay      = document.getElementById('overlay');
+const fileInput    = document.getElementById('resume-upload');
+const uploadZone   = document.getElementById('upload-zone');
+const fileNameEl   = document.getElementById('file-name');
+const analyzeBtn   = document.getElementById('analyze-btn');
+const ikigaiBtn    = document.getElementById('ikigai-btn');
+const clearBtn     = document.getElementById('clear-btn');
+const chatHistory  = document.getElementById('chat-history');
+const userInput    = document.getElementById('user-input');
+const sendBtn      = document.getElementById('send-btn');
+const scroll       = document.getElementById('chat-scroll');
+const audioBtn     = document.getElementById('toggle-audio-btn');
+const audioIcon    = document.getElementById('audio-icon');
+const audioLabel   = document.getElementById('audio-label');
+const modeLabel    = document.getElementById('mode-label');
+const micBtn       = document.getElementById('mic-btn');
+const ctaEl        = document.getElementById('live-coach-cta');
+
+// ════════ SIDEBAR ════════
+function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+}
+menuBtn.addEventListener('click', () => {
+    const isOpen = sidebar.classList.toggle('open');
+    overlay.classList.toggle('show', isOpen);
+});
+overlay.addEventListener('click', closeSidebar);
+
+// ════════ AUTO-RESIZE TEXTAREA ════════
+userInput.addEventListener('input', () => {
+    userInput.style.height = 'auto';
+    userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
+});
+
+// ════════ AUDIO OPTIMIERUNG (Natürlicher & Sympathischer) ════════
+audioBtn.addEventListener('click', () => {
+    audioActive = !audioActive;
+    audioIcon.className = audioActive ? 'fas fa-volume-up text-sm' : 'fas fa-volume-xmark text-sm';
+    audioIcon.style.color = audioActive ? 'var(--accent)' : 'var(--text-muted)';
+    audioLabel.textContent = audioActive ? 'Audio' : 'Stumm';
+    if (!audioActive) window.speechSynthesis.cancel();
+});
+
+function speak(text) {
+    if (!audioActive || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+
+    // 1. Bereinigung von Emojis und Markdown, um Vorlese-Fehler zu vermeiden
+    let clean = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+    clean = clean.replace(/[*#_`>]/g, ' ').replace(/\s+/g, ' ').trim();
+
+    const utt = new SpeechSynthesisUtterance(clean);
+    const voices = window.speechSynthesis.getVoices();
+
+    // 2. Suche nach den am besten klingenden deutschen Stimmen (Premium/Natural bevorzugt)
+    const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural'))
+                || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google'))
+                || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft'))
+                || voices.find(v => v.lang.startsWith('de'));
+
+    if (voice) utt.voice = voice;
+    
+    // 3. Feintuning für sympathische Stimmfrequenz
+    utt.rate = 1.02;   // Minimale Beschleunigung für dynamischen Fluss
+    utt.pitch = 1.06;  // Leicht erhöhte Tonlage für eine freundlichere Aura
+
+    window.speechSynthesis.speak(utt);
+}
+// Erzwingt das Laden der Systemstimmen im Hintergrund
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+
+// ════════ MIC / SPEECH RECOGNITION ════════
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRec();
+    recognition.lang = 'de-DE';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        userInput.value = transcript;
+        userInput.dispatchEvent(new Event('input'));
+    };
+    recognition.onend = () => {
+        recognizing = false;
+        micBtn.classList.remove('recording');
+        micBtn.querySelector('i').style.color = 'var(--text-muted)';
+    };
+
+    micBtn.addEventListener('click', () => {
+        if (recognizing) {
+            recognition.stop();
+        } else {
+            recognition.start();
+            recognizing = true;
+            micBtn.classList.add('recording');
+            micBtn.querySelector('i').style.color = '#ef4444';
+        }
+    });
+} else {
+    micBtn.style.display = 'none';
+}
+
+// ════════ MARKDOWN RENDER ════════
+function renderMarkdown(text) {
+    if (window.marked) {
+        marked.setOptions({ breaks: true, gfm: true });
+        return marked.parse(text);
+    }
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+               .replace(/\*(.*?)\*/g, '<em>$1</em>')
+               .replace(/\n/g, '<br>');
+}
+
+// ════════ FLÜSSIGE CHATAUSGABE (Typewriter-Streaming-Effekt) ════════
+function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'msg-enter';
+
+    if (role === 'user') {
+        // Nutzer-Nachrichten werden sofort ohne Verzögerung dargestellt
+        div.innerHTML = `
+            <div class="flex gap-3 items-start justify-end">
+                <div class="flex-1 flex flex-col items-end">
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <span class="text-xs" style="color:var(--text-muted)">Du</span>
+                    </div>
+                    <div class="rounded-2xl rounded-tr-sm px-4 py-3 max-w-sm" style="background:#1e3a5f;border:1px solid #2a4a7f">
+                        <p class="text-sm" style="white-space:pre-wrap;color:var(--text-primary)">${escHtml(text)}</p>
+                    </div>
+                </div>
+                <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#25272b;border:1px solid var(--border);color:var(--text-secondary)">DU</div>
+            </div>`;
+        chatHistory.appendChild(div);
+        scrollToBottom();
+    } else {
+        // KI-Antworten erhalten den flüssigen Schreibeffekt
+        div.innerHTML = `
+            <div class="flex gap-3 items-start">
+                <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                    <i class="fas fa-robot text-white text-xs"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span>
+                        <span class="text-xs" style="color:var(--text-muted)">${getTime()}</span>
+                    </div>
+                    <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble animate-content" style="background:var(--bg-card);border:1px solid var(--border)">
+                    </div>
+                </div>
+            </div>`;
+        
+        chatHistory.appendChild(div);
+        const bubbleContainer = div.querySelector('.animate-content');
+        
+        // Wort-für-Wort-Generierungs-Logik für perfekten Fluss ohne HTML-Tags zu brechen
+        let words = text.split(/(\s+)/);
+        let index = 0;
+        let currentString = "";
+
+        function typeNextWord() {
+            if (index < words.length) {
+                currentString += words[index];
+                bubbleContainer.innerHTML = renderMarkdown(currentString);
+                index++;
+                scrollToBottom();
+
+                // Dynamisches Timing: Längere Atempausen bei Satzzeichen erzeugen Realismus
+                let delay = 25;
+                const lastWord = words[index - 1];
+                if (/[.!?]/.test(lastWord)) {
+                    delay = 220; // Pause am Satzende
+                } else if (/,/.test(lastWord)) {
+                    delay = 100; // Kurze Atempause bei Komma
+                }
+                setTimeout(typeNextWord, delay);
+            }
+        }
+        typeNextWord();
+    }
+}
+
+function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function getTime() {
+    return new Date().toLocaleTimeString('de', { hour:'2-digit', minute:'2-digit' });
+}
+
+// ════════ THINKING INDICATOR ════════
+function showThinking() {
+    const div = document.createElement('div');
+    div.id = 'thinking';
+    div.className = 'msg-enter';
+    div.innerHTML = `
+        <div class="flex gap-3 items-start">
+            <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                <i class="fas fa-robot text-white text-xs"></i>
+            </div>
+            <div class="rounded-2xl rounded-tl-sm px-5 py-4" style="background:var(--bg-card);border:1px solid var(--border)">
+                <div class="dot-pulse flex gap-1.5">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>`;
+    chatHistory.appendChild(div);
+    scrollToBottom();
+}
+function removeThinking() {
+    const el = document.getElementById('thinking');
+    if (el) el.remove();
+}
+
+// ════════ SCROLL ════════
+function scrollToBottom() {
+    setTimeout(() => { scroll.scrollTop = scroll.scrollHeight; }, 60);
+}
+
+// ════════ LIVE COACH CTA ════════
+function checkShowCTA() {
+    if (messageCount >= 4 && !ctaEl.classList.contains('show')) {
+        ctaEl.classList.add('show');
+    }
+}
+
+// ════════ ASK AI ════════
+async function askAI(userMsg, systemMsg) {
+    conversationHistory.push({ role: 'user', content: userMsg });
+
+    showThinking();
+    sendBtn.disabled = true;
+
+    const finalPrompt = extractedText
+        ? `[Lebenslauf des Nutzers]\n${extractedText}\n\n[Anfrage]\n${userMsg}`
+        : userMsg;
+
+    const historyToSend = [...conversationHistory];
+    if (extractedText) {
+        historyToSend[historyToSend.length - 1] = { role: 'user', content: finalPrompt };
+    }
+
+    try {
+        const res = await fetch(`${WORKER_URL}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'openrouter/free',
+                messages: [
+                    { role: 'system', content: systemMsg },
+                    ...historyToSend
+                ]
+            })
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const reply = data.choices[0].message.content;
+
+        removeThinking();
+        conversationHistory.push({ role: 'assistant', content: reply });
+        
+        // Führt die neue animierte Ausgabe und das optimierte Audio aus
+        addMessage('ai', reply);
+        speak(reply);
+        
+        messageCount++;
+        checkShowCTA();
+    } catch (e) {
+        removeThinking();
+        addMessage('ai', '⚠️ Es gab ein Problem bei der Verbindung. Bitte versuche es erneut.');
+        console.error(e);
+    } finally {
+        sendBtn.disabled = false;
+    }
+}
+
+// ════════ SEND ════════
+function handleSend() {
+    const msg = userInput.value.trim();
+    if (!msg) return;
+    addMessage('user', msg);
+    userInput.value = '';
+    userInput.style.height = 'auto';
+
+    const sys = currentMode === 'cv' ? SYSTEM_CV
+              : currentMode === 'ikigai' ? SYSTEM_IKIGAI
+              : SYSTEM_DEFAULT;
+    askAI(msg, sys);
+}
+
+sendBtn.addEventListener('click', handleSend);
+userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+    }
+});
+
+// ════════ FILE UPLOAD ════════
+fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+        try {
+            if (file.name.endsWith('.docx')) {
+                const res = await mammoth.extractRawText({ arrayBuffer: ev.target.result });
+                extractedText = res.value;
+            } else {
+                extractedText = ev.target.result;
+            }
+
+            uploadZone.classList.add('has-file');
+            fileNameEl.textContent = '✓ ' + file.name;
+            fileNameEl.classList.remove('hidden');
+            analyzeBtn.classList.remove('hidden');
+
+            setMode('cv');
+            addMessage('ai', `✅ **"${file.name}"** wurde erfolgreich geladen!\n\nKlicke auf **"Lebenslauf analysieren"** für eine vollständige Optimierung, oder stelle mir direkt eine Frage zu deinem Lebenslauf.`);
+        } catch (err) {
+            addMessage('ai', '⚠️ Die Datei konnte nicht gelesen werden. Bitte probiere eine .txt oder .docx Datei.');
+        }
+    };
+
+    if (file.name.endsWith('.docx')) reader.readAsArrayBuffer(file);
+    else reader.readAsText(file, 'UTF-8');
+    if (window.innerWidth < 768) closeSidebar();
+});
+
+// ════════ ANALYZE ════════
+analyzeBtn.addEventListener('click', () => {
+    if (window.innerWidth < 768) closeSidebar();
+    setMode('cv');
+    addMessage('user', 'Bitte führe eine umfassende Lebenslauf-Optimierung durch.');
+    askAI('Führe eine umfassende Lebenslauf-Analyse und Optimierung durch. Strukturiere klar nach: Gesamteinschätzung, Stärken, Verbesserungsvorschläge, ATS-Tipps.', SYSTEM_CV);
+});
+
+// ════════ IKIGAI ════════
+ikigaiBtn.addEventListener('click', () => {
+    if (window.innerWidth < 768) closeSidebar();
+    setMode('ikigai');
+    conversationHistory = [];
+    addMessage('user', 'Ich möchte meine Ikigai-Berufung entdecken.');
+    askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai ist, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
+});
+
+// ════════ CLEAR ════════
+clearBtn.addEventListener('click', () => {
+    conversationHistory = [];
+    extractedText = '';
+    messageCount = 0;
+    currentMode = 'default';
+    chatHistory.innerHTML = '';
+    ctaEl.classList.remove('show');
+    modeLabel.classList.add('hidden');
+    analyzeBtn.classList.add('hidden');
+    uploadZone.classList.remove('has-file');
+    fileNameEl.classList.add('hidden');
+    fileInput.value = '';
+    addMessage('ai', 'Gespräch zurückgesetzt. Wie kann ich dir helfen?');
+    if (window.innerWidth < 768) closeSidebar();
+});
+
+// ════════ MODE ════════
+function setMode(mode) {
+    currentMode = mode;
+    if (mode === 'cv') {
+        modeLabel.textContent = '📄 Lebenslauf-Modus';
+        modeLabel.classList.remove('hidden');
+    } else if (mode === 'ikigai') {
+        modeLabel.textContent = '☯️ Ikigai-Modus';
+        modeLabel.classList.remove('hidden');
+    } else {
+        modeLabel.classList.add('hidden');
+    }
+}
+</script>
+</body>
+</html>
