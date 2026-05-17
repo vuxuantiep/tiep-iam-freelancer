@@ -390,22 +390,24 @@
 <div id="overlay"></div>
 
 <div id="sidebar" class="flex flex-col h-full">
-    <div class="p-5 border-b flex justify-between items-start gap-4" style="border-color:var(--border)">
-        <div>
+    <div class="p-5 border-b flex flex-row justify-between items-center gap-4 flex-shrink-0" style="border-color:var(--border)">
+        
+        <div class="flex-1 min-w-0">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-briefcase text-white text-xs"></i>
                 </div>
-                <span class="g-text text-lg" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
+                <span class="g-text text-lg truncate" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
             </div>
-            <p class="text-xs mt-1" style="color:var(--text-muted)">KI Karriereberatung</p>
+            <p class="text-xs mt-0.5 truncate" style="color:var(--text-muted)">KI Karriereberatung</p>
         </div>
 
-        <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors" title="Menü schließen">
+        <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors flex-shrink-0" title="Menü schließen">
             <i class="fas fa-times"></i>
         </button>
+        
     </div>
-    
+
     <div class="p-4 space-y-3 flex-1 overflow-y-auto">
         <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--text-muted)">Werkzeuge</p>
         <div>
