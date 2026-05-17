@@ -201,18 +201,16 @@ h2.section-title em { font-style:normal; color:var(--accent); }
 .hero-right { display:flex; justify-content:center; align-items:flex-start; padding-top:8px; }
 .hero-photo-wrap {
   width: 100%;
-  max-width: 260px;     /* Macht dein Foto dezenter und kompakter */
-  
-  /* 💡 WICHTIG FÜR DIE PROPORTION: 
-     Damit das Gesicht perfekt im Rahmen sitzt und nicht verzerrt, 
-     nutzen wir ein festes Seitenverhältnis (z.B. 3:4 Portrait) */
-  aspect-ratio: 3 / 4;  
-  
-  border-radius: 16px;  /* Schöne, weiche Ecken */
+  max-width: 260px;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 20px 45px rgba(26, 35, 50, 0.12);
   position: relative;
-  flex-shrink: 0;       /* Verhindert, dass der Browser das Foto zusammendrückt */
+  flex-shrink: 0;
+
+  /* 🎯 DIESE ZEILE HINZUFÜGEN: Zieht das Foto optisch nach oben */
+  margin-top: -30px; 
 }
 .hero-photo-wrap img {
   width: 100%;
@@ -531,9 +529,21 @@ footer p { font-size:0.8rem; color:var(--muted); }
   .produkte-cards     { grid-template-columns:1fr; }
   .produkt-hero       { grid-template-columns:1fr; }
   /* Passt den Abstand auf Tablets harmonisch an */
-  .hero-grid { 
-    grid-template-columns: 1fr 230px; 
-    gap: 40px; 
+  .hero-grid {
+    display: grid;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 24px;
+    
+    /* ÄNDERUNG 1: Schiebt den Text nach links und das Foto nach rechts */
+    grid-template-columns: 1fr 260px; 
+    justify-content: space-between;
+    
+    /* ÄNDERUNG 2: Den Abstand nochmals deutlich vergrößert */
+    gap: 160px; 
+    
+    /* Nimmt die zentrierte Ausrichtung heraus, damit das Bild oben startet */
+    align-items: start; 
   }
 }
 
