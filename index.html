@@ -1121,7 +1121,17 @@ chatInput.addEventListener("keypress", async function(event) {
             const networkResponse = await fetch(COMPUTE_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: queryText })
+                // Erklärungs-Kommentar: Wir geben der KI bei jeder Anfrage unsichtbar im Hintergrund 
+            // deine System-Anweisung mit, damit sie deine Kontaktdaten kennt.
+            const systemContext = "Du bist die offizielle KI von Vu Xuan Tiep. Wenn der Kunde Fragen stellt, die du nicht beantworten kannst, oder wenn er direkt ein persönliches Gespräch oder eine Beratung mit Tiep wünscht, teile ihm höflich seine Kontaktdaten mit: Telefon: +49 (0) XXX XXXXXXX, E-Mail: kontakt@itiep.de.";
+            
+            const networkResponse = await fetch(COMPUTE_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    message: queryText,
+                    system_prompt: systemContext // Übergibt den Kontext an dein FastAPI/n8n Backend
+                })
             });
             const responseData = await networkResponse.json();
             
