@@ -284,6 +284,35 @@
 
         <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
 
+        <button id="analyze-btn" class="sidebar-btn hidden" style="border-color:var(--accent);background:rgba(66,133,244,0.08)">
+            <i class="fas fa-search-plus" style="color:var(--accent)"></i>
+            <span>Lebenslauf analysieren</span>
+        </button>
+
+        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
+
+        <button id="start-interview-btn" class="sidebar-btn" style="border-color:#a78bfa; background:rgba(167,139,250,0.05)">
+            <i class="fas fa-comments" style="color:#a78bfa"></i>
+            <span>Interview trainieren</span>
+        </button>
+
+        <div id="interview-panel" class="hidden rounded-xl p-4 text-center transition-all duration-300" style="background:#1e1f21; border:1px dashed #a78bfa">
+            <div class="flex justify-center items-center gap-2 mb-2">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-purple-400">Simulation aktiv</h3>
+            </div>
+            
+            <div class="w-16 h-16 rounded-full mx-auto my-2 flex items-center justify-center shadow-lg shadow-purple-500/10 animate-pulse" style="background:linear-gradient(135deg, #6d28d9, #4f46e5)">
+                <i class="fas fa-user-tie text-2xl text-white"></i>
+            </div>
+            <p id="interview-status" class="text-xs text-gray-400">HR-Manager ist bereit...</p>
+        </div>
+
+        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
+
         <button id="ikigai-btn" class="sidebar-btn">
             <i class="fas fa-dharmachakra" style="color:#a78bfa"></i>
             <span>Ikigai entdecken</span>
@@ -393,7 +422,29 @@
 // ════════ CONFIG (Optimierte Systemprompts für wärmere Tonalität) ════════
 const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
 const SYSTEM_DEFAULT = "Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown. Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden emotionalen Hürden ein echter Coach wertvolle Unterstützung bieten kann.";
-const SYSTEM_CV = "Du bist ein empathischer HR-Coach. Analysiere den Lebenslauf wertschätzend und konstruktiv auf Deutsch. Starte mit einer positiven Gesamteinschätzung, gefolgt von Stärken und klaren, ermutigenden Optimierungstipps für ATS und Struktur.";
+// =========================================================================
+// ERWEITERTE LOGIK FÜR SYSTEM_CV & NEUER INTERVIEW-MODUS (SCHRITT 2)
+// =========================================================================
+
+const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. 
+Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. 
+
+Strukturiere deine Antwort streng nach folgenden Punkten:
+1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)
+2. Stärken & markante Kernkompetenzen
+3. Konkrete Verbesserungsvorschläge (Format, Formulierungen, ATS-Optimierung)
+4. 🚀 PASSENDE JOB-PROFILE & SUCHPORTALE: Schlage basierend auf dem Profil 3 konkrete Berufsfelder vor. Nenne explizit die besten Suchportale für diese Branchen (z.B. LinkedIn, Indeed, StepStone oder spezialisierte Plattformen).
+5. 💡 NÄCHSTER SCHRITT: Beende deine Antwort immer mit einem freundlichen Satz, dass der Nutzer jetzt links im Menü auf den lila Button 'Interview trainieren' klicken kann, um eine reale Vorstellungsgespräch-Simulation für diese Berufsfelder zu starten.`;
+
+const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager in einem realen, professionellen Vorstellungsgespräch auf dem deutschen Arbeitsmarkt.
+
+Deine Verhaltensregeln:
+1. Einstieg & Job-Anpassung: In der ersten Runde nennt dir der Nutzer seine Wunschstelle und kopiert eventuell eine konkrete Stellenausschreibung oder Anforderungen in den Chat. Analysiere diese Anforderungen SOFORT im Hintergrund und gleiche sie mit dem Lebenslauf des Nutzers ab.
+2. Zielgerichtete Fragen: Richte das gesamte restliche Interview exakt an diesem spezifischen Stellenangebot und den Anforderungen aus. Stelle Fragen zu den dort geforderten Qualifikationen, Tools oder Aufgaben.
+3. ⚠️ WICHTIGSTE REGEL: Stelle IMMER NUR EINE FRAGE auf einmal! Warte die Antwort des Nutzers zwingend ab, bevor du weiterredest.
+4. Dynamik: Reagiere professionell und direkt auf die Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).
+5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
+
 const SYSTEM_IKIGAI = "Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutzer feinfühlig Schritt für Schritt. Stelle immer nur GENAU EINE Frage auf einmal, um den Nutzer nicht zu überfordern. Sei herzlich, reagiere auf die Antworten eingehend und bestärkend.";
 
 // ════════ STATE ════════
@@ -415,6 +466,9 @@ const fileNameEl   = document.getElementById('file-name');
 const analyzeBtn   = document.getElementById('analyze-btn');
 const ikigaiBtn    = document.getElementById('ikigai-btn');
 const clearBtn     = document.getElementById('clear-btn');
+const startInterviewBtn = document.getElementById('start-interview-btn');
+const interviewPanel    = document.getElementById('interview-panel');
+const interviewStatus   = document.getElementById('interview-status');
 const chatHistory  = document.getElementById('chat-history');
 const userInput    = document.getElementById('user-input');
 const sendBtn      = document.getElementById('send-btn');
@@ -674,7 +728,10 @@ async function askAI(userMsg, systemMsg) {
         // Führt die neue animierte Ausgabe und das optimierte Audio aus
         addMessage('ai', reply);
         speak(reply);
-        
+        // Setzt den Status im Panel nach der Antwort wieder zurück:
+        if (currentMode === 'interview') {
+            interviewStatus.textContent = "HR-Manager hört zu...";
+        }
         messageCount++;
         checkShowCTA();
     } catch (e) {
@@ -687,6 +744,9 @@ async function askAI(userMsg, systemMsg) {
 }
 
 // ════════ SEND ════════
+// =========================================================================
+// OPTIMIERTE SENDE-LOGIK FÜR DEN INTERVIEW-MODUS (SCHRITT 4)
+// =========================================================================
 function handleSend() {
     const msg = userInput.value.trim();
     if (!msg) return;
@@ -694,9 +754,17 @@ function handleSend() {
     userInput.value = '';
     userInput.style.height = 'auto';
 
+    // 1. Dem System sagen, welchen Prompt es beim Absenden nutzen soll
     const sys = currentMode === 'cv' ? SYSTEM_CV
               : currentMode === 'ikigai' ? SYSTEM_IKIGAI
+              : currentMode === 'interview' ? SYSTEM_INTERVIEW // 🎭 Verwendet das HR-Manager Profil im Gespräch
               : SYSTEM_DEFAULT;
+              
+    // 2. Wenn wir uns im Interview befinden, verändern wir den Live-Status
+    if (currentMode === 'interview') {
+        interviewStatus.textContent = "HR-Manager tippt eine Antwort...";
+    }
+
     askAI(msg, sys);
 }
 
@@ -757,12 +825,40 @@ ikigaiBtn.addEventListener('click', () => {
     askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai ist, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
 });
 
+// ════════ INTERVIEW SIMULATION (MIT JOB-SPEC-ERFASSUNG) ════════
+startInterviewBtn.addEventListener('click', () => {
+    if (window.innerWidth < 768) closeSidebar();
+
+    // 🛡️ 1. SICHERHEITSPRÜFUNG: Existiert ein Lebenslauf?
+    if (!extractedText || extractedText.trim() === '') {
+        setMode('cv'); 
+        addMessage('ai', 'Guten Tag! Bevor wir mit dem simulierten Vorstellungsgespräch starten können, benötige ich Ihren Lebenslauf. Bitte laden Sie diesen kurz im linken Menü hoch, damit ich mich optimal auf Sie vorbereiten kann! 📄✨');
+        return; 
+    }
+    
+    // 🚀 2. INTERVIEW INITIALISIEREN
+    setMode('interview');
+    conversationHistory = [];
+    chatHistory.innerHTML = '';
+    
+    // Visuelles Live-Panel in der Sidebar aktivieren
+    interviewPanel.classList.remove('hidden');
+    interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
+    
+    // Signal für den Start
+    addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
+    
+    // Die perfekte, zielgerichtete Einstiegsfrage über askAI triggern:
+    askAI('Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage: Auf welche konkrete Stelle ich mich bewerben möchte und warum. Frage mich außerdem aktiv, ob ich bereits ein konkretes Stellenangebot gefunden habe und sage mir, dass ich den Text der Ausschreibung oder Anforderungen einfach hier in den Chat kopieren kann, damit du das Interview ganz gezielt darauf ausrichten kannst.', SYSTEM_INTERVIEW);
+});
+
 // ════════ CLEAR ════════
 clearBtn.addEventListener('click', () => {
     conversationHistory = [];
     extractedText = '';
     messageCount = 0;
     currentMode = 'default';
+    interviewPanel.classList.add('hidden');
     chatHistory.innerHTML = '';
     ctaEl.classList.remove('show');
     modeLabel.classList.add('hidden');
@@ -780,11 +876,19 @@ function setMode(mode) {
     if (mode === 'cv') {
         modeLabel.textContent = '📄 Lebenslauf-Modus';
         modeLabel.classList.remove('hidden');
+        interviewPanel.classList.add('hidden'); // Verstecken, wenn im CV-Modus
     } else if (mode === 'ikigai') {
         modeLabel.textContent = '☯️ Ikigai-Modus';
         modeLabel.classList.remove('hidden');
+        interviewPanel.classList.add('hidden'); // Verstecken, wenn im Ikigai-Modus
+    } else if (mode === 'interview') {
+    modeLabel.textContent = '🎭 Interview-Simulation';
+    modeLabel.classList.remove('hidden');
+    userInput.placeholder = 'Kopiere hier die Stellenbeschreibung oder antworte dem HR-Manager...'; // ✨ Dynamischer Text
     } else {
-        modeLabel.classList.add('hidden');
+    modeLabel.classList.add('hidden');
+    interviewPanel.classList.add('hidden');
+    userInput.placeholder = 'Frag mich etwas oder tippe \'Ikigai\'...'; // 🔄 Zurücksetzen auf Standard
     }
 }
 </script>
