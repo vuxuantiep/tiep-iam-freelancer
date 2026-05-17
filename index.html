@@ -1,1570 +1,955 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vu Xuan Tiep – KI-Automatisierung & Digitale Lösungen für KMU</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-:root {
-  --bg:        #fafbfc;
-  --bg2:       #f3f5f7;
-  --text:      #1a2332;
-  --muted:     #556b7d;
-  --border:    #d8dfe6;
-  --accent:    #1e5a96;
-  --accent2:   #2d7fb8;
-  --green:     #2d8a6f;
-  --purple:    #6d28d9;
-  --card:      #ffffff;
-  --serif:     'Playfair Display', serif;
-  --sans:      'Inter', sans-serif;
-  --radius:    10px;
-  --shadow:    0 4px 24px rgba(26,35,50,0.08);
-  --shadow-lg: 0 12px 40px rgba(26,35,50,0.12);
-}
-
-html { scroll-behavior: smooth; }
-body { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:15px; line-height:1.8; overflow-x:hidden; }
-
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:var(--bg); }
-::-webkit-scrollbar-thumb { background:var(--accent); border-radius:3px; }
-
-/* ═══════════════════════════
-   NAV
-═══════════════════════════ */
-nav {
-  position:fixed; top:0; left:0; right:0; z-index:200;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 5vw; height:68px;
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--border);
-  transition:box-shadow 0.3s;
-}
-nav.scrolled { box-shadow:0 4px 20px rgba(26,35,50,0.08); }
-
-.nav-logo {
-  font-family:var(--serif); font-weight:700; font-size:1.1rem;
-  color:var(--text); text-decoration:none; letter-spacing:-0.3px; flex-shrink:0;
-}
-.nav-logo span { color:var(--accent); }
-
-.nav-links { display:flex; gap:2.4rem; list-style:none; }
-.nav-links a {
-  font-size:0.875rem; font-weight:500; color:var(--muted);
-  text-decoration:none; transition:color 0.2s;
-}
-.nav-links a:hover, .nav-links a.active { color:var(--accent); }
-
-.nav-cta {
-  font-size:0.85rem; font-weight:600; background:var(--accent); color:#fff;
-  padding:9px 22px; border-radius:6px; text-decoration:none;
-  transition:all 0.2s; white-space:nowrap;
-}
-.nav-cta:hover { background:var(--accent2); transform:translateY(-1px); }
-
-/* Hamburger */
-#hamburger {
-  display:none; flex-direction:column; gap:5px; cursor:pointer;
-  padding:6px; border:none; background:none; z-index:201;
-}
-#hamburger span {
-  display:block; width:24px; height:2px; background:var(--text);
-  border-radius:2px; transition:all 0.3s;
-}
-#hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
-#hamburger.open span:nth-child(2) { opacity:0; }
-#hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
-
-/* Mobile menu overlay */
-#mobile-menu {
-  display:none; position:fixed; inset:0; top:68px; z-index:190;
-  background:#fff; padding:32px 5vw 40px; flex-direction:column; gap:0;
-  overflow-y:auto;
-}
-#mobile-menu.show { display:flex; }
-#mobile-menu a {
-  display:block; padding:16px 0; font-size:1.1rem; font-weight:500;
-  color:var(--text); text-decoration:none; border-bottom:1px solid var(--border);
-  transition:color 0.2s;
-}
-#mobile-menu a:hover { color:var(--accent); }
-#mobile-menu .mob-cta {
-  margin-top:24px; text-align:center; background:var(--accent); color:#fff;
-  padding:15px; border-radius:8px; font-weight:600; font-size:1rem; border-bottom:none;
-}
-
-/* ═══════════════════════════
-   LAYOUT
-═══════════════════════════ */
-section { padding:96px 5vw; }
-.container { max-width:1100px; margin:0 auto; }
-
-.tag {
-  font-size:0.72rem; font-weight:700; color:var(--accent);
-  letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; display:block;
-}
-
-h2.section-title {
-  font-family:var(--serif); font-weight:700;
-  font-size:clamp(2rem,5vw,3.2rem);
-  line-height:1.15; margin-bottom:18px;
-}
-h2.section-title em { font-style:normal; color:var(--accent); }
-
-.section-lead {
-  font-size:1rem; color:var(--muted); max-width:580px;
-  margin-bottom:56px; line-height:1.8;
-}
-
-/* ═══════════════════════════
-   HERO
-═══════════════════════════ */
-#home {
-  min-height:100vh; display:flex; align-items:center;
-  padding-top:88px; padding-bottom:48px; position:relative;
-}
-
-.hero-grid {
-  display: grid;
-  
-  /* 💡 DER TRICK: Wir begrenzen die maximale Gesamtbreite des Hero-Bereichs.
-     Dadurch rücken Text und Foto näher zusammen und wirken super edel. */
-  max-width: 1040px;
-  margin: 0 auto;       /* Zentriert den gesamten Bereich auf dem Bildschirm */
-  padding: 0 24px;      /* Sicherheitsabstand zu den Bildschirmrändern */
-  
-  /* Spaltenbreite: Text nimmt den Platz ein, Foto bekommt eine feste, dezentere Breite */
-  grid-template-columns: 1fr 260px; 
-  
-  /* Deutlicher Abstand zwischen Textende und Fotobeginn */
-  gap: 90px; 
-  align-items: center;  /* Zentriert das Foto vertikal auf Höhe des Textes */
-}
-
-.hero-eyebrow {
-  display:inline-flex; align-items:center; gap:8px;
-  font-size:0.78rem; color:var(--accent); font-weight:600;
-  letter-spacing:1px; text-transform:uppercase; margin-bottom:20px;
-  background:rgba(30,90,150,0.06); border:1px solid rgba(30,90,150,0.15);
-  padding:6px 14px; border-radius:20px;
-}
-
-.hero-name {
-  font-family:var(--serif); font-weight:700;
-  font-size:clamp(1.7rem,3.5vw,2.8rem);
-  line-height:1.15; margin-bottom:10px; letter-spacing:-0.3px;
-}
-.hero-name span { color:var(--accent); }
-
-.hero-role {
-  font-size:1rem; color:var(--muted); font-weight:400;
-  margin-bottom:24px; line-height:1.5;
-}
-
-.hero-desc {
-  font-size:0.9rem; color:var(--muted); line-height:1.8;
-  max-width:480px; margin-bottom:32px;
-}
-
-.hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
-.btn-primary {
-  font-size:0.9rem; font-weight:600; background:var(--accent); color:#fff;
-  padding:13px 30px; border-radius:7px; text-decoration:none;
-  transition:all 0.25s; border:2px solid var(--accent);
-}
-.btn-primary:hover { background:var(--accent2); border-color:var(--accent2); transform:translateY(-2px); box-shadow:0 8px 24px rgba(30,90,150,0.2); }
-
-.btn-outline {
-  font-size:0.9rem; font-weight:600; background:transparent; color:var(--accent);
-  padding:13px 30px; border:2px solid var(--accent); border-radius:7px;
-  text-decoration:none; transition:all 0.25s;
-}
-.btn-outline:hover { background:var(--accent); color:#fff; }
-
-.hero-stats {
-  display:flex; gap:40px; margin-top:48px; padding-top:36px;
-  border-top:1px solid var(--border); flex-wrap:wrap;
-}
-.stat-num {
-  font-family:var(--serif); font-weight:700; font-size:2rem;
-  color:var(--accent); display:block; line-height:1;
-}
-.stat-label { font-size:0.78rem; color:var(--muted); margin-top:6px; }
-
-.hero-right { display:flex; justify-content:center; align-items:flex-start; padding-top:8px; }
-.hero-photo-wrap {
-  width: 100%;
-  max-width: 260px;
-  aspect-ratio: 3 / 4;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 45px rgba(26, 35, 50, 0.12);
-  position: relative;
-  flex-shrink: 0;
-
-  /* 🎯 DIESE ZEILE HINZUFÜGEN: Zieht das Foto optisch nach oben */
-  margin-top: -30px; 
-}
-.hero-photo-wrap img {
-  width: 100%;
-  height: 100%;
-  
-  /* 💡 FOTO-DARSTELLUNG RETTEN:
-     'cover' sorgt dafür, dass das Bild den Rahmen komplett ausfüllt ohne Verzerrung.
-     'center 5%' schiebt den Bildausschnitt leicht nach oben, damit dein Kopf optimal 
-     zu sehen ist und nicht oben abgeschnitten wird! */
-  object-fit: cover;
-  object-position: center 5%; 
-  display: block;
-}
-
-/* ═══════════════════════════
-   PRODUKTE OVERVIEW
-═══════════════════════════ */
-#produkte { background:var(--bg2); }
-
-.produkte-cards {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
-}
-
-.produkt-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:36px 28px;
-  text-decoration:none; color:inherit;
-  display:flex; flex-direction:column;
-  transition:all 0.3s; position:relative; overflow:hidden;
-}
-.produkt-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:4px;
-  background:var(--accent);
-}
-.produkt-card:nth-child(2)::before { background:var(--green); }
-.produkt-card:nth-child(3)::before { background:var(--purple); }
-
-.produkt-card:hover {
-  transform:translateY(-4px); box-shadow:var(--shadow-lg);
-  border-color:transparent;
-}
-
-.produkt-icon {
-  width:52px; height:52px; border-radius:12px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.4rem; margin-bottom:20px; flex-shrink:0;
-  background:rgba(30,90,150,0.08);
-}
-.produkt-card:nth-child(2) .produkt-icon { background:rgba(45,138,111,0.1); }
-.produkt-card:nth-child(3) .produkt-icon { background:rgba(109,40,217,0.08); }
-
-.produkt-card h3 {
-  font-family:var(--serif); font-size:1.25rem; font-weight:600;
-  margin-bottom:10px; line-height:1.3;
-}
-.produkt-card p { font-size:0.9rem; color:var(--muted); line-height:1.75; flex:1; }
-
-.produkt-link {
-  margin-top:20px; font-size:0.85rem; font-weight:600; color:var(--accent);
-  display:flex; align-items:center; gap:6px;
-}
-.produkt-card:nth-child(2) .produkt-link { color:var(--green); }
-.produkt-card:nth-child(3) .produkt-link { color:var(--purple); }
-
-/* ═══════════════════════════
-   PRODUKT DETAIL SECTIONS
-═══════════════════════════ */
-.produkt-section { background:var(--bg); }
-.produkt-section.alt { background:var(--bg2); }
-
-.produkt-hero {
-  display:grid; grid-template-columns:1fr 1fr; gap:64px;
-  align-items:center; margin-bottom:72px;
-}
-
-.produkt-badge {
-  display:inline-flex; align-items:center; gap:8px;
-  font-size:0.72rem; font-weight:700; text-transform:uppercase;
-  letter-spacing:1.5px; padding:6px 14px; border-radius:20px; margin-bottom:20px;
-}
-.badge-immo  { background:rgba(30,90,150,0.08);  color:var(--accent); border:1px solid rgba(30,90,150,0.2); }
-.badge-coach { background:rgba(45,138,111,0.08); color:var(--green);  border:1px solid rgba(45,138,111,0.2); }
-.badge-integ { background:rgba(109,40,217,0.07); color:var(--purple); border:1px solid rgba(109,40,217,0.2); }
-
-.produkt-section h2 {
-  font-family:var(--serif); font-size:clamp(1.8rem,4vw,2.8rem);
-  font-weight:700; line-height:1.15; margin-bottom:16px;
-}
-.produkt-section h2 .accent-blue   { color:var(--accent); }
-.produkt-section h2 .accent-green  { color:var(--green);  }
-.produkt-section h2 .accent-purple { color:var(--purple); }
-
-.produkt-section .lead {
-  font-size:1rem; color:var(--muted); line-height:1.85; margin-bottom:28px;
-}
-
-.visual-box {
-  background:var(--card); border:1px solid var(--border); border-radius:14px;
-  padding:40px 32px; box-shadow:var(--shadow);
-}
-
-.features-grid {
-  display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:16px;
-}
-
-.feat-item {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:10px; padding:24px 20px;
-  transition:all 0.2s;
-}
-.feat-item:hover { border-color:var(--accent); box-shadow:var(--shadow); }
-.feat-item.green:hover { border-color:var(--green); }
-.feat-item.purple:hover { border-color:var(--purple); }
-
-.feat-icon {
-  font-size:1.5rem; margin-bottom:12px; display:block;
-}
-.feat-item h4 {
-  font-family:var(--serif); font-size:1rem; font-weight:600;
-  margin-bottom:7px; line-height:1.3;
-}
-.feat-item p { font-size:0.875rem; color:var(--muted); line-height:1.7; }
-
-/* Steps */
-.steps { display:flex; flex-direction:column; gap:16px; }
-.step {
-  display:flex; gap:18px; align-items:flex-start;
-  background:var(--card); border:1px solid var(--border);
-  border-radius:10px; padding:20px;
-}
-.step-num {
-  width:36px; height:36px; border-radius:50%; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  font-weight:700; font-size:0.85rem; color:#fff;
-  background:var(--accent);
-}
-.step-num.green  { background:var(--green); }
-.step-num.purple { background:var(--purple); }
-.step h4 { font-weight:600; font-size:0.95rem; margin-bottom:3px; }
-.step p  { font-size:0.875rem; color:var(--muted); }
-
-/* CTA strip */
-.cta-strip {
-  border-radius:12px; padding:40px 36px;
-  display:flex; align-items:center; justify-content:space-between; gap:24px;
-  flex-wrap:wrap; margin-top:56px;
-  background:linear-gradient(135deg, rgba(30,90,150,0.04), rgba(30,90,150,0.01));
-  border:1px solid var(--border);
-}
-.cta-strip.green  { background:linear-gradient(135deg,rgba(45,138,111,0.05),rgba(45,138,111,0.01)); }
-.cta-strip.purple { background:linear-gradient(135deg,rgba(109,40,217,0.04),rgba(109,40,217,0.01)); }
-
-.cta-strip h3 { font-family:var(--serif); font-size:1.4rem; font-weight:600; margin-bottom:6px; }
-.cta-strip p  { font-size:0.9rem; color:var(--muted); }
-.cta-btn {
-  flex-shrink:0; font-size:0.9rem; font-weight:600; color:#fff;
-  padding:13px 28px; border-radius:7px; text-decoration:none;
-  background:var(--accent); transition:all 0.25s; white-space:nowrap;
-}
-.cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(30,90,150,0.2); }
-.cta-btn.green  { background:var(--green); }
-.cta-btn.green:hover { box-shadow:0 8px 20px rgba(45,138,111,0.25); }
-.cta-btn.purple { background:var(--purple); }
-.cta-btn.purple:hover { box-shadow:0 8px 20px rgba(109,40,217,0.25); }
-
-/* Section divider */
-.section-divider {
-  height:2px; background:linear-gradient(90deg,transparent,var(--border),transparent);
-  margin:0 5vw;
-}
-
-/* ═══════════════════════════
-   SERVICES
-═══════════════════════════ */
-#services { background:var(--bg2); }
-
-.services-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
-.service-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:36px 28px; transition:all 0.3s;
-}
-.service-card:hover { border-color:var(--accent); box-shadow:var(--shadow-lg); }
-
-.service-icon { font-size:2rem; margin-bottom:14px; display:block; }
-.service-card h3 { font-family:var(--serif); font-size:1.2rem; margin-bottom:10px; }
-.service-card p { font-size:0.9rem; color:var(--muted); margin-bottom:16px; }
-.service-tags { display:flex; flex-wrap:wrap; gap:7px; }
-.service-tag {
-  font-size:0.73rem; color:var(--accent); background:rgba(30,90,150,0.06);
-  padding:4px 10px; border-radius:4px; border:1px solid rgba(30,90,150,0.14);
-}
-
-/* ═══════════════════════════
-   PORTFOLIO
-═══════════════════════════ */
-#portfolio { background:var(--bg); }
-
-.portfolio-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
-.port-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); overflow:hidden; transition:all 0.3s;
-}
-.port-card:hover { border-color:var(--accent); box-shadow:var(--shadow-lg); }
-
-.port-header {
-  padding:24px 28px 18px; border-bottom:1px solid var(--border);
-  display:flex; justify-content:space-between; align-items:flex-start;
-}
-.port-cat { font-size:0.72rem; color:var(--muted); letter-spacing:0.7px; margin-bottom:6px; font-weight:600; }
-.port-badge {
-  font-size:0.7rem; text-transform:uppercase; padding:4px 12px;
-  border-radius:4px; white-space:nowrap; letter-spacing:0.5px; font-weight:600;
-}
-.badge-green { background:rgba(45,138,111,0.1); color:var(--green); border:1px solid rgba(45,138,111,0.2); }
-.badge-blue  { background:rgba(30,90,150,0.08); color:var(--accent); border:1px solid rgba(30,90,150,0.18); }
-
-.port-body { padding:24px 28px; }
-.port-body h3 { font-family:var(--serif); font-size:1.15rem; margin-bottom:8px; }
-.port-body p { font-size:0.875rem; color:var(--muted); margin-bottom:18px; }
-.port-specs { display:flex; flex-direction:column; gap:8px; }
-.port-spec { font-size:0.83rem; color:var(--text); }
-.port-spec::before { content:'—'; color:var(--accent); margin-right:8px; font-weight:600; }
-.port-stack { display:flex; flex-wrap:wrap; gap:7px; margin-top:18px; }
-.stack-tag { font-size:0.72rem; color:var(--accent); background:rgba(30,90,150,0.06); padding:3px 10px; border-radius:4px; }
-
-/* ═══════════════════════════
-   EXPERIENCE
-═══════════════════════════ */
-#experience { background:var(--bg2); }
-
-.exp-timeline { display:flex; flex-direction:column; gap:20px; }
-.exp-item {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:26px 28px;
-  border-left:4px solid var(--accent);
-}
-.exp-period { font-size:0.78rem; color:var(--muted); margin-bottom:7px; font-weight:500; }
-.exp-item h3 { font-family:var(--serif); font-size:1.1rem; margin-bottom:3px; }
-.exp-company { font-size:0.875rem; color:var(--accent); margin-bottom:10px; font-weight:500; }
-.exp-item p  { font-size:0.875rem; color:var(--muted); line-height:1.7; }
-
-.certs-grid { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
-.cert-badge {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:7px; padding:10px 16px;
-  display:flex; align-items:center; gap:10px;
-  font-size:0.8rem; color:var(--muted);
-}
-.cert-badge img { height:24px; width:auto; }
-
-/* ═══════════════════════════
-   KONTAKT
-═══════════════════════════ */
-#kontakt { background:var(--bg); }
-
-.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:56px; }
-.contact-info h3 { font-family:var(--serif); font-size:1.25rem; margin-bottom:14px; }
-.contact-info p  { font-size:0.9rem; color:var(--muted); margin-bottom:26px; line-height:1.8; }
-
-.contact-detail {
-  display:flex; align-items:center; gap:14px;
-  margin-bottom:16px; font-size:0.875rem;
-}
-.contact-icon {
-  width:38px; height:38px; background:rgba(30,90,150,0.07);
-  border:1px solid var(--border); border-radius:7px;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-}
-
-.contact-form { display:flex; flex-direction:column; gap:16px; }
-.form-group { display:flex; flex-direction:column; gap:6px; }
-.form-group label { font-size:0.83rem; font-weight:600; color:var(--text); }
-.form-group input, .form-group textarea, .form-group select {
-  background:var(--card); border:1px solid var(--border); border-radius:7px;
-  padding:11px 14px; font-family:var(--sans); font-size:0.9rem; color:var(--text);
-  transition:border-color 0.2s; outline:none; resize:vertical;
-}
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-  border-color:var(--accent);
-}
-.form-group textarea { min-height:110px; }
-.form-group select { appearance:none; cursor:pointer; }
-.form-submit {
-  display:block; text-align:center; font-size:0.9rem; font-weight:600;
-  padding:13px; border-radius:7px; border:none;
-  background:var(--accent); color:#fff; cursor:pointer; transition:all 0.2s;
-}
-.form-submit:hover { background:var(--accent2); transform:translateY(-1px); }
-
-/* ═══════════════════════════
-   FOOTER
-═══════════════════════════ */
-footer {
-  padding:32px 5vw; border-top:1px solid var(--border);
-  display:flex; justify-content:space-between; align-items:center;
-  flex-wrap:wrap; gap:16px; background:var(--card);
-}
-.footer-logo { font-family:var(--serif); font-weight:700; font-size:1rem; }
-.footer-logo span { color:var(--accent); }
-footer p { font-size:0.8rem; color:var(--muted); }
-
-/* ═══════════════════════════
-   ANIMATIONS
-═══════════════════════════ */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(24px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-.fade-up { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
-.fade-up.visible { opacity:1; transform:none; }
-
-/* ═══════════════════════════
-   RESPONSIVE
-═══════════════════════════ */
-@media (max-width: 1024px) {
-  .produkte-cards     { grid-template-columns:1fr; }
-  .produkt-hero       { grid-template-columns:1fr; }
-  /* Passt den Abstand auf Tablets harmonisch an */
-  .hero-grid {
-    display: grid;
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 0 24px;
-    
-    /* ÄNDERUNG 1: Schiebt den Text nach links und das Foto nach rechts */
-    grid-template-columns: 1fr 260px; 
-    justify-content: space-between;
-    
-    /* ÄNDERUNG 2: Den Abstand nochmals deutlich vergrößert */
-    gap: 160px; 
-    
-    /* Nimmt die zentrierte Ausrichtung heraus, damit das Bild oben startet */
-    align-items: start; 
-  }
-}
-
-@media (max-width: 760px) {
-  .hero-grid          { grid-template-columns:1fr; }
-  .hero-right         { display:none; }
-}
-
-@media (max-width: 900px) {
-  section             { padding:72px 5vw; }
-  .services-grid      { grid-template-columns:1fr; }
-  .portfolio-grid     { grid-template-columns:1fr; }
-  .contact-grid       { grid-template-columns:1fr; }
-  .features-grid      { grid-template-columns:1fr; }
-  .cta-strip          { flex-direction:column; text-align:center; }
-}
-
-@media (max-width: 768px) {
-  /* Hide desktop nav elements */
-  .nav-links   { display:none; }
-  .nav-cta     { display:none; }
-  #hamburger   { display:flex; }
-
-  .hero-stats  { gap:24px; }
-  .hero-name   { font-size:2rem; }
-
-  .produkt-hero { gap:36px; }
-}
-
-@media (max-width: 480px) {
-  section          { padding:56px 5vw; }
-  .hero-btns       { flex-direction:column; }
-  .btn-primary, .btn-outline { text-align:center; }
-}
-
-/* ═══════════════════════════
-   PORTFOLIO ASSISTANT (unchanged)
-═══════════════════════════ */
-#portfolio-assistant {
-  position:fixed; bottom:20px; left:20px; z-index:10000;
-  font-family:var(--sans); display:flex; flex-direction:column; align-items:flex-start;
-}
-#assistant-window {
-  display:none; width:330px; max-width:calc(100vw - 40px); height:440px;
-  background:#fff; border:1px solid var(--border); border-radius:16px;
-  overflow:hidden; margin-bottom:12px; box-shadow:0 10px 35px rgba(26,35,50,0.15);
-  flex-direction:column; transition:all 0.3s;
-}
-.asst-header {
-  padding:14px 18px; border-bottom:1px solid var(--border);
-  display:flex; justify-content:space-between; align-items:center;
-  background:var(--accent);
-}
-.asst-header-title { display:flex; align-items:center; gap:10px; color:#fff; font-weight:600; font-size:0.9rem; }
-#asst-header-avatar { width:28px; height:28px; border-radius:50%; object-fit:cover; opacity:0; transition:opacity 0.3s; }
-#asst-header-avatar.visible { opacity:1; }
-.close-icon { color:#fff; cursor:pointer; font-size:1rem; transition:opacity 0.2s; }
-.close-icon:hover { opacity:0.7; }
-#asst-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
-.asst-msg { max-width:88%; padding:10px 14px; border-radius:14px; font-size:0.875rem; line-height:1.6; }
-.asst-msg.bot { background:var(--bg2); color:var(--text); align-self:flex-start; border-radius:14px 14px 14px 4px; }
-.asst-msg.user { background:var(--accent); color:#fff; align-self:flex-end; border-radius:14px 14px 4px 14px; }
-.asst-footer { padding:12px 16px; border-top:1px solid var(--border); }
-#asst-input {
-  width:100%; border:1px solid var(--border); border-radius:8px;
-  padding:10px 14px; font-family:var(--sans); font-size:0.875rem; outline:none;
-  transition:border-color 0.2s;
-}
-#asst-input:focus { border-color:var(--accent); }
-#asst-toggle-btn {
-  width:54px; height:54px; border-radius:50%; cursor:pointer;
-  border:2px solid var(--accent); background:var(--card);
-  box-shadow:0 4px 16px rgba(30,90,150,0.25);
-  transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); overflow:hidden;
-}
-#asst-toggle-btn img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s; }
-#asst-toggle-btn:hover { transform:scale(1.08); }
-#asst-toggle-btn.shrunk { width:32px; height:32px; opacity:0.5; }
-.asst-msg.loading { background:transparent; color:var(--muted); font-style:italic; align-self:flex-start; padding:0; }
-.animate-spin { animation:spin 1s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tiep Coach – KI Karriereberatung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <style>
+        /* Erklärungs-Kommentar: Basis-Farbdefinitionen für das gesamte Dashboard */
+        :root {
+            --bg-main: #0f0f10;
+            --bg-card: #191a1b;
+            --bg-input: #1e1f21;
+            --border: #2a2b2e;
+            --border-hover: #3c4043;
+            --accent: #4285f4;
+            --accent-2: #34a853;
+            --text-primary: #e8e8e8;
+            --text-secondary: #9aa0a6;
+            --text-muted: #5f6368;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .g-text {
+            background: linear-gradient(120deg, #4285f4 0%, #1a73e8 40%, #34a853 100%);
+            background-size: 200% auto;
+            animation: flow 5s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        .g-bg {
+            background: linear-gradient(120deg, #4285f4 0%, #1a73e8 50%, #34a853 100%);
+            background-size: 200% auto;
+            animation: flow 5s linear infinite;
+        }
+        @keyframes flow { to { background-position: 200% center; } }
+
+        /* Erklärungs-Kommentar: Animationen und Layout für das Menü (Sidebar) */
+        #sidebar {
+            width: 0;
+            overflow: hidden;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+            flex-shrink: 0;
+            z-index: 100;
+        }
+        #sidebar.open { width: 280px; }
+
+        /* Erklärungs-Kommentar: Fehlerbehebung für mobile Ansichten. 
+           Das Overlay nutzt nun display:none, um Klicks im Hintergrund nicht zu blockieren. */
+        @media (max-width: 767px) {
+            #sidebar {
+                position: fixed;
+                top: 0; left: 0; bottom: 0;
+                height: 100%;
+                z-index: 100;
+            }
+            #overlay {
+                display: none;
+                position: fixed; inset: 0;
+                background: rgba(0,0,0,0.6);
+                z-index: 90;
+                backdrop-filter: blur(4px);
+            }
+            #overlay.show { display: block; }
+        }
+
+        .prose-bubble h1, .prose-bubble h2, .prose-bubble h3 {
+            font-family: 'DM Serif Display', serif;
+            color: #c5d5f5;
+            margin: 0.75rem 0 0.35rem;
+        }
+        .prose-bubble h2 { font-size: 1.05rem; }
+        .prose-bubble h3 { font-size: 0.95rem; }
+        .prose-bubble p { margin: 0.4rem 0; }
+        .prose-bubble ul, .prose-bubble ol {
+            padding-left: 1.25rem;
+            margin: 0.4rem 0;
+        }
+        .prose-bubble li { margin: 0.2rem 0; }
+        .prose-bubble strong { color: #c8d8ff; font-weight: 600; }
+        .prose-bubble em { color: #a8c8a0; font-style: italic; }
+        .prose-bubble code {
+            background: #25272b;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.85em;
+            color: #89b4fa;
+            font-family: 'Courier New', monospace;
+        }
+        .prose-bubble hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0.75rem 0;
+        }
+
+        .input-wrap {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1.5px rgba(66,133,244,0.3);
+        }
+
+        .dot-pulse span {
+            display: inline-block;
+            width: 7px; height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: dotBounce 1.2s ease-in-out infinite;
+        }
+        .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+        .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotBounce {
+            0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        #live-coach-cta {
+            display: none;
+            animation: fadeSlideUp 0.5s ease both;
+        }
+        #live-coach-cta.show { display: flex; }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #chat-scroll::-webkit-scrollbar { width: 5px; }
+        #chat-scroll::-webkit-scrollbar-track { background: transparent; }
+        #chat-scroll::-webkit-scrollbar-thumb { background: #2a2b2e; border-radius: 10px; }
+
+        .sidebar-btn {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 12px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .sidebar-btn:hover { background: #25272b; border-color: var(--border-hover); }
+        .sidebar-btn.active {
+            background: rgba(167, 139, 250, 0.15) !important;
+            border-color: #a78bfa !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(167, 139, 250, 0.2);
+        }
+
+        .recording-active {
+            color: #ef4444 !important;
+            animation: pulse-mic 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse-mic {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .stage-pill {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(66,133,244,0.12);
+            border: 1px solid rgba(66,133,244,0.3);
+            color: #7ab3f8;
+            font-weight: 500;
+        }
+
+        .model-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: rgba(52,168,83,0.1);
+            border: 1px solid rgba(52,168,83,0.25);
+            color: #5bba6f;
+            font-weight: 500;
+        }
+
+        .msg-enter { animation: msgFade 0.35s ease both; }
+        @keyframes msgFade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes micPulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+        }
+        #mic-btn.recording {
+            background: rgba(239,68,68,0.15) !important;
+            animation: micPulse 1.5s ease-in-out infinite;
+        }
+        #mic-btn.recording i { color: #ef4444 !important; }
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .upload-zone:hover { border-color: var(--border-hover); background: #202123; }
+
+        /* ── ☯️ EXKLUSIVE COOMORANT & CREAM SCREEN STYLES (VARIANT 2) ── */
+        #ikigai-screen {
+            --cream: #f4f0e6;
+            --ink: #1a1410;
+            --love: #c85a3a;
+            --good: #3a7c6b;
+            --need: #4a6fa5;
+            --paid: #c4963a;
+            --center: #7c4a7e;
+            --border-iki: rgba(26,20,16,0.11);
+            
+            background: var(--cream);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
+        }
+        .iki-title-main {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            color: var(--ink);
+        }
+        .iki-tab-bar {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-iki);
+            overflow-x: auto;
+        }
+        .iki-screen-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--ink);
+            opacity: 0.5;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+        .iki-screen-btn:hover { opacity: 0.9; }
+        .iki-screen-btn.active {
+            opacity: 1;
+            border-bottom-color: var(--ink);
+            font-weight: 600;
+        }
+        .iki-view { display: none; animation: ikiFadeIn 0.4s ease both; }
+        .iki-view.active { display: block; }
+        @keyframes ikiFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+        .iki-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media(min-width: 768px) { .iki-grid { grid-template-columns: 1fr 1fr; } }
+
+        .iki-box {
+            background: #ffffff;
+            border: 1px solid var(--border-iki);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(26,20,16,0.02);
+        }
+        .iki-box-header {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .iki-bullets { list-style: none; padding:0; margin:0; }
+        .iki-bullets li {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+        }
+        .iki-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--love);
+            font-weight: bold;
+            font-size: 1.2rem;
+            top: -2px;
+        }
+        .iki-table-full {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .iki-table-full th, .iki-table-full td {
+            border: 1px solid var(--border-iki);
+            padding: 12px;
+            text-align: left;
+        }
+        .iki-table-full th { background: rgba(26,20,16,0.02); font-weight: 600; }
+
+        .iki-plan-card {
+            background: #ffffff;
+            border-left: 4px solid var(--love);
+            border-radius: 0 12px 12px 0;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-top: 1px solid var(--border-iki);
+            border-right: 1px solid var(--border-iki);
+            border-bottom: 1px solid var(--border-iki);
+        }
+    </style>
 </head>
-<body>
+<body class="flex h-screen overflow-hidden relative">
 
-<!-- ═══════════════════════════════════
-     NAV
-═══════════════════════════════════ -->
-<nav id="navbar">
-  <a href="#home" class="nav-logo">Vu Xuan <span>Tiep</span></a>
-
-  <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#experience">Mein Weg</a></li>
-    <li><a href="#kontakt">Kontakt</a></li>
-  </ul>
-
-  <a href="#kontakt" class="nav-cta">Beratung anfragen</a>
-
-  <button id="hamburger" aria-label="Menü öffnen">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- Mobile Menu -->
-<div id="mobile-menu">
-  <a href="#home"       onclick="closeMobile()">Home</a>
-  <a href="#services"   onclick="closeMobile()">Services</a>
-  <a href="#portfolio"  onclick="closeMobile()">Portfolio</a>
-  <a href="#experience" onclick="closeMobile()">Mein Weg</a>
-  <a href="#kontakt"    onclick="closeMobile()">Kontakt</a>
-  <a href="#kontakt"    onclick="closeMobile()" class="mob-cta">Beratung anfragen →</a>
+<div id="dsgvo-modal" class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md rounded-2xl p-6 shadow-2xl border" style="background: var(--bg-card); border-color: var(--border);">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 g-bg rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-shield-alt text-white text-sm"></i>
+            </div>
+            <div>
+                <h2 class="text-base font-bold text-white">Willkommen beim Tiep Coach</h2>
+                <p class="text-[11px]" style="color: var(--text-muted)">Kurzanleitung & Datenschutz</p>
+            </div>
+        </div>
+        <div class="space-y-2 text-xs mb-4 p-3 rounded-xl bg-white/5 border border-white/5">
+            <p class="font-medium text-gray-300"><i class="fas fa-info-circle text-blue-400 mr-1"></i> So funktioniert es:</p>
+            <ul class="list-disc list-inside space-y-1 text-gray-400 pl-1">
+                <li>Lebenslauf links hochladen für Optimierung.</li>
+                <li>Modus wählen (Interview oder Ikigai) oder direkt chatten.</li>
+                <li>Deine Daten werden nur live verarbeitet und nicht gespeichert.</li>
+            </ul>
+        </div>
+        <div class="space-y-3 mb-4">
+            <p class="text-xs font-medium text-gray-300">Optionale Personalisierung:</p>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-secondary)">Dein Name</label>
+                    <input type="text" id="user-name-input" placeholder="z. B. Max" class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all" style="background: var(--bg-input); border-color: var(--border); color: var(--text-primary);">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-secondary)">Wunsch-Branche</label>
+                    <input type="text" id="user-job-input" placeholder="z. B. IT, Marketing" class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all" style="background: var(--bg-input); border-color: var(--border); color: var(--text-primary);">
+                </div>
+            </div>
+        </div>
+        <div class="text-[11px] text-gray-400 leading-relaxed mb-5 border-t pt-3" style="border-color: var(--border)">
+            <p><i class="fas fa-user-lock mr-1 text-green-400"></i> <strong>DSGVO-Hinweis:</strong> Mit dem Klick auf Starten erklärst du dich einverstanden, dass deine Eingaben und dein Lebenslauf temporär verarbeitet werden. Es erfolgt keine dauerhafte Speicherung.</p>
+        </div>
+        <button id="dsgvo-accept-btn" class="w-full py-2.5 rounded-xl text-xs font-semibold text-white g-bg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span>Einverstanden & Starten</span><i class="fas fa-arrow-right text-[10px]"></i>
+        </button>
+    </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     HERO
-═══════════════════════════════════ -->
-<section id="home">
-  <div class="container">
-    <div class="hero-grid">
-      <div style="animation:fadeUp 0.7s ease both">
-        <div class="hero-eyebrow">
-          <span>🇩🇪</span> Hamburg · IAM · KI-Automatisierung
-        </div>
-        <h1 class="hero-name">
-          Mehr Kunden.<br>Weniger <span>manuelle Arbeit</span>.
-        </h1>
-        <p class="hero-role">KI-Automatisierung & sichere Enterprise-Systeme für KMU</p>
-        <p class="hero-desc">
-          Ich helfe Ihrem Unternehmen, qualifizierte Leads automatisch zu gewinnen,
-          IT-Prozesse intelligent zu automatisieren – sicher, datenschutzkonform und zukunftsfähig.
-        </p>
-        <div class="hero-btns">
-          <a href="#kontakt" class="btn-primary">Kostenlose Erstanalyse</a>
-          <a href="#produkte" class="btn-outline">Unsere Produkte</a>
-        </div>
-        <div class="hero-stats">
-          <div>
-            <span class="stat-num">10+</span>
-            <div class="stat-label">Jahre IT-Erfahrung</div>
-          </div>
-          <div>
-            <span class="stat-num">3</span>
-            <div class="stat-label">Kern-Produkte</div>
-          </div>
-          <div>
-            <span class="stat-num">100%</span>
-            <div class="stat-label">DSGVO-konform</div>
-          </div>
-        </div>
-      </div>
+<div id="overlay"></div>
 
-      <div class="hero-right" style="animation:fadeUp 0.7s ease 0.15s both backwards">
-        <div class="hero-photo-wrap">
-          <img src="https://itiep.de/8-transparent.png" alt="Tiep Vu Xuan – KI-Experte Hamburg">
+<div id="sidebar" class="flex flex-col h-full">
+    <div class="p-5 border-b flex justify-between items-start gap-4" style="border-color:var(--border)">
+        <div>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-briefcase text-white text-xs"></i>
+                </div>
+                <span class="g-text text-lg" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
+            </div>
+            <p class="text-xs mt-1" style="color:var(--text-muted)">KI Karriereberatung</p>
         </div>
-      </div>
+
+        <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors" title="Menü schließen">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
-  </div>
-</section>
+    
+    <div class="p-4 space-y-3 flex-1 overflow-y-auto">
+        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--text-muted)">Werkzeuge</p>
+        <div>
+            <label for="resume-upload" class="upload-zone" id="upload-zone">
+                <div class="text-center">
+                    <i class="fas fa-file-upload text-3xl text-gray-400 mb-2"></i>
+                    <p class="text-sm font-medium text-gray-200">Lebenslauf hochladen</p>
+                    <p class="text-xs text-gray-500">PDF oder Word-Format</p>
+                </div>
+            </label>
+            <input type="file" id="resume-upload" accept=".docx,.txt" class="hidden">
+            <p id="file-name" class="text-xs mt-2 text-center hidden" style="color:#5bba6f"></p>
+        </div>
 
-<!-- ═══════════════════════════════════
-     SERVICES
-═══════════════════════════════════ -->
-<section id="services">
-  <div class="container">
-    <span class="tag">Services</span>
-    <h2 class="section-title">Was ich für Sie <em>löse</em></h2>
-    <p class="section-lead">Von sicherem Identity Management bis zur intelligenten KI-Vertriebsautomatisierung – maßgeschneidert für Ihr Unternehmen.</p>
-
-    <div class="services-grid">
-      <div class="service-card fade-up">
-        <div class="service-icon">🛡️</div>
-        <h3>Identity & Zugriffssicherheit</h3>
-        <p>Sichere Benutzerverwaltung, Zero-Trust-Architekturen und RBAC-Modelle für Enterprise-Systeme.</p>
-        <div class="service-tags">
-          <span class="service-tag">Azure Entra ID</span>
-          <span class="service-tag">Active Directory</span>
-          <span class="service-tag">Zero Trust</span>
+        <button id="analyze-btn" class="sidebar-btn hidden" style="border-color:var(--accent);background:rgba(66,133,244,0.08)">
+            <i class="fas fa-search-plus" style="color:var(--accent)"></i><span>Lebenslauf analysieren</span>
+        </button>
+        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
+        <button id="start-interview-btn" class="sidebar-btn" style="border-color:#a78bfa; background:rgba(167,139,250,0.05)">
+            <i class="fas fa-comments" style="color:#a78bfa"></i><span>Interview trainieren</span>
+        </button>
+        <div id="interview-panel" class="hidden rounded-xl p-4 text-center transition-all duration-300" style="background:#1e1f21; border:1px dashed #a78bfa">
+            <div class="flex justify-center items-center gap-2 mb-2">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-purple-400">Simulation aktiv</h3>
+            </div>
+            <div class="w-16 h-16 rounded-full mx-auto my-2 flex items-center justify-center shadow-lg" style="background:linear-gradient(135deg, #6d28d9, #4f46e5)">
+                <i class="fas fa-user-tie text-2xl text-white"></i>
+            </div>
+            <p id="interview-status" class="text-xs text-gray-400">HR-Manager ist bereit...</p>
         </div>
-      </div>
-      <div class="service-card fade-up">
-        <div class="service-icon">🤖</div>
-        <h3>KI-Vertriebsautomatisierung</h3>
-        <p>Automatisches Lead-Finding, Kundenbewertung und Follow-up-Systeme für mehr Umsatz.</p>
-        <div class="service-tags">
-          <span class="service-tag">Lead Automation</span>
-          <span class="service-tag">CRM Agent</span>
-          <span class="service-tag">KI-Scoring</span>
-        </div>
-      </div>
-      <div class="service-card fade-up">
-        <div class="service-icon">📦</div>
-        <h3>Software Modernisierung</h3>
-        <p>Containerisierung von Legacy-Anwendungen, Cloud-Migration und sichere KI-Integration.</p>
-        <div class="service-tags">
-          <span class="service-tag">Docker/Kubernetes</span>
-          <span class="service-tag">Cloud-Migration</span>
-          <span class="service-tag">ERP Modernisierung</span>
-        </div>
-      </div>
-      <div class="service-card fade-up">
-        <div class="service-icon">🔗</div>
-        <h3>Automatisierung & Integration</h3>
-        <p>Workflow-Automatisierung, API-Integration und datenschutzkonforme Prozesse für KMU.</p>
-        <div class="service-tags">
-          <span class="service-tag">n8n Workflows</span>
-          <span class="service-tag">API Integration</span>
-          <span class="service-tag">DSGVO-konform</span>
-        </div>
-      </div>
+        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
+        <button id="ikigai-btn" class="sidebar-btn"><i class="fas fa-dharmachakra" style="color:#a78bfa"></i><span>Ikigai entdecken</span></button>
+        <button id="clear-btn" class="sidebar-btn"><i class="fas fa-rotate-left" style="color:var(--text-muted)"></i><span style="color:var(--text-secondary)">Gespräch zurücksetzen</span></button>
     </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════
-     PRODUKTE ÜBERSICHT
-═══════════════════════════════════ -->
-<section id="produkte">
-  <div class="container">
-    <span class="tag">Produkte</span>
-    <h2 class="section-title">Drei digitale <em>Lösungen</em></h2>
-    <p class="section-lead">Konkrete Produkte, die echte Probleme lösen — für Privatvermieter, Jobsuchende und Unternehmen mit Integrationsbedarf.</p>
-
-    <div class="produkte-cards">
-      <a href="#immo" class="produkt-card fade-up">
-        <div class="produkt-icon">🏠</div>
-        <h3>Immobilien­verwaltung für Privat­vermieter</h3>
-        <p>Automatisierte Mietverwaltung — Mietzahlungen, Kommunikation, Dokumente und Übergaben digital und stressfrei.</p>
-        <div class="produkt-link">Zum Produkt <i class="fas fa-arrow-right"></i></div>
-      </a>
-
-      <a href="#coach" class="produkt-card fade-up">
-        <div class="produkt-icon">🤖</div>
-        <h3>KI-Karriere Coach</h3>
-        <p>Tiep Coach — ein KI-Assistent der Lebensläufe optimiert, Ikigai-Analysen führt und auf echte Coaches vorbereitet.</p>
-        <div class="produkt-link">Zum Produkt <i class="fas fa-arrow-right"></i></div>
-      </a>
-
-      <a href="#integration" class="produkt-card fade-up">
-        <div class="produkt-icon">🔀</div>
-        <h3>Integrations­berater</h3>
-        <p>Systemintegration für KMU — ERP, CRM, APIs und KI-Tools intelligent verknüpfen, automatisieren und skalieren.</p>
-        <div class="produkt-link">Zum Produkt <i class="fas fa-arrow-right"></i></div>
-      </a>
+    <div class="p-4 border-t" style="border-color:var(--border)">
+        <span class="model-badge">KI-Modell: kostenlos</span>
+        <p class="text-xs mt-1" style="color:var(--text-muted)">Tiep Coach v3.0 • itiep.de</p>
     </div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ═══════════════════════════════════
-     PRODUKT 1: IMMOBILIEN
-═══════════════════════════════════ -->
-<section id="immo" class="produkt-section alt">
-  <div class="container">
-
-    <div class="produkt-hero">
-      <div>
-        <span class="produkt-badge badge-immo">🏠 Produkt 1</span>
-        <h2>Immobilien­verwaltung für <span class="accent-blue">Privatvermieter</span></h2>
-        <p class="lead">
-          Als Privatvermieter kämpfen Sie täglich mit Mietzahlungsüberwachung, Kommunikation,
-          Nebenkostenabrechnungen und Übergaben. Unser System automatisiert all das — sicher,
-          DSGVO-konform und ohne technisches Vorwissen.
-        </p>
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;">
-          <p style="font-size:0.78rem;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;">Typische Ergebnisse</p>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> 90% weniger manuelle Verwaltungsaufwand
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> Automatische Mahnung bei Zahlungsverzug
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> Rechtssichere Dokumente auf Knopfdruck
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> Mieter-Kommunikation via WhatsApp / E-Mail
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="visual-box">
-          <p style="font-size:0.78rem;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;">So läuft es ab</p>
-          <div class="steps">
-            <div class="step">
-              <div class="step-num">1</div>
-              <div>
-                <h4>Objekte anlegen</h4>
-                <p>Wohnungen, Mieter und Mietverträge einmalig erfassen — alles zentral.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-num">2</div>
-              <div>
-                <h4>Automatik läuft</h4>
-                <p>Zahlungen werden überwacht, Mahnungen automatisch verschickt, Dokumente generiert.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-num">3</div>
-              <div>
-                <h4>Sie behalten die Kontrolle</h4>
-                <p>Dashboard zeigt Status aller Objekte — Sie entscheiden, das System erledigt die Arbeit.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="features-grid">
-      <div class="feat-item fade-up">
-        <span class="feat-icon">💶</span>
-        <h4>Zahlungsüberwachung</h4>
-        <p>Automatische Erkennung von Zahlungseingängen, Meldungen bei Verzug und digitale Mahnungen.</p>
-      </div>
-      <div class="feat-item fade-up">
-        <span class="feat-icon">📄</span>
-        <h4>Dokumenten­management</h4>
-        <p>Mietverträge, Nebenkostenabrechnungen, Übergabeprotokolle — rechtssicher und automatisch generiert.</p>
-      </div>
-      <div class="feat-item fade-up">
-        <span class="feat-icon">💬</span>
-        <h4>Mieter-Kommunikation</h4>
-        <p>Automatische Nachrichten zu Terminen, Zahlungen und Anfragen per E-Mail oder WhatsApp.</p>
-      </div>
-      <div class="feat-item fade-up">
-        <span class="feat-icon">🔒</span>
-        <h4>DSGVO-konform</h4>
-        <p>Alle Daten sicher in Deutschland gespeichert. Kein US-Cloud-Anbieter, volle Datenkontrolle.</p>
-      </div>
-    </div>
-
-    <div class="cta-strip">
-      <div>
-        <h3>Kostenlose Demo anfragen</h3>
-        <p>30 Minuten — ich zeige Ihnen, wie das System Ihre Verwaltung vereinfacht.</p>
-      </div>
-      <a href="#kontakt" class="cta-btn">Demo vereinbaren →</a>
-    </div>
-
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ═══════════════════════════════════
-     PRODUKT 2: KI-KARRIERE COACH
-═══════════════════════════════════ -->
-<section id="coach" class="produkt-section">
-  <div class="container">
-
-    <div class="produkt-hero">
-      <div>
-        <span class="produkt-badge badge-coach">🤖 Produkt 2</span>
-        <h2>Tiep Coach – Ihr <span class="accent-green">KI-Karriere­begleiter</span></h2>
-        <p class="lead">
-          Der Tiep Coach ist ein KI-Assistent, der Jobsuchende und Karrierewechsler kostenlos begleitet.
-          Er optimiert Lebensläufe, führt durch die Ikigai-Selbstanalyse und bereitet auf Gespräche
-          mit echten Karrierecoaches vor — auf Wunsch auch auf Vietnamesisch.
-        </p>
-        <div style="background:rgba(45,138,111,0.05);border:1px solid rgba(45,138,111,0.2);border-radius:10px;padding:24px;">
-          <p style="font-size:0.78rem;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;">Was der Coach bietet</p>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> Lebenslauf-Analyse & ATS-Optimierung
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> Ikigai-Analyse in 4 Schritten
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> Karrierefragen jederzeit — kostenlos
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--green);font-weight:700;">✓</span> Weiterleitung zu echtem Coach bei Bedarf
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="visual-box" style="border-color:rgba(45,138,111,0.2);">
-          <p style="font-size:0.78rem;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;">So funktioniert Tiep Coach</p>
-          <div class="steps">
-            <div class="step">
-              <div class="step-num green">1</div>
-              <div>
-                <h4>Chat starten</h4>
-                <p>Kein Login, keine Registrierung — einfach öffnen und losschreiben.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-num green">2</div>
-              <div>
-                <h4>Lebenslauf hochladen</h4>
-                <p>Als .docx oder .txt — der KI-Coach analysiert sofort und gibt konkrete Verbesserungen.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-num green">3</div>
-              <div>
-                <h4>Ikigai entdecken oder Coach buchen</h4>
-                <p>Für tiefere Arbeit empfiehlt der Assistent einen echten Karrierecoach.</p>
-              </div>
-            </div>
-          </div>
-          <a href="https://itiep.de/ki-coach.html" target="_blank" class="cta-btn green" style="display:block;text-align:center;margin-top:24px;border-radius:8px;">
-            Tiep Coach ausprobieren →
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="features-grid">
-      <div class="feat-item green fade-up">
-        <span class="feat-icon">📄</span>
-        <h4>Lebenslauf­optimierung</h4>
-        <p>Stärken, Schwächen, ATS-Kompatibilität — strukturiert und auf Deutsch in Sekunden.</p>
-      </div>
-      <div class="feat-item green fade-up">
-        <span class="feat-icon">☯️</span>
-        <h4>Ikigai-Analyse</h4>
-        <p>4 gezielte Fragen zur Leidenschaft, Stärken, Beruf und Mission — das eigene Ikigai entdecken.</p>
-      </div>
-      <div class="feat-item green fade-up">
-        <span class="feat-icon">🎤</span>
-        <h4>Spracheingabe</h4>
-        <p>Mikrofon-Unterstützung für schnelle Eingaben — kein Tippen notwendig.</p>
-      </div>
-      <div class="feat-item green fade-up">
-        <span class="feat-icon">🌐</span>
-        <h4>Mehrsprachig</h4>
-        <p>Verfügbar auf Deutsch und Vietnamesisch — ideal für die vietnamesische Community in Deutschland.</p>
-      </div>
-    </div>
-
-    <div class="cta-strip green">
-      <div>
-        <h3>Jetzt kostenlos testen</h3>
-        <p>Kein Account erforderlich — einfach öffnen, Lebenslauf hochladen und loslegen.</p>
-      </div>
-      <a href="https://itiep.de/coach" target="_blank" class="cta-btn green">Coach öffnen →</a>
-    </div>
-
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ═══════════════════════════════════
-     PRODUKT 3: INTEGRATIONSBERATER
-═══════════════════════════════════ -->
-<section id="integration" class="produkt-section alt">
-  <div class="container">
-
-    <div class="produkt-hero">
-      <div>
-        <span class="produkt-badge badge-integ">🔀 Produkt 3</span>
-        <h2>Integrations­berater für <span class="accent-purple">digitale Systeme</span></h2>
-        <p class="lead">
-          Ihre Tools sprechen nicht miteinander? ERP, CRM, Buchhaltung, KI-Tools —
-          ich verbinde sie zu einem reibungslosen digitalen Workflow. Keine Daten­inseln mehr,
-          keine manuellen Übertragungen, keine verpassten Chancen.
-        </p>
-        <div style="background:rgba(109,40,217,0.04);border:1px solid rgba(109,40,217,0.18);border-radius:10px;padding:24px;">
-          <p style="font-size:0.78rem;font-weight:700;color:var(--purple);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;">Typische Integrationsszenarien</p>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--purple);font-weight:700;">✓</span> ERP ↔ CRM ↔ Buchhaltung automatisch synchron
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--purple);font-weight:700;">✓</span> KI-gestützte Datenverarbeitung & Reports
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--purple);font-weight:700;">✓</span> API-Integration mit 200+ Drittanbieter-Tools
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;">
-              <span style="color:var(--purple);font-weight:700;">✓</span> Bestand & Auftragsdaten in Echtzeit
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="visual-box" style="border-color:rgba(109,40,217,0.18);">
-          <p style="font-size:0.78rem;font-weight:700;color:var(--purple);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;">Meine Vorgehensweise</p>
-          <div class="steps">
-            <div class="step">
-              <div class="step-num purple">1</div>
-              <div>
-                <h4>Analyse Ihres Ist-Zustands</h4>
-                <p>Welche Systeme existieren? Wo entstehen manuelle Engpässe? Kostenlose Erstanalyse.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-num purple">2</div>
-              <div>
-                <h4>Integrationskonzept & Umsetzung</h4>
-                <p>Maßgeschneiderte Verbindung der Systeme via API, n8n oder benutzerdefinierter Middleware.</p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-num purple">3</div>
-              <div>
-                <h4>Monitoring & Optimierung</h4>
-                <p>Dashboards zeigen Systemstatus in Echtzeit. Kontinuierliche Verbesserung nach Bedarf.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="features-grid">
-      <div class="feat-item purple fade-up">
-        <span class="feat-icon">🔗</span>
-        <h4>API-Integration</h4>
-        <p>REST, GraphQL, Webhooks — ich verbinde jedes System, das eine offene Schnittstelle hat.</p>
-      </div>
-      <div class="feat-item purple fade-up">
-        <span class="feat-icon">⚙️</span>
-        <h4>n8n Workflow-Automation</h4>
-        <p>Open-Source, selbstgehostet und DSGVO-konform. Keine teuren SaaS-Abhängigkeiten.</p>
-      </div>
-      <div class="feat-item purple fade-up">
-        <span class="feat-icon">🗄️</span>
-        <h4>ERP & CRM Modernisierung</h4>
-        <p>Dolibarr, SAP, Salesforce, HubSpot — erfahren mit allen gängigen Systemen im KMU-Bereich.</p>
-      </div>
-      <div class="feat-item purple fade-up">
-        <span class="feat-icon">📊</span>
-        <h4>Echtzeit-Monitoring</h4>
-        <p>Grafana-Dashboards zeigen Status und Performance aller Integrationspunkte — jederzeit.</p>
-      </div>
-    </div>
-
-    <div class="cta-strip purple">
-      <div>
-        <h3>Kostenlose System-Analyse</h3>
-        <p>45 Minuten — ich analysiere Ihre Systemlandschaft und zeige konkretes Einsparpotenzial.</p>
-      </div>
-      <a href="#kontakt" class="cta-btn purple">Analyse anfragen →</a>
-    </div>
-
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════
-     PORTFOLIO
-═══════════════════════════════════ -->
-<section id="portfolio">
-  <div class="container">
-    <span class="tag">Portfolio</span>
-    <h2 class="section-title">Implementierte <em>Lösungen</em></h2>
-    <p class="section-lead">Real-world Projekte für unterschiedliche Branchen und Anforderungen.</p>
-
-    <div class="portfolio-grid">
-      <div class="port-card fade-up">
-        <div class="port-header">
-          <div>
-            <div class="port-cat">KI-Automatisierung</div>
-            <span class="port-badge badge-blue">Implementiert</span>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>KI Lead Finder System</h3>
-          <p>Automatisches System für tägliches Lead-Scraping, Bewertung und Priorisierung.</p>
-          <div class="port-specs">
-            <div class="port-spec">Scraping aus 3+ Quellen (LinkedIn, Jobportale, Web)</div>
-            <div class="port-spec">KI-basiertes Scoring & Priorisierung</div>
-            <div class="port-spec">REST API & CRM-Integration</div>
-            <div class="port-spec">Tägliche Lead-Reports automatisch</div>
-          </div>
-          <div class="port-stack">
-            <span class="stack-tag">FastAPI/Langgraph</span>
-            <span class="stack-tag">PostgreSQL</span>
-            <span class="stack-tag">OpenAI / Ollama</span>
-            <span class="stack-tag">Docker</span>
-            <span class="stack-tag">n8n</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="port-card fade-up">
-        <div class="port-header">
-          <div>
-            <div class="port-cat">KI-Automatisierung</div>
-            <span class="port-badge badge-blue">Implementiert</span>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>AI CRM Agent & Sales Automation</h3>
-          <p>Intelligenter Agent, der Leads automatisch priorisiert und Follow-ups übernimmt.</p>
-          <div class="port-specs">
-            <div class="port-spec">Automatische Lead-Priorisierung & Segmentierung</div>
-            <div class="port-spec">KI-generierte Follow-up-Nachrichten</div>
-            <div class="port-spec">Zeitgesteuerte Outreach-Kampagnen</div>
-            <div class="port-spec">Performance-Tracking & A/B-Testing</div>
-          </div>
-          <div class="port-stack">
-            <span class="stack-tag">OpenAI API</span>
-            <span class="stack-tag">n8n</span>
-            <span class="stack-tag">Dolibarr</span>
-            <span class="stack-tag">Grafana</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="port-card fade-up">
-        <div class="port-header">
-          <div>
-            <div class="port-cat">Modernisierung</div>
-            <span class="port-badge badge-blue">Implementiert</span>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>Enterprise ERP Containerisierung</h3>
-          <p>Sichere Migration und Containerisierung von Legacy-ERP in moderne Infrastruktur.</p>
-          <div class="port-specs">
-            <div class="port-spec">Docker/Kubernetes Zero-Downtime-Migration</div>
-            <div class="port-spec">Hybrid-Cloud-Setup (On-Prem + Cloud)</div>
-            <div class="port-spec">KI-gestützte Prozessoptimierung</div>
-            <div class="port-spec">DSGVO-konforme Datenverwaltung</div>
-          </div>
-          <div class="port-stack">
-            <span class="stack-tag">Kubernetes</span>
-            <span class="stack-tag">Docker</span>
-            <span class="stack-tag">Azure</span>
-            <span class="stack-tag">Traefik</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="port-card fade-up">
-        <div class="port-header">
-          <div>
-            <div class="port-cat">Sicherheit & IAM</div>
-            <span class="port-badge badge-green">Implementiert</span>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>Zero-Trust IAM & Sicherheitsinfrastruktur</h3>
-          <p>Moderne Identity Management Systeme mit Zero-Trust Prinzipien für Enterprise.</p>
-          <div class="port-specs">
-            <div class="port-spec">Azure Entra ID Rollout & Hybrid-Szenarien</div>
-            <div class="port-spec">RBAC & JIT/JEA Zugriffssteuerung</div>
-            <div class="port-spec">IaC-Automatisierung für Onboarding</div>
-            <div class="port-spec">Compliance-Auditberichte (ISO 27001, DSGVO)</div>
-          </div>
-          <div class="port-stack">
-            <span class="stack-tag">Azure Entra ID</span>
-            <span class="stack-tag">PowerShell/Ansible</span>
-            <span class="stack-tag">Intune</span>
-            <span class="stack-tag">Cloudflare Zero Trust</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════
-     EXPERIENCE
-═══════════════════════════════════ -->
-<section id="experience">
-  <div class="container">
-    <span class="tag">Hintergrund</span>
-    <h2 class="section-title">Mein <em>Werdegang</em></h2>
-    <p class="section-lead">Über 10 Jahre Erfahrung in IT-Infrastruktur, IAM und Enterprise-Modernisierung.</p>
-
-    <div class="exp-timeline">
-      <div class="exp-item fade-up">
-        <div class="exp-period">2024 – Heute</div>
-        <h3>KI-Automatisierungsexperte (itiep.de)</h3>
-        <div class="exp-company">Beratung & Produktentwicklung</div>
-        <p>Spezialisierung auf KI-Vertriebsautomatisierung, Systemintegration und datenschutzkonforme Lösungen für KMU.</p>
-      </div>
-      <div class="exp-item fade-up">
-        <div class="exp-period">2023 – Heute</div>
-        <h3>IT-Applikationsmanager (adesso GmbH)</h3>
-        <div class="exp-company">Betrieb · IAM · Cloud</div>
-        <p>Betrieb kritischer Fachanwendungen, IAM-Prozessdesign, Azure/AD-Integration und PowerShell-Automatisierung.</p>
-      </div>
-      <div class="exp-item fade-up">
-        <div class="exp-period">2020 – 2023</div>
-        <h3>IT-Systemadministrator (Landessozialgericht Hamburg)</h3>
-        <div class="exp-company">Infrastruktur · Sicherheit</div>
-        <p>Windows-Server-Administration, GPO-Management, Berechtigungskonzepte für Behörde mit hohen Compliance-Anforderungen.</p>
-      </div>
-      <div class="exp-item fade-up">
-        <div class="exp-period">2019 – 2020</div>
-        <h3>IT-Techniker (Wärme Hamburg GmbH)</h3>
-        <div class="exp-company">IT-Operations</div>
-        <p>Systemrollout, SCCM-Management, Asset-Management und On-Site Support für mittelständisches Energieunternehmen.</p>
-      </div>
-    </div>
-
-    <div style="margin-top:48px;">
-      <p style="font-family:var(--serif);font-weight:600;font-size:1rem;margin-bottom:18px;">Zertifizierungen</p>
-      <div class="certs-grid">
-        <div class="cert-badge">
-          <img src="https://itiep.de/images/aws-cloud-practitioner.png" alt="AWS">
-          AWS Cloud Practitioner
-        </div>
-        <div class="cert-badge">
-          <img src="https://itiep.de/images/Azure-Admin.png" alt="Azure">
-          Azure Administrator
-        </div>
-        <div class="cert-badge">
-          <img src="https://itiep.de/images/mcsa-2016.png" alt="MCSA">
-          MCSA Windows Server 2016
-        </div>
-        <div class="cert-badge">
-          <img src="https://itiep.de/images/Software-Entwickler.png" alt="Software-Entwickler">
-          Software-Entwickler
-        </div>
-        <div class="cert-badge">
-          <img src="https://itiep.de/images/IHK-SPS-Programmierer.png" alt="IHK-SPS Programmierer">
-          IHK-SPS Programmierer
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════
-     KONTAKT
-═══════════════════════════════════ -->
-<section id="kontakt" style="background:var(--bg2);">
-  <div class="container">
-    <span class="tag">Kontakt</span>
-    <h2 class="section-title">Kostenlose <em>Erstanalyse</em> buchen</h2>
-    <p class="section-lead">Lassen Sie uns in einem kurzen Gespräch Ihre Situation analysieren und konkrete Möglichkeiten aufzeigen.</p>
-
-    <div class="contact-grid">
-      <div class="contact-info">
-        <h3>Lass uns sprechen</h3>
-        <p>Ich antworte in der Regel innerhalb von 24 Stunden. In einem kostenlosen Erstgespräch (30–45 Min.) analysiere ich Ihre Herausforderungen und zeige maßgeschneiderte Lösungen auf.</p>
-
-        <div class="contact-detail">
-          <div class="contact-icon">📍</div>
-          <div>
-            <div style="font-size:0.78rem;color:var(--muted)">Standort</div>
-            <div style="font-weight:500">Hamburg, Deutschland</div>
-          </div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon">💼</div>
-          <div>
-            <div style="font-size:0.78rem;color:var(--muted)">Fokus</div>
-            <div style="font-weight:500">KMU, Privatvermieter, Enterprise</div>
-          </div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-icon">🔒</div>
-          <div>
-            <div style="font-size:0.78rem;color:var(--muted)">Datenschutz</div>
-            <div style="font-weight:500">100% DSGVO-konform</div>
-          </div>
-        </div>
-
-        <div style="background:rgba(30,90,150,0.05);border:1px solid var(--border);border-radius:9px;padding:20px;margin-top:24px;">
-          <p style="font-size:0.875rem;color:var(--muted);line-height:1.75;">
-            <strong style="color:var(--text)">💡 Gut zu wissen:</strong> Viele KMU verlieren täglich Zeit durch manuelle Prozesse. Eine automatisierte Lösung amortisiert sich meist innerhalb von 3–6 Monaten.
-          </p>
-        </div>
-      </div>
-
-      <form class="contact-form" onsubmit="handleSubmit(event)">
-        <div class="form-group">
-          <label>Ihr Name</label>
-          <input type="text" placeholder="Max Mustermann" required>
-        </div>
-        <div class="form-group">
-          <label>Ihre E-Mail</label>
-          <input type="email" placeholder="max@beispiel.de" required>
-        </div>
-        <div class="form-group">
-          <label>Unternehmen / Situation</label>
-          <input type="text" placeholder="z.B. Privatvermieter, GmbH, Jobsuche…">
-        </div>
-        <div class="form-group">
-          <label>Ihr Interesse</label>
-          <select required>
-            <option value="">Bitte auswählen…</option>
-            <option>🏠 Immobilienverwaltung für Privatvermieter</option>
-            <option>🤖 KI-Karriere Coach (Tiep Coach)</option>
-            <option>🔀 Integrationsberatung & Systemautomatisierung</option>
-            <option>🛡️ Identity Management & Sicherheit</option>
-            <option>📦 Software Modernisierung</option>
-            <option>💬 Allgemeine Beratung</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Ihre Nachricht</label>
-          <textarea placeholder="Beschreiben Sie kurz Ihre Situation oder Herausforderung…" required></textarea>
-        </div>
-        <button type="submit" class="form-submit">Erstanalyse anfragen →</button>
-        <div id="form-success" style="display:none;text-align:center;padding:14px;background:rgba(45,138,111,0.08);border:1px solid rgba(45,138,111,0.25);border-radius:7px;color:var(--green);font-weight:600;font-size:0.875rem;">
-          ✓ Vielen Dank! Ich melde mich innerhalb von 24 Stunden.
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════
-     FOOTER
-═══════════════════════════════════ -->
-<footer>
-  <div>
-    <div class="footer-logo">Vu Xuan <span>Tiep</span></div>
-    <p style="margin-top:6px;">© 2026 Vu Xuan Tiep – KI & Enterprise Lösungen · Hamburg</p>
-  </div>
-  <div style="text-align:right;">
-    <p style="margin-bottom:6px;font-size:0.85rem;">
-      <strong>E-Mail:</strong>
-      <a href="mailto:vuxuantiep@gmail.com" style="color:var(--accent);text-decoration:none;">vuxuantiep@gmail.com</a>
-    </p>
-    <p>
-      <a href="https://itiep.de/Lebenslauf-TIEP.pdf" style="color:var(--muted);text-decoration:none;font-size:0.8rem;">Lebenslauf herunterladen →</a>
-    </p>
-  </div>
-</footer>
-
-<!-- ═══════════════════════════════════
-     PORTFOLIO ASSISTANT (unchanged)
-═══════════════════════════════════ -->
-<div id="portfolio-assistant">
-  <div id="assistant-window">
-    <div class="asst-header">
-      <div class="asst-header-title">
-        <img id="asst-header-avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="iTiep-Ki">
-        <span>iTiep-Ki Assistentin</span>
-      </div>
-      <span class="close-icon" id="asst-close"><i class="fas fa-times"></i></span>
-    </div>
-    <div id="asst-messages">
-      <div class="asst-msg bot">Hallo! Ich bin iTiep-Ki. 🤖 Frag mich zu Tieps Projekten, Produkten oder Tech-Stack!</div>
-    </div>
-    <div class="asst-footer">
-      <input id="asst-input" type="text" placeholder="Frage zu Tieps Lösungen…" autocomplete="off">
-    </div>
-  </div>
-  <div id="asst-toggle-btn">
-    <img id="asst-main-avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="iTiep-Ki">
-  </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     SCRIPTS
-═══════════════════════════════════ -->
+<div id="main-chat-view" class="flex-1 flex flex-col h-full min-w-0" style="background:var(--bg-main)">
+    <header class="flex items-center justify-between px-4 py-3 border-b flex-shrink-0" style="border-color:var(--border);background:var(--bg-main)">
+        <button id="menu-btn" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors">
+            <i class="fas fa-bars" style="color:var(--text-secondary)"></i>
+        </button>
+        <div class="flex items-center gap-2"><span id="mode-label" class="stage-pill hidden">💼 Lebenslauf-Modus</span></div>
+        <button id="toggle-audio-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors border" style="border-color:var(--border)">
+            <i id="audio-icon" class="fas fa-volume-up text-sm" style="color:var(--accent)"></i><span id="audio-label" class="text-xs" style="color:var(--text-secondary)">Audio</span>
+        </button>
+    </header>
+
+    <div id="chat-scroll" class="flex-1 overflow-y-auto px-4 py-6">
+        <div id="chat-history" class="max-w-2xl mx-auto space-y-6">
+            <div class="msg-enter">
+                <div class="flex gap-3 items-start">
+                    <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5"><i class="fas fa-robot text-white text-xs"></i></div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1.5"><span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span></div>
+                        <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble" style="background:var(--bg-card);border:1px solid var(--border)">
+                            <p>Willkommen! Ich bin dein <strong>Tiep Coach</strong> – dein KI-Karrierebegleiter.</p>
+                            <ul>
+                                <li>📄 <strong>Lebenslauf-Optimierung</strong> – lade dein Dokument hoch</li>
+                                <li>☯️ <strong>Ikigai-Analyse</strong> – finde deine Berufung</li>
+                                <li>💬 <strong>Karriereberatung</strong> – stell mir deine Fragen</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="live-coach-cta" class="max-w-2xl mx-auto px-4 py-2 w-full">
+        <div class="rounded-2xl p-4 flex items-center gap-4" style="background:rgba(52,168,83,0.08);border:1px solid rgba(52,168,83,0.25)">
+            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center" style="background:rgba(52,168,83,0.15)"><i class="fas fa-user-tie" style="color:#5bba6f"></i></div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold" style="color:#5bba6f">Bereit für den nächsten Schritt?</p>
+                <p class="text-xs mt-0.5" style="color:var(--text-secondary)">Ein echter Coach kann dir noch gezielter helfen.</p>
+            </div>
+            <a href="mailto:coach@tiep.de" class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold text-white transition-opacity hover:opacity-80" style="background:linear-gradient(120deg,#34a853,#1a73e8)">Jetzt buchen</a>
+        </div>
+    </div>
+
+    <div class="px-4 pb-4 pt-2 flex-shrink-0" style="background:var(--bg-main)">
+        <div class="max-w-2xl mx-auto">
+            <div class="input-wrap flex items-end gap-2 px-4 py-3">
+                <textarea id="user-input" rows="1" class="flex-1 bg-transparent outline-none resize-none text-sm" style="color:var(--text-primary);max-height:120px;overflow-y:auto;line-height:1.5" placeholder="Schreibe eine Nachricht…"></textarea>
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <button id="mic-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors"><i class="fas fa-microphone text-sm" style="color:var(--text-muted)"></i></button>
+                    <button id="send-btn" class="w-9 h-9 g-bg rounded-full flex items-center justify-center hover:opacity-90 transition-opacity"><i class="fas fa-arrow-up text-white text-sm"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ikigai-screen" class="hidden fixed inset-0 z-[500] flex flex-col overflow-y-auto p-6 md:p-12">
+    <div class="max-w-4xl w-full mx-auto flex-1 flex flex-col justify-between">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between border-b pb-6 mb-8 animate-fade" style="border-color:rgba(26,20,16,0.11)">
+            <div>
+                <h1 class="iki-title-main">Mein Ikigai</h1>
+                <p class="text-xs uppercase tracking-widest font-medium mt-1" style="color:#c85a3a">Deine Lebens- und Berufsbestimmung</p>
+            </div>
+            <button onclick="closeIkigaiScreen()" class="mt-4 md:mt-0 px-5 py-2 rounded-full border text-xs font-semibold flex items-center gap-2 hover:bg-black/5 transition-all" style="border-color:#1a1410; color:#1a1410">
+                <i class="fas fa-arrow-left"></i> Zurück zum Coach-Gespräch
+            </button>
+        </div>
+
+        <div class="iki-tab-bar mb-6">
+            <button class="iki-screen-btn active" onclick="switchScreenTab('iki-tab-1', this)">Übersicht</button>
+            <button class="iki-screen-btn" onclick="switchScreenTab('iki-tab-2', this)">Die 4 Kreise</button>
+            <button class="iki-screen-btn" onclick="switchScreenTab('iki-tab-3', this)">Empfehlungen</button>
+            <button class="iki-screen-btn" onclick="switchScreenTab('iki-tab-4', this)">30-Tage-Plan</button>
+        </div>
+
+        <div class="flex-1">
+            <div id="iki-tab-1" class="iki-view active">
+                <div class="iki-box">
+                    <div class="iki-box-header" style="color:#7c4a7e"><i class="fas fa-star"></i> Deine Ikigai-Essenz</div>
+                    <p id="iki-data-essenz" class="text-base leading-relaxed font-serif italic text-gray-800">Wird geladen...</p>
+                </div>
+            </div>
+
+            <div id="iki-tab-2" class="iki-view">
+                <div class="iki-grid">
+                    <div class="iki-box">
+                        <div class="iki-box-header" style="color:#c85a3a"><i class="fas fa-heart"></i> Was du liebst</div>
+                        <ul id="iki-data-love" class="iki-bullets"></ul>
+                    </div>
+                    <div class="iki-box">
+                        <div class="iki-box-header" style="color:#3a7c6b"><i class="fas fa-award"></i> Worin du gut bist</div>
+                        <ul id="iki-data-good" class="iki-bullets"></ul>
+                    </div>
+                    <div class="iki-box">
+                        <div class="iki-box-header" style="color:#4a6fa5"><i class="fas fa-globe"></i> Was die Welt braucht</div>
+                        <ul id="iki-data-need" class="iki-bullets"></ul>
+                    </div>
+                    <div class="iki-box">
+                        <div class="iki-box-header" style="color:#c4963a"><i class="fas fa-coins"></i> Womit du Geld verdienen kannst</div>
+                        <ul id="iki-data-paid" class="iki-bullets"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="iki-tab-3" class="iki-view">
+                <div class="iki-box">
+                    <div class="iki-box-header"><i class="fas fa-lightbulb"></i> Strategische Pfade</div>
+                    <table class="iki-table-full">
+                        <thead>
+                            <tr><th>Bereich</th><th>Konkrete Ausrichtung</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><b>Berufung</b></td><td id="iki-data-berufung">...</td></tr>
+                            <tr><td><b>Nische / Wunschberuf</b></td><td id="iki-data-nische">...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="iki-tab-4" class="iki-view">
+                <div class="iki-box">
+                    <div class="iki-box-header" style="color:#c85a3a"><i class="fas fa-calendar-alt"></i> Dein Action Plan</div>
+                    <div class="iki-plan-card">
+                        <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-[#c85a3a]/10 text-[#c85a3a] mb-2">Tage 1–10</span>
+                        <p id="iki-data-plan1" class="text-sm text-gray-700">...</p>
+                    </div>
+                    <div class="iki-plan-card" style="border-left-color:#3a7c6b">
+                        <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-[#3a7c6b]/10 text-[#3a7c6b] mb-2">Tage 11–30</span>
+                        <p id="iki-data-plan2" class="text-sm text-gray-700">...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 pt-4 border-t text-center text-xs opacity-60" style="border-color:rgba(26,20,16,0.1)">
+            Tiep Coach • Generierte Ikigai-Matrix © itiep.de
+        </div>
+    </div>
+</div>
+
 <script>
-// ── Hamburger nav ──────────────────────
-const hamburger   = document.getElementById('hamburger');
-const mobileMenu  = document.getElementById('mobile-menu');
+// ════════ CONFIG ════════
+const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
+const SYSTEM_DEFAULT = "Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown. Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden emotionalen Hürden ein echter Coach wertvolle Unterstützung bieten kann.";
 
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('show');
-  document.body.style.overflow = mobileMenu.classList.contains('show') ? 'hidden' : '';
+const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. Strukturiere deine Antwort streng nach folgenden Punkten:\n1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)\n2. Stärken & markante Kernkompetenzen\n3. Konkrete Verbesserungsvorschläge (Format, Formulierungen, ATS-Optimierung)\n4. 🚀 PASSENDE JOB-PROFILE & SUCHPORTALE: Schlage basierend auf dem Profil 3 konkrete Berufsfelder vor. Nenne explizit die besten Suchportale für diese Branchen (z.B. LinkedIn, Indeed, StepStone oder spezialisierte Plattformen).\n5. 💡 NÄCHSTER SCHRITT: Beende deine Antwort immer mit einem freundlichen Satz, dass der Nutzer jetzt links im Menü auf den lila Button 'Interview trainieren' klicken kann, um eine reale Vorstellungsgespräch-Simulation für diese Berufsfelder zu starten.`;
+
+const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager in einem realen, professionellen Vorstellungsgespräch auf dem deutschen Arbeitsmarkt. Deine Verhaltensregeln:\n1. Einstieg & Job-Anpassung: In der ersten Runde nennt dir der Nutzer seine Wunschstelle und kopiert eventuell eine konkrete Stellenausschreibung oder Anforderungen in den Chat. Analysiere diese Anforderungen SOFORT im Hintergrund und gleiche sie mit dem Lebenslauf des Nutzers ab.\n2. Zielgerichtete Fragen: Richte das gesamte restliche Interview exakt an diesem spezifischen Stellenangebot und den Anforderungen aus. Stelle Fragen zu den dort geforderten Qualifikationen, Tools oder Aufgaben.\n3. ⚠️ WICHTIGSTE REGEL: Stelle IMMER NUR EINE FRAGE auf einmal! Warte die Antwort des Nutzers zwingend ab, bevor du weiterredest.\n4. Dynamik: Reagiere professionell und direkt auf die Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).\n5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
+
+const SYSTEM_IKIGAI = `Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutzer feinfühlig Schritt für Schritt. Stelle immer nur GENAU EINE Frage auf einmal.
+
+Sobald du alle 4 Bereiche (Liebe, Stärken, Bedarf, Markt) vollständig erarbeitet hast, beendest du das Gespräch und gibst deine finale Analyse AUSSCHLIESSLICH als valides JSON-Objekt aus. Packe kein HTML und kein Markdown drumherum, nur das reine JSON-Objekt in diesem exakten Format:
+{
+  "essenz": "Deine Lebensaufgabe zusammengefasst...",
+  "love": ["Punkt 1", "Punkt 2", "Punkt 3"],
+  "good": ["Punkt 1", "Punkt 2", "Punkt 3"],
+  "need": ["Punkt 1", "Punkt 2", "Punkt 3"],
+  "paid": ["Punkt 1", "Punkt 2", "Punkt 3"],
+  "berufung": "Deine Berufung...",
+  "nische": "Passender Beruf...",
+  "plan1": "Schritt für Tag 1-10...",
+  "plan2": "Schritt für Tag 11-30..."
+}`;
+
+// ════════ STATE ════════
+let conversationHistory = [];
+let extractedText = "";
+let audioActive = true;
+let currentMode = "default";  
+let messageCount = 0;
+
+// ════════ UI ELEMENTS ════════
+const userInput     = document.getElementById('user-input');
+const sendBtn       = document.getElementById('send-btn');
+const clearBtn      = document.getElementById('clear-btn');
+const chatScroll    = document.getElementById('chat-scroll');
+const menuBtn       = document.getElementById('menu-btn');
+const sidebar       = document.getElementById('sidebar');
+const overlay       = document.getElementById('overlay');
+const fileInput     = document.getElementById('resume-upload');
+const uploadZone    = document.getElementById('upload-zone');
+const fileNameEl    = document.getElementById('file-name');
+const modeLabel         = document.getElementById('mode-label');
+const analyzeBtn        = document.getElementById('analyze-btn');
+const ikigaiBtn         = document.getElementById('ikigai-btn');
+const startInterviewBtn = document.getElementById('start-interview-btn');
+const interviewPanel    = document.getElementById('interview-panel');
+const interviewStatus   = document.getElementById('interview-status');
+const micBtn        = document.getElementById('mic-btn');
+const audioBtn      = document.getElementById('toggle-audio-btn');
+const audioIcon     = document.getElementById('audio-icon');
+const audioLabel    = document.getElementById('audio-label');
+const ctaEl         = document.getElementById('live-coach-cta');
+
+// Erklärungs-Kommentar: Hier sind die korrigierten Sidebar-Funktionen für fehlerfreies Öffnen/Schließen
+// ════════ SIDEBAR OPERATIONS ════════
+function openSidebar() { 
+    sidebar.classList.add('open'); 
+    overlay.classList.add('show'); 
+}
+function closeSidebar() { 
+    sidebar.classList.remove('open'); 
+    overlay.classList.remove('show'); 
+}
+menuBtn.addEventListener('click', openSidebar);
+overlay.addEventListener('click', closeSidebar);
+
+// ════════ AUTO-RESIZE TEXTAREA ════════
+userInput.addEventListener('input', () => {
+    userInput.style.height = 'auto';
+    userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
 });
 
-function closeMobile() {
-  hamburger.classList.remove('open');
-  mobileMenu.classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-// ── Nav scroll shadow ──────────────────
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 20);
+// ════════ AUDIO STEUERUNG ════════
+audioBtn.addEventListener('click', () => {
+    audioActive = !audioActive;
+    audioIcon.className = audioActive ? 'fas fa-volume-up text-sm' : 'fas fa-volume-xmark text-sm';
+    audioIcon.style.color = audioActive ? 'var(--accent)' : 'var(--text-muted)';
+    audioLabel.textContent = audioActive ? 'Audio' : 'Stumm';
+    if (!audioActive) window.speechSynthesis.cancel();
 });
 
-// ── Active nav links ───────────────────
-const sections = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 100) cur = s.id;
-  });
-  navLinks.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
-  });
-}, { passive: true });
+function speak(text) {
+    if (!audioActive || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
 
-// ── Form ───────────────────────────────
-function handleSubmit(e) {
-  e.preventDefault();
-  document.getElementById('form-success').style.display = 'block';
-  e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
-  setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
-}
+    let clean = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+    clean = clean.replace(/[*#_`>]/g, ' ').replace(/\s+/g, ' ').trim();
 
-// ── Intersection observer ──────────────
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      obs.unobserve(entry.target);
+    const utterance = new SpeechSynthesisUtterance(clean);
+    utterance.lang = 'de-DE';
+
+    const setBestVoice = () => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length === 0) return false;
+        const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural'))
+                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google'))
+                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft'))
+                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('anna'))
+                    || voices.find(v => v.lang.startsWith('de'));
+        if (voice) { utterance.voice = voice; return true; }
+        return false;
+    };
+
+    if (!setBestVoice()) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            setBestVoice();
+            utterance.rate = 1.05;
+            window.speechSynthesis.speak(utterance);
+        };
+    } else {
+        utterance.rate = 1.05;
+        window.speechSynthesis.speak(utterance);
     }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
-
-// ── Portfolio assistant (unchanged) ────
-const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev";
-const toggleBtn   = document.getElementById("asst-toggle-btn");
-const mainAvatar  = document.getElementById("asst-main-avatar");
-const headerAvatar= document.getElementById("asst-header-avatar");
-const chatWin     = document.getElementById("assistant-window");
-const chatInput   = document.getElementById("asst-input");
-const msgContainer= document.getElementById("asst-messages");
-const closeBtn    = document.getElementById("asst-close");
-
-function toggleAssistant() {
-  if (chatWin.style.display === "flex") {
-    chatWin.style.display = "none";
-    toggleBtn.classList.remove("shrunk");
-    headerAvatar.classList.remove("visible");
-  } else {
-    chatWin.style.display = "flex";
-    toggleBtn.classList.add("shrunk");
-    headerAvatar.classList.add("visible");
-    chatInput.focus();
-  }
 }
-toggleBtn.onclick = toggleAssistant;
-closeBtn.onclick  = toggleAssistant;
 
-function typeWriterEffect(element, text) {
-  const words = text.split(" ");
-  let i = 0;
-  element.innerHTML = "";
-  function printWord() {
-    if (i < words.length) {
-      element.innerHTML += words[i] + " ";
-      i++;
-      msgContainer.scrollTop = msgContainer.scrollHeight;
-      setTimeout(printWord, 40);
+// ════════ MIC / SPEECH RECOGNITION ════════
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'de-DE';
+    recognition.continuous = false;
+
+    let isRecording = false;
+    recognition.onresult = (e) => {
+        const speechToText = e.results[0][0].transcript;
+        userInput.value = userInput.value.trim() === '' ? speechToText : userInput.value + ' ' + speechToText;
+        userInput.style.height = 'auto';
+        userInput.style.height = userInput.scrollHeight + 'px';
+    };
+    recognition.onstart = () => { micBtn.querySelector('i').classList.add('recording-active'); };
+    recognition.onend = () => { micBtn.querySelector('i').classList.remove('recording-active'); };
+    micBtn.addEventListener('click', () => { if (isRecording) recognition.stop(); else recognition.start(); });
+} else {
+    micBtn.style.display = 'none';
+}
+
+// ════════ MARKDOWN RENDER ════════
+function renderMarkdown(text) {
+    if (window.marked) {
+        marked.setOptions({ breaks: true, gfm: true });
+        return marked.parse(text);
     }
-  }
-  printWord();
+    return text;
 }
 
-function appendBubble(role, text) {
-  const bubble = document.createElement("div");
-  bubble.className = `asst-msg ${role}`;
-  msgContainer.appendChild(bubble);
-  if (role === "bot") typeWriterEffect(bubble, text);
-  else bubble.innerText = text;
-  msgContainer.scrollTop = msgContainer.scrollHeight;
+// ════════ CHATAUSGABE ════════
+const chatHistory = document.getElementById('chat-history');
+function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'msg-enter';
+
+    if (role === 'user') {
+        div.innerHTML = `
+            <div class="flex gap-3 items-start justify-end">
+                <div class="flex-1 flex flex-col items-end">
+                    <div class="rounded-2xl rounded-tr-sm px-4 py-3 max-w-sm" style="background:#1e3a5f;border:1px solid #2a4a7f">
+                        <p class="text-sm" style="white-space:pre-wrap;color:var(--text-primary)">${escHtml(text)}</p>
+                    </div>
+                </div>
+                <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#25272b;border:1px solid var(--border);color:var(--text-secondary)">DU</div>
+            </div>`;
+        chatHistory.appendChild(div);
+        scrollToBottom();
+    } else {
+        div.innerHTML = `
+            <div class="flex gap-3 items-start">
+                <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5"><i class="fas fa-robot text-white text-xs"></i></div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1.5"><span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span><span class="text-xs" style="color:var(--text-muted)">${getTime()}</span></div>
+                    <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble animate-content" style="background:var(--bg-card);border:1px solid var(--border)"></div>
+                </div>
+            </div>`;
+        
+        chatHistory.appendChild(div);
+        const bubbleContainer = div.querySelector('.animate-content');
+        
+        let words = text.split(/(\s+)/);
+        let index = 0;
+        let currentString = "";
+
+        function typeNextWord() {
+            if (index < words.length) {
+                currentString += words[index];
+                bubbleContainer.innerHTML = renderMarkdown(currentString);
+                index++;
+                scrollToBottom();
+                setTimeout(typeNextWord, 25);
+            }
+        }
+        typeNextWord();
+    }
 }
+function escHtml(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function getTime() { return new Date().toLocaleTimeString('de', { hour:'2-digit', minute:'2-digit' }); }
 
-chatInput.addEventListener("keydown", async (e) => {
-  if (e.key === "Enter" && chatInput.value.trim() !== "") {
-    const queryText = chatInput.value.trim();
-    appendBubble("user", queryText);
-    chatInput.value = "";
-    showLoader();
+function showThinking() {
+    const div = document.createElement('div'); div.id = 'thinking'; div.className = 'msg-enter';
+    div.innerHTML = `<div class="flex gap-3 items-start"><div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5"><i class="fas fa-robot text-white text-xs"></i></div><div class="rounded-2xl rounded-tl-sm px-5 py-4" style="background:var(--bg-card);border:1px solid var(--border)"><div class="dot-pulse flex gap-1.5"><span></span><span></span><span></span></div></div></div>`;
+    chatHistory.appendChild(div); scrollToBottom();
+}
+function removeThinking() { const el = document.getElementById('thinking'); if (el) el.remove(); }
+function scrollToBottom() { if (chatScroll) { setTimeout(() => { chatScroll.scrollTop = chatScroll.scrollHeight; }, 60); } }
 
-    // Erweiterter System-Prompt: warmer, empathischer Ton + alle 3 Produkte detailliert
-    const systemContext = `Du bist die charmante, empathische und nahbare KI-Assistenz von Tiep Vu Xuan (itiep.de) aus Hamburg.
-Dein Ton ist herzlich, einladend, absolut authentisch und auf Augenhöhe. Du klingst nicht wie eine kühle Maschine, sondern wie ein hilfsbereiter Kollege.
-
-Hier ist dein Expertenwissen über Tieps drei kostenlose Freeware-Produkte (Geschenke an die Community):
-
-1. KI-Berufscoach (Tiep Coach):
-   - Zweck: Unterstützt Jobsuchende und Karrierewechsler vollkommen gratis und ohne Anmeldung.
-   - Funktionen: Analysiert Lebensläufe auf ATS-Roboter-Lesbarkeit, deckt blinde Flecken auf und führt eine tiefgehende, 4-schrittige 'Ikigai-Analyse' durch, um die wahre berufliche Berufung zu finden. Bereitet auch auf Bewerbungsgespräche vor (unterstützt Deutsch & Vietnamesisch).
-
-2. Immobilienverwaltung für private Vermieter:
-   - Zweck: Macht Schluss mit komplizierten Excel-Tabellen und Zettelwirtschaft für Menschen, die privat Wohnungen vermieten.
-   - Funktionen: Überwacht Mietzahlungen vollautomatisch, warnt charmant bei Zahlungsverzug, erstellt rechtssichere Dokumente und Nebenkosten-Übersichten auf Knopfdruck. Spart bis zu 90 % des manuellen Aufwands. Komplett kostenlos nutzbar.
-
-3. Integrationshelfer:
-   - Zweck: Ein echtes Herzensprojekt von Tiep, um Menschen beim sicheren Ankommen und Einleben in Deutschland zu helfen.
-   - Funktionen: Übersetzt und erklärt komplizierte deutsche Behördenbriefe, amtliche Anträge und Formulare in einfache, verständliche Sprache. Nimmt den Nutzern die Angst vor der Bürokratie. Darf und soll explizit kostenlos geteilt werden.
-
-Wichtige Verhaltensregeln für deine Antworten im Chat:
-- Antworte immer kurz, übersichtlich und auf den Punkt. Im kleinen Chatfenster mag niemand riesige Textwüsten lesen!
-- Nutze gerne Zeilenumbrüche oder Emojis (🏠, 🤖, 🤝), um deine Antworten lebendig zu gestalten.
-- Betone immer wieder charmant, dass diese 3 Tools vollkommen kostenlose Geschenke von Tiep sind, um zu zeigen, was moderne KI im echten Leben bewirken kann.
-- Wenn jemand ein individuelles Firmenprojekt sucht (z.B. n8n-Automatisierung, Identity Management, Enterprise ERP-Systeme), verweise auf das Kontaktformular für eine kostenlose Erstanalyse oder nenne Tieps E-Mail: vuxuantiep@gmail.com. Preise für Firmenlösungen gibt es individuell auf Anfrage.`;
+// ════════ ASK AI & JSON ABSICHERUNG ════════
+async function askAI(userMsg, systemMsg) {
+    conversationHistory.push({ role: 'user', content: userMsg });
+    showThinking();
+    sendBtn.disabled = true;
 
     try {
-      const res  = await fetch(COMPUTE_URL, {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ message: queryText, system_prompt: systemContext })
-      });
-      const data = await res.json();
-      hideLoader();
-      appendBubble("bot", data.reply);
-    } catch(err) {
-      hideLoader();
-      appendBubble("bot", "Verbindung zur Cloud unterbrochen. Bitte versuche es gleich noch einmal!");
-      console.error("Fehler bei der KI-Abfrage:", err);
+        const res = await fetch(`${WORKER_URL}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: 'openrouter/free', messages: [{ role: 'system', content: systemMsg }, ...conversationHistory] })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const reply = data.choices[0].message.content.trim();
+        removeThinking();
+
+        if (currentMode === 'ikigai' && reply.startsWith('{') && reply.endsWith('}')) {
+            try {
+                const parsedData = JSON.parse(reply);
+                renderIkigaiToScreen(parsedData);
+                addMessage('ai', '✨ Deine Ikigai-Analyse ist abgeschlossen! Ich habe dein persönliches Dashboard geladen.');
+                speak('Deine Analyse ist fertig. Ich öffne jetzt dein Dashboard.');
+                return;
+            } catch(jsonErr) {
+                console.error("JSON Parse Error, fallback to regular typing", jsonErr);
+            }
+        }
+
+        conversationHistory.push({ role: 'assistant', content: reply });
+        addMessage('ai', reply);
+        speak(reply);
+        messageCount++;
+        if (messageCount >= 4) ctaEl.classList.add('show');
+    } catch (e) {
+        removeThinking();
+        addMessage('ai', '⚠️ Fehler bei der Verbindung. Bitte erneut senden.');
+    } finally {
+        sendBtn.disabled = false;
     }
-  }
+}
+
+// ════════ SEND ACTION ════════
+async function handleSend() {
+    const text = userInput.value.trim();
+    if (!text) return;
+    userInput.value = ''; userInput.style.height = 'auto';
+    addMessage('user', text);
+
+    let activePrompt = SYSTEM_DEFAULT;
+    if (currentMode === 'interview') activePrompt = SYSTEM_INTERVIEW;
+    else if (currentMode === 'ikigai') activePrompt = SYSTEM_IKIGAI;
+    else if (currentMode === 'cv') activePrompt = SYSTEM_CV;
+
+    await askAI(text, activePrompt);
+}
+sendBtn.addEventListener('click', handleSend);
+userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+
+// ════════ SMART SCREEN CONTROLS ════════
+function renderIkigaiToScreen(data) {
+    document.getElementById('iki-data-essenz').textContent = data.essenz || '';
+    
+    const fillList = (id, arr) => {
+        const el = document.getElementById(id); el.innerHTML = '';
+        if(arr) arr.forEach(txt => { const li = document.createElement('li'); li.textContent = txt; el.appendChild(li); });
+    };
+    fillList('iki-data-love', data.love);
+    fillList('iki-data-good', data.good);
+    fillList('iki-data-need', data.need);
+    fillList('iki-data-paid', data.paid);
+
+    document.getElementById('iki-data-berufung').textContent = data.berufung || '';
+    document.getElementById('iki-data-nische').textContent = data.nische || '';
+    document.getElementById('iki-data-plan1').textContent = data.plan1 || '';
+    document.getElementById('iki-data-plan2').textContent = data.plan2 || '';
+
+    document.getElementById('main-chat-view').classList.add('hidden');
+    document.getElementById('ikigai-screen').classList.remove('hidden');
+}
+
+window.closeIkigaiScreen = function() {
+    document.getElementById('ikigai-screen').classList.add('hidden');
+    document.getElementById('main-chat-view').classList.remove('hidden');
+};
+
+window.switchScreenTab = function(tabId, btn) {
+    document.querySelectorAll('.iki-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.iki-screen-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+};
+
+// ════════ MODE CONFIG ════════
+function setMode(mode) {
+    currentMode = mode;
+    analyzeBtn.classList.remove('active'); ikigaiBtn.classList.remove('active'); if (startInterviewBtn) startInterviewBtn.classList.remove('active');
+    if (mode === 'cv') { modeLabel.textContent = '💼 Lebenslauf-Modus'; modeLabel.classList.remove('hidden'); analyzeBtn.classList.add('active'); }
+    else if (mode === 'ikigai') { modeLabel.textContent = '☯️ Ikigai-Modus'; modeLabel.classList.remove('hidden'); ikigaiBtn.classList.add('active'); }
+    else if (mode === 'interview') { modeLabel.textContent = '🎭 Interview-Simulation'; modeLabel.classList.remove('hidden'); if (startInterviewBtn) startInterviewBtn.classList.add('active'); }
+    else { modeLabel.classList.add('hidden'); }
+}
+
+ikigaiBtn.addEventListener('click', () => {
+    if (window.innerWidth < 768) closeSidebar();
+    setMode('ikigai'); conversationHistory = []; chatHistory.innerHTML = '';
+    addMessage('user', 'Ich möchte meine Ikigai-Berufung entdecken.');
+    askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai ist, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
 });
 
-function showLoader() {
-  const loader = document.createElement("div");
-  loader.id = "asst-loader"; loader.className = "asst-msg loading";
-  loader.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> iTiep-Ki analysiert…';
-  msgContainer.appendChild(loader);
-  msgContainer.scrollTop = msgContainer.scrollHeight;
+fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+        if (file.name.endsWith('.docx')) {
+            const res = await mammoth.extractRawText({ arrayBuffer: ev.target.result }); extractedText = res.value;
+        } else { extractedText = ev.target.result; }
+        fileNameEl.textContent = '✓ ' + file.name; fileNameEl.classList.remove('hidden'); analyzeBtn.classList.remove('hidden');
+        setMode('cv');
+        addMessage('ai', `✅ **"${file.name}"** geladen! Klicke auf "Lebenslauf analysieren" oder stelle mir Fragen.`);
+    };
+    if (file.name.endsWith('.docx')) reader.readAsArrayBuffer(file); else reader.readAsText(file, 'UTF-8');
+});
+
+analyzeBtn.addEventListener('click', () => {
+    setMode('cv'); conversationHistory = []; chatHistory.innerHTML = '';
+    addMessage('user', 'Bitte analysiere meinen Lebenslauf.');
+    askAI(`Hier ist mein Lebenslauf textuell: ${extractedText}. Führe eine vollständige Optimierung durch.`, SYSTEM_CV);
+});
+
+if (startInterviewBtn) {
+    startInterviewBtn.addEventListener('click', () => {
+        if (!extractedText) { addMessage('ai', 'Bitte lade zuerst links deinen Lebenslauf hoch.'); return; }
+        setMode('interview'); conversationHistory = []; chatHistory.innerHTML = '';
+        interviewPanel.classList.remove('hidden');
+        addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
+        askAI('Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage.', SYSTEM_INTERVIEW);
+    });
 }
-function hideLoader() {
-  const loader = document.getElementById("asst-loader");
-  if (loader) loader.remove();
-}
+
+clearBtn.addEventListener('click', () => {
+    conversationHistory = []; extractedText = ''; messageCount = 0; setMode('default');
+    if (interviewPanel) interviewPanel.classList.add('hidden');
+    chatHistory.innerHTML = ''; ctaEl.classList.remove('show'); fileNameEl.classList.add('hidden'); analyzeBtn.classList.add('hidden');
+    addMessage('ai', 'Gespräch zurückgesetzt. Wie kann ich dir helfen?');
+    closeIkigaiScreen();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dsgvoModal = document.getElementById('dsgvo-modal');
+    const dsgvoBtn   = document.getElementById('dsgvo-accept-btn');
+    if (dsgvoBtn && dsgvoModal) {
+        dsgvoBtn.addEventListener('click', () => { dsgvoModal.style.display = 'none'; });
+    }
+});
 </script>
 </body>
 </html>
