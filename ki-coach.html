@@ -181,9 +181,9 @@
             box-shadow: 0 0 12px rgba(167, 139, 250, 0.2);
         }
 
-        /* 🎙️ Pulsierender Effekt während der Sprachaufnahme */
+        /* 🎙️ Pulsierender Effekt während der Sprachaufnahme (Audio-Feature) */
         .recording-active {
-            color: #ef4444 !important;
+            color: #ef4444 !important; /* Färbt das Mikrofon-Icon hellrot */
             animation: pulse-mic 1.5s infinite ease-in-out;
         }
 
@@ -260,6 +260,55 @@
 </head>
 <body class="flex h-screen overflow-hidden relative">
 
+<div id="dsgvo-modal" class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md rounded-2xl p-6 shadow-2xl border" style="background: var(--bg-card); border-color: var(--border);">
+        
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-9 h-9 g-bg rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-shield-alt text-white text-sm"></i>
+            </div>
+            <div>
+                <h2 class="text-base font-bold text-white">Willkommen beim Tiep Coach</h2>
+                <p class="text-[11px]" style="color: var(--text-muted)">Kurzanleitung & Datenschutz</p>
+            </div>
+        </div>
+
+        <div class="space-y-2 text-xs mb-4 p-3 rounded-xl bg-white/5 border border-white/5">
+            <p class="font-medium text-gray-300"><i class="fas fa-info-circle text-blue-400 mr-1"></i> So funktioniert es:</p>
+            <ul class="list-disc list-inside space-y-1 text-gray-400 pl-1">
+                <li>Lebenslauf (PDF/Word) links hochladen für Optimierung.</li>
+                <li>Modus wählen (Interview oder Ikigai) oder direkt chatten.</li>
+                <li>Deine Daten werden nur live verarbeitet und nicht gespeichert.</li>
+            </ul>
+        </div>
+
+        <div class="space-y-3 mb-4">
+            <p class="text-xs font-medium text-gray-300">Optionale Personalisierung:</p>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-secondary)">Dein Name</label>
+                    <input type="text" id="user-name-input" placeholder="z. B. Max" class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all" style="background: var(--bg-input); border-color: var(--border); color: var(--text-primary);">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-secondary)">Wunsch-Branche</label>
+                    <input type="text" id="user-job-input" placeholder="z. B. IT, Marketing" class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all" style="background: var(--bg-input); border-color: var(--border); color: var(--text-primary);">
+                </div>
+            </div>
+        </div>
+
+        <div class="text-[11px] text-gray-400 leading-relaxed mb-5 border-t pt-3" style="border-color: var(--border)">
+            <p>
+                <i class="fas fa-user-lock mr-1 text-green-400"></i> 
+                <strong>DSGVO-Hinweis:</strong> Mit dem Klick auf Starten erklärst du dich einverstanden, dass deine Eingaben und dein Lebenslauf temporär verarbeitet werden, um Antworten zu generieren. Es erfolgt <u>keine</u> dauerhafte Speicherung oder Weitergabe deiner Daten.
+            </p>
+        </div>
+
+        <button id="dsgvo-accept-btn" class="w-full py-2.5 rounded-xl text-xs font-semibold text-white g-bg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2">
+            <span>Einverstanden & Starten</span>
+            <i class="fas fa-arrow-right text-[10px]"></i>
+        </button>
+    </div>
+</div>
 <div id="overlay"></div>
 
 <div id="sidebar" class="flex flex-col h-full">
@@ -333,6 +382,9 @@
             <span class="model-badge">KI-Modell: kostenlos</span>
         </div>
         <p class="text-xs" style="color:var(--text-muted)">Tiep Intelligence v3.0</p>
+        <p class="text-[10px] mt-1.5 opacity-50 tracking-wide">
+            Powered by: <span class="g-text">vuxuantiep</span> © itiep.de
+        </p>
     </div>
 </div>
 
@@ -439,14 +491,11 @@ let extractedText = "";
 let audioActive = true;
 let currentMode = "default";  
 let messageCount = 0;
-let recognizing = false;
-let recognition = null;
 
 // ════════ UI ELEMENTS ════════
 const userInput     = document.getElementById('user-input');
 const sendBtn       = document.getElementById('send-btn');
 const clearBtn      = document.getElementById('clear-btn');
-const chatContainer = document.getElementById('chat-container');
 const chatScroll    = document.getElementById('chat-scroll');
 
 const menuBtn       = document.getElementById('menu-btn');
@@ -471,7 +520,7 @@ const audioLabel    = document.getElementById('audio-label');
 
 const ctaEl         = document.getElementById('live-coach-cta');
 
-// ════════ SIDEBAR REPARATUR (openSidebar hinzugefügt!) ════════
+// ════════ SIDEBAR OPERATIONS ════════
 function openSidebar() {
     if (sidebar) sidebar.classList.add('open');
     if (overlay) overlay.classList.add('show');
@@ -534,35 +583,59 @@ if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => windo
 
 // ════════ MIC / SPEECH RECOGNITION ════════
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRec();
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
     recognition.lang = 'de-DE';
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        userInput.value = transcript;
-        userInput.dispatchEvent(new Event('input'));
+    let isRecording = false;
+
+    recognition.onresult = (event) => {
+        const speechToText = event.results[0][0].transcript;
+        if (userInput.value.trim() === '') {
+            userInput.value = speechToText;
+        } else {
+            userInput.value += ' ' + speechToText;
+        }
+        userInput.style.height = 'auto';
+        userInput.style.height = userInput.scrollHeight + 'px';
     };
+
+    recognition.onstart = () => {
+        isRecording = true;
+        micBtn.querySelector('i').classList.add('recording-active');
+        userInput.placeholder = "Ich höre zu... Sprechen Sie jetzt Ihre Antwort.";
+    };
+
     recognition.onend = () => {
-        recognizing = false;
-        micBtn.classList.remove('recording');
-        micBtn.querySelector('i').style.color = 'var(--text-muted)';
+        isRecording = false;
+        micBtn.querySelector('i').classList.remove('recording-active');
+        if (currentMode === 'interview') {
+            userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
+        } else {
+            userInput.placeholder = "Schreibe eine Nachricht…";
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Spracherkennungs-Fehler:", event.error);
+        isRecording = false;
+        micBtn.querySelector('i').classList.remove('recording-active');
     };
 
     micBtn.addEventListener('click', () => {
-        if (recognizing) {
+        if (isRecording) {
             recognition.stop();
         } else {
             recognition.start();
-            recognizing = true;
-            micBtn.classList.add('recording');
-            micBtn.querySelector('i').style.color = '#ef4444';
         }
     });
+
 } else {
     micBtn.style.display = 'none';
+    console.log("Web Speech API wird von diesem Browser nicht unterstützt.");
 }
 
 // ════════ MARKDOWN RENDER ════════
@@ -672,7 +745,7 @@ function removeThinking() {
     if (el) el.remove();
 }
 
-// ════════ SCROLL REPARATUR (Nutzt chatScroll!) ════════
+// ════════ SCROLL REPARATUR ════════
 function scrollToBottom() {
     if (chatScroll) {
         setTimeout(() => { chatScroll.scrollTop = chatScroll.scrollHeight; }, 60);
@@ -763,13 +836,12 @@ async function handleSend() {
     checkShowCTA();
 }
 
-// ════════ EVENT LISTENERS FÜR DAS SENDEN (Hier haben sie gefehlt! ✨) ════════
+// ════════ EVENT LISTENERS FÜR DAS SENDEN ════════
 sendBtn.addEventListener('click', handleSend);
 
 userInput.addEventListener('keydown', (e) => {
-    // Wenn Enter gedrückt wird (ohne Shift-Taste für Zeilenumbruch), Nachricht senden
     if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault(); // Verhindert einen ungewollten Zeilenumbruch
+        e.preventDefault(); 
         handleSend();
     }
 });
@@ -880,7 +952,7 @@ function setMode(mode) {
     
     analyzeBtn.classList.remove('active');
     ikigaiBtn.classList.remove('active');
-    if (typeof startInterviewBtn !== 'undefined' && startInterviewBtn) {
+    if (startInterviewBtn) {
         startInterviewBtn.classList.remove('active');
     }
     
@@ -888,42 +960,60 @@ function setMode(mode) {
         modeLabel.textContent = '📄 Lebenslauf-Modus';
         modeLabel.classList.remove('hidden');
         analyzeBtn.classList.add('active');
-        
-        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
-            interviewPanel.classList.add('hidden');
-        }
+        if (interviewPanel) interviewPanel.classList.add('hidden');
         userInput.placeholder = 'Frag mich etwas zu deinem Lebenslauf...';
         
     } else if (mode === 'ikigai') {
         modeLabel.textContent = '☯️ Ikigai-Modus';
         modeLabel.classList.remove('hidden');
         ikigaiBtn.classList.add('active');
-        
-        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
-            interviewPanel.classList.add('hidden');
-        }
+        if (interviewPanel) interviewPanel.classList.add('hidden');
         userInput.placeholder = 'Beantworte die Fragen für deine Ikigai-Analyse...';
         
     } else if (mode === 'interview') {
         modeLabel.textContent = '🎭 Interview-Simulation';
         modeLabel.classList.remove('hidden');
-        if (typeof startInterviewBtn !== 'undefined' && startInterviewBtn) {
-            startInterviewBtn.classList.add('active');
-        }
-        
-        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
-            interviewPanel.classList.remove('hidden');
-        }
+        if (startInterviewBtn) startInterviewBtn.classList.add('active');
+        if (interviewPanel) interviewPanel.classList.remove('hidden');
         userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
         
     } else {
         modeLabel.classList.add('hidden');
-        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
-            interviewPanel.classList.add('hidden');
-        }
+        if (interviewPanel) interviewPanel.classList.add('hidden');
         userInput.placeholder = 'Frag mich etwas oder tippe \'Ikigai\'...';
     }
 }
+
+// ════════ 🔐 DSGVO & WILLKOMMEN LOGIK ════════
+document.addEventListener('DOMContentLoaded', () => {
+    const dsgvoModal = document.getElementById('dsgvo-modal');
+    const dsgvoBtn   = document.getElementById('dsgvo-accept-btn');
+    const nameInput  = document.getElementById('user-name-input');
+    const jobInput   = document.getElementById('user-job-input');
+
+    if (dsgvoBtn && dsgvoModal) {
+        dsgvoBtn.addEventListener('click', () => {
+            const userName = nameInput ? nameInput.value.trim() : '';
+            const userJob  = jobInput ? jobInput.value.trim() : '';
+
+            // Schließt das DSGVO-Fenster unsichtbar
+            dsgvoModal.style.display = 'none';
+
+            // Wenn Name oder Branche ausgefüllt wurden, passe die Begrüßung an
+            if (userName || userJob) {
+                let welcomeText = `Hallo **${userName || 'Gast'}**! 👋 Schön, dass du da bist.`;
+                if (userJob) {
+                    welcomeText += ` Ich habe notiert, dass du dich für den Bereich **${userJob}** interessierst.`;
+                }
+                welcomeText += `\n\nDein System ist jetzt startbereit. Lade links deinen Lebenslauf hoch oder leg direkt los!`;
+                
+                // Chat-Verlauf leeren und neue personalisierte Nachricht anzeigen
+                chatHistory.innerHTML = '';
+                addMessage('ai', welcomeText);
+            }
+        });
+    }
+});
 </script>
 </body>
 </html>
