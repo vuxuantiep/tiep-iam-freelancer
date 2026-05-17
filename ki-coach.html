@@ -174,7 +174,6 @@
             transition: background 0.15s, border-color 0.15s;
         }
         .sidebar-btn:hover { background: #25272b; border-color: var(--border-hover); }
-        /* ✨ Visuelles Highlight für den aktuell aktiven Modus-Button */
         .sidebar-btn.active {
             background: rgba(167, 139, 250, 0.15) !important;
             border-color: #a78bfa !important;
@@ -182,9 +181,9 @@
             box-shadow: 0 0 12px rgba(167, 139, 250, 0.2);
         }
 
-        /* 🎙️ Pulsierender Effekt während der Sprachaufnahme (Audio-Feature) */
+        /* 🎙️ Pulsierender Effekt während der Sprachaufnahme */
         .recording-active {
-            color: #ef4444 !important; /* Wechselt das Mikrofon-Icon zu hellem Rot */
+            color: #ef4444 !important;
             animation: pulse-mic 1.5s infinite ease-in-out;
         }
 
@@ -238,9 +237,6 @@
         #mic-btn.recording i { color: #ef4444 !important; }
 
         /* ── Upload zone ── */
-        /* =========================================================================
-        UPLOAD ZONE ZENTRIERUNG OPTIMIEREN
-        ========================================================================= */
         .upload-zone {
             border: 2px dashed var(--border);
             border-radius: 12px;
@@ -249,13 +245,11 @@
             cursor: pointer;
             transition: all 0.2s ease;
             background: var(--bg-card);
-            
-            /* 💡 DER TRICK: Flexbox aktivieren und Elemente untereinander zentrieren */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px; /* Erzeugt einen sauberen Abstand zwischen Icon, Text und Button */
+            gap: 12px;
         }
 
         .upload-zone:hover {
@@ -269,7 +263,6 @@
 <div id="overlay"></div>
 
 <div id="sidebar" class="flex flex-col h-full">
-
     <div class="p-5 border-b" style="border-color:var(--border)">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
@@ -285,7 +278,7 @@
 
         <div>
             <label for="resume-upload" class="upload-zone" id="upload-zone">
-                <div id="uploadZone" class="upload-zone">
+                <div class="text-center">
                     <i class="fas fa-file-upload text-3xl text-gray-400 mb-2"></i>
                     <p class="text-sm font-medium text-gray-200">Lebenslauf hochladen</p>
                     <p class="text-xs text-gray-500">PDF oder Word-Format</p>
@@ -299,8 +292,6 @@
             <i class="fas fa-search-plus" style="color:var(--accent)"></i>
             <span>Lebenslauf analysieren</span>
         </button>
-
-        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
 
         <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
 
@@ -432,31 +423,13 @@
 </div>
 
 <script>
-// ════════ CONFIG (Optimierte Systemprompts für wärmere Tonalität) ════════
+// ════════ CONFIG ════════
 const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
 const SYSTEM_DEFAULT = "Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown. Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden emotionalen Hürden ein echter Coach wertvolle Unterstützung bieten kann.";
-// =========================================================================
-// ERWEITERTE LOGIK FÜR SYSTEM_CV & NEUER INTERVIEW-MODUS (SCHRITT 2)
-// =========================================================================
 
-const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. 
-Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. 
+const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. Strukturiere deine Antwort streng nach folgenden Punkten:\n1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)\n2. Stärken & markante Kernkompetenzen\n3. Konkrete Verbesserungsvorschläge (Format, Formulierungen, ATS-Optimierung)\n4. 🚀 PASSENDE JOB-PROFILE & SUCHPORTALE: Schlage basierend auf dem Profil 3 konkrete Berufsfelder vor. Nenne explizit die besten Suchportale für diese Branchen (z.B. LinkedIn, Indeed, StepStone oder spezialisierte Plattformen).\n5. 💡 NÄCHSTER SCHRITT: Beende deine Antwort immer mit einem freundlichen Satz, dass der Nutzer jetzt links im Menü auf den lila Button 'Interview trainieren' klicken kann, um eine reale Vorstellungsgespräch-Simulation für diese Berufsfelder zu starten.`;
 
-Strukturiere deine Antwort streng nach folgenden Punkten:
-1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)
-2. Stärken & markante Kernkompetenzen
-3. Konkrete Verbesserungsvorschläge (Format, Formulierungen, ATS-Optimierung)
-4. 🚀 PASSENDE JOB-PROFILE & SUCHPORTALE: Schlage basierend auf dem Profil 3 konkrete Berufsfelder vor. Nenne explizit die besten Suchportale für diese Branchen (z.B. LinkedIn, Indeed, StepStone oder spezialisierte Plattformen).
-5. 💡 NÄCHSTER SCHRITT: Beende deine Antwort immer mit einem freundlichen Satz, dass der Nutzer jetzt links im Menü auf den lila Button 'Interview trainieren' klicken kann, um eine reale Vorstellungsgespräch-Simulation für diese Berufsfelder zu starten.`;
-
-const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager in einem realen, professionellen Vorstellungsgespräch auf dem deutschen Arbeitsmarkt.
-
-Deine Verhaltensregeln:
-1. Einstieg & Job-Anpassung: In der ersten Runde nennt dir der Nutzer seine Wunschstelle und kopiert eventuell eine konkrete Stellenausschreibung oder Anforderungen in den Chat. Analysiere diese Anforderungen SOFORT im Hintergrund und gleiche sie mit dem Lebenslauf des Nutzers ab.
-2. Zielgerichtete Fragen: Richte das gesamte restliche Interview exakt an diesem spezifischen Stellenangebot und den Anforderungen aus. Stelle Fragen zu den dort geforderten Qualifikationen, Tools oder Aufgaben.
-3. ⚠️ WICHTIGSTE REGEL: Stelle IMMER NUR EINE FRAGE auf einmal! Warte die Antwort des Nutzers zwingend ab, bevor du weiterredest.
-4. Dynamik: Reagiere professionell und direkt auf die Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).
-5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
+const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager in einem realen, professionellen Vorstellungsgespräch auf dem deutschen Arbeitsmarkt. Deine Verhaltensregeln:\n1. Einstieg & Job-Anpassung: In der ersten Runde nennt dir der Nutzer seine Wunschstelle und kopiert eventuell eine konkrete Stellenausschreibung oder Anforderungen in den Chat. Analysiere diese Anforderungen SOFORT im Hintergrund und gleiche sie mit dem Lebenslauf des Nutzers ab.\n2. Zielgerichtete Fragen: Richte das gesamte restliche Interview exakt an diesem spezifischen Stellenangebot und den Anforderungen aus. Stelle Fragen zu den dort geforderten Qualifikationen, Tools oder Aufgaben.\n3. ⚠️ WICHTIGSTE REGEL: Stelle IMMER NUR EINE FRAGE auf einmal! Warte die Antwort des Nutzers zwingend ab, bevor du weiterredest.\n4. Dynamik: Reagiere professionell und direkt auf die Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).\n5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
 
 const SYSTEM_IKIGAI = "Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutzer feinfühlig Schritt für Schritt. Stelle immer nur GENAU EINE Frage auf einmal, um den Nutzer nicht zu überfordern. Sei herzlich, reagiere auf die Antworten eingehend und bestärkend.";
 
@@ -469,27 +442,21 @@ let messageCount = 0;
 let recognizing = false;
 let recognition = null;
 
-/// ═══════════════════════════════════════════════════════════════════════════
-// 📑 UI ELEMENTS (REIHENFOLGE GEPRÜFT & ABSOLUT FEHLERFREI)
-// ═══════════════════════════════════════════════════════════════════════════
-// --- 💬 Chat & Eingabe ---
+// ════════ UI ELEMENTS ════════
 const userInput     = document.getElementById('user-input');
 const sendBtn       = document.getElementById('send-btn');
 const clearBtn      = document.getElementById('clear-btn');
 const chatContainer = document.getElementById('chat-container');
-const chatScroll    = document.getElementById('chat-scroll'); // Wichtig für automatisches Scrollen
+const chatScroll    = document.getElementById('chat-scroll');
 
-// --- 🗺️ Navigation & Sidebar ---
 const menuBtn       = document.getElementById('menu-btn');
 const sidebar       = document.getElementById('sidebar');
 const overlay       = document.getElementById('overlay');
 
-// --- 📄 Dokumenten-Upload (Lebenslauf) ---
 const fileInput     = document.getElementById('resume-upload');
 const uploadZone    = document.getElementById('upload-zone');
 const fileNameEl    = document.getElementById('file-name');
 
-// --- 🎭 Modus-Steuerung & Panels ---
 const modeLabel         = document.getElementById('mode-label');
 const analyzeBtn        = document.getElementById('analyze-btn');
 const ikigaiBtn         = document.getElementById('ikigai-btn');
@@ -497,25 +464,35 @@ const startInterviewBtn = document.getElementById('start-interview-btn');
 const interviewPanel    = document.getElementById('interview-panel');
 const interviewStatus   = document.getElementById('interview-status');
 
-// --- 🎙️ Audio & Spracheingabe ---
 const micBtn        = document.getElementById('mic-btn');
-const audioBtn      = document.getElementById('toggle-audio-btn'); // Falls für Sprachausgabe genutzt
+const audioBtn      = document.getElementById('toggle-audio-btn');
 const audioIcon     = document.getElementById('audio-icon');
 const audioLabel    = document.getElementById('audio-label');
 
-// --- 💡 Sonstiges ---
 const ctaEl         = document.getElementById('live-coach-cta');
 
-// ════════ SIDEBAR ════════
-function closeSidebar() {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('show');
+// ════════ SIDEBAR REPARATUR (openSidebar hinzugefügt!) ════════
+function openSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (overlay) overlay.classList.add('show');
 }
-menuBtn.addEventListener('click', () => {
-    const isOpen = sidebar.classList.toggle('open');
-    overlay.classList.toggle('show', isOpen);
-});
-overlay.addEventListener('click', closeSidebar);
+
+function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('show');
+}
+
+// ════════ NAVIGATION & SIDEBAR EVENT LISTENERS ════════
+if (menuBtn) {
+    menuBtn.addEventListener('click', openSidebar);
+}
+if (overlay) {
+    overlay.addEventListener('click', closeSidebar);
+}
+const closeBtn = document.querySelector('.sidebar-btn'); 
+if (closeBtn) { 
+    closeBtn.addEventListener('click', closeSidebar);
+}
 
 // ════════ AUTO-RESIZE TEXTAREA ════════
 userInput.addEventListener('input', () => {
@@ -523,7 +500,7 @@ userInput.addEventListener('input', () => {
     userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
 });
 
-// ════════ AUDIO OPTIMIERUNG (Natürlicher & Sympathischer) ════════
+// ════════ AUDIO STEUERUNG ════════
 audioBtn.addEventListener('click', () => {
     audioActive = !audioActive;
     audioIcon.className = audioActive ? 'fas fa-volume-up text-sm' : 'fas fa-volume-xmark text-sm';
@@ -536,28 +513,23 @@ function speak(text) {
     if (!audioActive || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
 
-    // 1. Bereinigung von Emojis und Markdown, um Vorlese-Fehler zu vermeiden
     let clean = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
     clean = clean.replace(/[*#_`>]/g, ' ').replace(/\s+/g, ' ').trim();
 
-    const utt = new SpeechSynthesisUtterance(clean);
+    const Logan = new SpeechSynthesisUtterance(clean);
     const voices = window.speechSynthesis.getVoices();
 
-    // 2. Suche nach den am besten klingenden deutschen Stimmen (Premium/Natural bevorzugt)
     const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural'))
                 || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google'))
                 || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft'))
                 || voices.find(v => v.lang.startsWith('de'));
 
-    if (voice) utt.voice = voice;
-    
-    // 3. Feintuning für sympathische Stimmfrequenz
-    utt.rate = 1.02;   // Minimale Beschleunigung für dynamischen Fluss
-    utt.pitch = 1.06;  // Leicht erhöhte Tonlage für eine freundlichere Aura
+    if (voice) Logan.voice = voice;
+    Logan.rate = 1.02;   
+    Logan.pitch = 1.06;  
 
-    window.speechSynthesis.speak(utt);
+    window.speechSynthesis.speak(Logan);
 }
-// Erzwingt das Laden der Systemstimmen im Hintergrund
 if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 
 // ════════ MIC / SPEECH RECOGNITION ════════
@@ -604,13 +576,13 @@ function renderMarkdown(text) {
                .replace(/\n/g, '<br>');
 }
 
-// ════════ FLÜSSIGE CHATAUSGABE (Typewriter-Streaming-Effekt) ════════
+// ════════ CHATAUSGABE ════════
+const chatHistory = document.getElementById('chat-history');
 function addMessage(role, text) {
     const div = document.createElement('div');
     div.className = 'msg-enter';
 
     if (role === 'user') {
-        // Nutzer-Nachrichten werden sofort ohne Verzögerung dargestellt
         div.innerHTML = `
             <div class="flex gap-3 items-start justify-end">
                 <div class="flex-1 flex flex-col items-end">
@@ -626,7 +598,6 @@ function addMessage(role, text) {
         chatHistory.appendChild(div);
         scrollToBottom();
     } else {
-        // KI-Antworten erhalten den flüssigen Schreibeffekt
         div.innerHTML = `
             <div class="flex gap-3 items-start">
                 <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
@@ -645,7 +616,6 @@ function addMessage(role, text) {
         chatHistory.appendChild(div);
         const bubbleContainer = div.querySelector('.animate-content');
         
-        // Wort-für-Wort-Generierungs-Logik für perfekten Fluss ohne HTML-Tags zu brechen
         let words = text.split(/(\s+)/);
         let index = 0;
         let currentString = "";
@@ -657,13 +627,12 @@ function addMessage(role, text) {
                 index++;
                 scrollToBottom();
 
-                // Dynamisches Timing: Längere Atempausen bei Satzzeichen erzeugen Realismus
                 let delay = 25;
                 const lastWord = words[index - 1];
                 if (/[.!?]/.test(lastWord)) {
-                    delay = 220; // Pause am Satzende
+                    delay = 220; 
                 } else if (/,/.test(lastWord)) {
-                    delay = 100; // Kurze Atempause bei Komma
+                    delay = 100; 
                 }
                 setTimeout(typeNextWord, delay);
             }
@@ -703,9 +672,11 @@ function removeThinking() {
     if (el) el.remove();
 }
 
-// ════════ SCROLL ════════
+// ════════ SCROLL REPARATUR (Nutzt chatScroll!) ════════
 function scrollToBottom() {
-    setTimeout(() => { scroll.scrollTop = scroll.scrollHeight; }, 60);
+    if (chatScroll) {
+        setTimeout(() => { chatScroll.scrollTop = chatScroll.scrollHeight; }, 60);
+    }
 }
 
 // ════════ LIVE COACH CTA ════════
@@ -751,10 +722,9 @@ async function askAI(userMsg, systemMsg) {
         removeThinking();
         conversationHistory.push({ role: 'assistant', content: reply });
         
-        // Führt die neue animierte Ausgabe und das optimierte Audio aus
         addMessage('ai', reply);
         speak(reply);
-        // Setzt den Status im Panel nach der Antwort wieder zurück:
+
         if (currentMode === 'interview') {
             interviewStatus.textContent = "HR-Manager hört zu...";
         }
@@ -769,11 +739,7 @@ async function askAI(userMsg, systemMsg) {
     }
 }
 
-// ════════ SEND ════════
-// =========================================================================
-// OPTIMIERTE SENDE-LOGIK FÜR DEN INTERVIEW-MODUS (SCHRITT 4)
-// =========================================================================
-// ════════ INTELIGENTE NACHRICHTEN-STEUERUNG (DYNAMISCHE PROMPTS) ════════
+// ════════ SEND LOGIK ════════
 async function handleSend() {
     const text = userInput.value.trim();
     if (!text) return;
@@ -783,8 +749,7 @@ async function handleSend() {
     addMessage('user', text);
     messageCount++;
 
-    // 🧠 Dynamische Ermittlung des System-Prompts basierend auf currentMode
-    let activeSystemPrompt = SYSTEM_DEFAULT; // Basis-Standard
+    let activeSystemPrompt = SYSTEM_DEFAULT;
     
     if (currentMode === 'interview') {
         activeSystemPrompt = SYSTEM_INTERVIEW;
@@ -794,10 +759,20 @@ async function handleSend() {
         activeSystemPrompt = SYSTEM_CV;
     }
 
-    // 🛡️ WICHTIG: Hier muss activeSystemPrompt übergeben werden!
     await askAI(text, activeSystemPrompt); 
     checkShowCTA();
 }
+
+// ════════ EVENT LISTENERS FÜR DAS SENDEN (Hier haben sie gefehlt! ✨) ════════
+sendBtn.addEventListener('click', handleSend);
+
+userInput.addEventListener('keydown', (e) => {
+    // Wenn Enter gedrückt wird (ohne Shift-Taste für Zeilenumbruch), Nachricht senden
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault(); // Verhindert einen ungewollten Zeilenumbruch
+        handleSend();
+    }
+});
 
 // ════════ FILE UPLOAD ════════
 fileInput.addEventListener('change', async (e) => {
@@ -831,20 +806,15 @@ fileInput.addEventListener('change', async (e) => {
     if (window.innerWidth < 768) closeSidebar();
 });
 
-// ════════ LEBENSLAUF ANALYSIEREN (MODUS-WECHSEL OPTIMIERT) ════════
+// ════════ LEBENSLAUF ANALYSIEREN ════════
 analyzeBtn.addEventListener('click', () => {
     if (window.innerWidth < 768) closeSidebar();
     
-    // Zwingend den Modus wechseln
     setMode('cv');
-    
-    // 💡 WICHTIG: Verlauf leeren, damit die KI das vorherige HR-Interview komplett vergisst!
     conversationHistory = []; 
     chatHistory.innerHTML = '';
     
     addMessage('user', 'Bitte analysiere meinen Lebenslauf basierend auf der hochgeladenen Datei.');
-    
-    // Analyse mit dem reinen CV-Systemprompt starten
     askAI(`Hier ist mein Lebenslauf textuell: ${extractedText}. Führe eine vollständige Optimierung und Analyse durch.`, SYSTEM_CV);
 });
 
@@ -853,39 +823,37 @@ ikigaiBtn.addEventListener('click', () => {
     if (window.innerWidth < 768) closeSidebar();
     setMode('ikigai');
     conversationHistory = [];
+    chatHistory.innerHTML = '';
     addMessage('user', 'Ich möchte meine Ikigai-Berufung entdecken.');
     askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai ist, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
 });
 
-// ════════ INTERVIEW SIMULATION (MIT JOB-SPEC-ERFASSUNG & ABSICHERUNG) ════════
-// 🛡️ Das 'if' prüft, ob der Button existiert. Wenn nicht, wird der Code übersprungen statt abzustürzen!
+// ════════ INTERVIEW SIMULATION ════════
 if (startInterviewBtn) {
     startInterviewBtn.addEventListener('click', () => {
         if (window.innerWidth < 768) closeSidebar();
 
-        // 🛡️ 1. SICHERHEITSPRÜFUNG: Existiert ein Lebenslauf?
         if (!extractedText || extractedText.trim() === '') {
             setMode('cv'); 
             addMessage('ai', 'Guten Tag! Bevor wir mit dem simulierten Vorstellungsgespräch starten können, benötige ich Ihren Lebenslauf. Bitte laden Sie diesen kurz im linken Menü hoch, damit ich mich optimal auf Sie vorbereiten kann! 📄✨');
             return; 
         }
         
-        // 🚀 2. INTERVIEW INITIALISIEREN
         setMode('interview');
         conversationHistory = [];
         chatHistory.innerHTML = '';
         
-        // Visuelles Live-Panel in der Sidebar aktivieren
-        interviewPanel.classList.remove('hidden');
-        interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
+        if (interviewPanel) {
+            interviewPanel.classList.remove('hidden');
+        }
+        if (interviewStatus) {
+            interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
+        }
         
-        // Signal für den Start
         addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
-        
-        // Die perfekte, zielgerichtete Einstiegsfrage über askAI triggern:
         askAI('Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage: Auf welche konkrete Stelle ich mich bewerben möchte und warum. Frage mich außerdem aktiv, ob ich bereits ein konkretes Stellenangebot gefunden habe und sage mir, dass ich den Text der Ausschreibung oder Anforderungen einfach hier in den Chat kopieren kann, damit du das Interview ganz gezielt darauf ausrichten kannst.', SYSTEM_INTERVIEW);
     });
-} 
+}
 
 // ════════ CLEAR ════════
 clearBtn.addEventListener('click', () => {
@@ -901,26 +869,21 @@ clearBtn.addEventListener('click', () => {
     uploadZone.classList.remove('has-file');
     fileNameEl.classList.add('hidden');
     fileInput.value = '';
-    // 💡 Modus komplett zurücksetzen und Panel verstecken
     setMode('default');
     addMessage('ai', 'Gespräch zurückgesetzt. Wie kann ich dir helfen?');
     if (window.innerWidth < 768) closeSidebar();
 });
 
-// ═══════════════════════════════════════════════════════════════════════════
-// 🧠 MODE STEUERUNG (SAUBER FORMATIONIERT & EINZIGARTIG)
-// ═══════════════════════════════════════════════════════════════════════════
+// ════════ MODE STEUERUNG ════════
 function setMode(mode) {
     currentMode = mode;
     
-    // Visuelle Highlights aller Sidebar-Buttons zurücksetzen
     analyzeBtn.classList.remove('active');
     ikigaiBtn.classList.remove('active');
     if (typeof startInterviewBtn !== 'undefined' && startInterviewBtn) {
         startInterviewBtn.classList.remove('active');
     }
     
-    // Modus-spezifische Anpassungen (UI & Prompts)
     if (mode === 'cv') {
         modeLabel.textContent = '📄 Lebenslauf-Modus';
         modeLabel.classList.remove('hidden');
@@ -954,87 +917,12 @@ function setMode(mode) {
         userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
         
     } else {
-        // Standard-Zustand (Default)
         modeLabel.classList.add('hidden');
         if (typeof interviewPanel !== 'undefined' && interviewPanel) {
             interviewPanel.classList.add('hidden');
         }
         userInput.placeholder = 'Frag mich etwas oder tippe \'Ikigai\'...';
     }
-} // 👈 Hier endet setMode vollkommen korrekt!
-
-
-// ═══════════════════════════════════════════════════════════════════════════
-// 🎙️ AUDIO-EINGABE (SPEECH-TO-TEXT LOGIK)
-// ═══════════════════════════════════════════════════════════════════════════
-// 📑 Hier definieren wir die fehlende Variable direkt vor der Nutzung:
-
-let isRecording = false;
-
-// Überprüfen, ob die Web Speech API vom Browser unterstützt wird
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    
-    recognition.lang = 'de-DE';
-    recognition.interimResults = false;
-    recognition.continuous = false;
-
-    // Sprache erfolgreich in Text transformiert
-    recognition.onresult = (event) => {
-        const speechToText = event.results[0][0].transcript;
-        
-        if (userInput.value.trim() === '') {
-            userInput.value = speechToText;
-        } else {
-            userInput.value += ' ' + speechToText;
-        }
-        
-        // Textarea-Höhe dynamisch mitwachsen lassen
-        userInput.style.height = 'auto';
-        userInput.style.height = userInput.scrollHeight + 'px';
-    };
-
-    // Aufnahme gestartet
-    recognition.onstart = () => {
-        isRecording = true;
-        micBtn.querySelector('i').classList.add('recording-active');
-        userInput.placeholder = "Ich höre zu... Sprechen Sie jetzt Ihre Antwort.";
-    };
-
-    // Aufnahme beendet
-    recognition.onend = () => {
-        isRecording = false;
-        micBtn.querySelector('i').classList.remove('recording-active');
-        
-        // Dynamischer Platzhalter-Reset je nach Modus
-        if (currentMode === 'interview') {
-            userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
-        } else {
-            userInput.placeholder = "Schreibe eine Nachricht…";
-        }
-    };
-
-    // Fehler-Handling
-    recognition.onerror = (event) => {
-        console.error("Spracherkennungs-Fehler:", event.error);
-        isRecording = false;
-        micBtn.querySelector('i').classList.remove('recording-active');
-    };
-
-    // Klick-Event-Steuerung für das Mikrofon
-    micBtn.addEventListener('click', () => {
-        if (isRecording) {
-            recognition.stop();
-        } else {
-            recognition.start();
-        }
-    });
-
-} else {
-    // Falls der Browser inkompatibel ist, das Icon verstecken
-    micBtn.style.display = 'none';
-    console.log("Web Speech API wird von diesem Browser nicht unterstützt.");
 }
 </script>
 </body>
