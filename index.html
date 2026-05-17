@@ -1079,9 +1079,13 @@
 </div>
 
 <script>
-// Backend Verbindungs-URL
+// ==========================================
+// 1. GLOBALE KONSTANTEN & VARIABLEN
+// ==========================================
+// Backend Verbindungs-URL zu deinem Cloudflare Worker / Server
 const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev"; 
 
+// HTML-Elemente aus der Webseite abgreifen
 const toggleBtn = document.getElementById("asst-toggle-btn");
 const mainAvatar = document.getElementById("asst-main-avatar");
 const headerAvatar = document.getElementById("asst-header-avatar");
@@ -1090,73 +1094,84 @@ const chatInput = document.getElementById("asst-input");
 const msgContainer = document.getElementById("asst-messages");
 const closeBtn = document.getElementById("asst-close");
 
+// ==========================================
+// 2. INTERACTION / UI-LOGIK (Öffnen & Schließen)
+// ==========================================
+// Funktion zum Umschalten (Anzeigen/Verstecken) des Chat-Fensters
 function toggleAssistant() {
     if (chatWin.style.display === "flex") {
-        // Schließen-Modus
+        // Schließen-Modus: Fenster ausblenden, Button wieder vergrößern, Header-Bild verstecken
         chatWin.style.display = "none";
-        toggleBtn.classList.remove("shrunk"); // Button wird wieder groß
-        headerAvatar.classList.remove("visible"); // Header-Gesicht verschwindet
+        toggleBtn.classList.remove("shrunk"); 
+        headerAvatar.classList.remove("visible"); 
     } else {
-        // Öffnen-Modus
+        // Öffnen-Modus: Fenster anzeigen, Button verkleinern, Header-Bild einblenden und Fokus ins Eingabefeld setzen
         chatWin.style.display = "flex";
-        toggleBtn.classList.add("shrunk"); // Button schrumpft animiert zusammen
-        headerAvatar.classList.add("visible"); // Gesicht taucht oben im Chat auf
+        toggleBtn.classList.add("shrunk"); 
+        headerAvatar.classList.add("visible"); 
         chatInput.focus();
     }
 }
 
+// Den Klick-Events der Buttons die obige Funktion zuweisen
 toggleBtn.onclick = toggleAssistant;
 closeBtn.onclick = toggleAssistant;
 
-// Chat-Eingabe über Enter-Taste
-// Erklärungs-Kommentar: Dieser Event-Listener fängt das Drücken der Enter-Taste im Chat ab
-// Erklärungs-Kommentar: Diese Funktion gibt Text Wort für Wort aus, um den flüssigen Gemini-Effekt zu erzeugen
+// ==========================================
+// 3. TEXT-EFFEKTE & CHAT-BLASEN
+// ==========================================
+// Diese Funktion gibt Text Wort für Wort aus, um den flüssigen Gemini-Schreibeffekt zu erzeugen
 function typeWriterEffect(element, text) {
     const words = text.split(" ");
     let i = 0;
-    element.innerHTML = ""; // Container leeren vor dem Tippen
+    element.innerHTML = ""; // Container leeren, bevor das Tippen startet
 
     function printWord() {
         if (i < words.length) {
             element.innerHTML += words[i] + " ";
             i++;
-            msgContainer.scrollTop = msgContainer.scrollHeight; // Scrollt flüssig nach unten mit
-            setTimeout(printWord, 40); // Geschwindigkeit: 40ms pro Wort
+            msgContainer.scrollTop = msgContainer.scrollHeight; // Scrollt automatisch mit dem Text nach unten
+            setTimeout(printWord, 40); // Geschwindigkeit: 40ms Verzögerung pro Wort
         }
     }
     printWord();
 }
 
-// Erklärungs-Kommentar: Aktualisierte Funktion zum Erstellen der Chat-Blasen
+// Funktion zum Erstellen und Hinzufügen der Chat-Blasen (Doppelte Funktion wurde hier sicher entfernt!)
 function appendBubble(role, text) {
     const bubble = document.createElement("div");
     bubble.className = `asst-msg ${role}`;
     msgContainer.appendChild(bubble);
     
     if (role === "bot") {
-        // Bot-Antworten nutzen den flüssigen Schreibeffekt wie bei Gemini
+        // Antworten der KI nutzen den modernen, flüssigen Schreibeffekt
         typeWriterEffect(bubble, text);
     } else {
-        // Nutzer-Eingaben erscheinen sofort komplett
+        // Nachrichten des Nutzers erscheinen sofort und komplett
         bubble.innerText = text;
     }
     msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
-// Erklärungs-Kommentar: Fängt das Absenden ab, fügt den System-Prompt hinzu und sendet ihn ans Backend
+// ==========================================
+// 4. NETZWERK-KOMMUNIKATION & KI-PROMPT
+// ==========================================
+// Event-Listener: Fängt das Drücken der Enter-Taste im Eingabefeld ab
 chatInput.addEventListener("keydown", async (e) => {
     if (e.key === "Enter" && chatInput.value.trim() !== "") {
         const queryText = chatInput.value.trim();
         
+        // Nutzer-Nachricht anzeigen, Feld leeren und Lade-Animation starten
         appendBubble("user", queryText);
         chatInput.value = "";
         showLoader();
 
-        // Erklärungs-Kommentar: Hier ist dein verbesserter System-Prompt mit deinen persönlichen Daten hinterlegt
-        // Du kannst die Telefonnummer hier direkt anpassen, falls nötig
+        // Hier ist dein optimierter System-Prompt mit all deinen persönlichen Daten hinterlegt.
+        // Die KI nutzt diese Informationen im Hintergrund, um passgenau zu antworten.
         const systemContext = "Du bist die offizielle KI-Assistenz von Vu Xuan Tiep (45 Jahre alt, geboren in Hanoi, ledig, keine Kinder). Alle Karriere-Details stehen im Lebenslauf weiter unten auf der Seite. Wenn du eine Information nicht findest oder der Nutzer Fragen zu Honoraren, Gehaltwünschen oder Preisangeboten stellt, antworte transparent, dass du es nicht weißt, und gib höflich seine Kontaktdaten weiter: Telefon: +49 (0) 123 456789, E-Mail: vuxuantiep@gmail.com.";
 
         try {
+            // Senden des JSON-Pakets (Nachricht + System-Prompt Kontext) an dein Cloud-Backend
             const networkResponse = await fetch(COMPUTE_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -1167,25 +1182,22 @@ chatInput.addEventListener("keydown", async (e) => {
             });
             const responseData = await networkResponse.json();
             
+            // Lade-Animation entfernen und die KI-Antwort ausgeben
             hideLoader();
             appendBubble("bot", responseData.reply);
         } catch (err) {
+            // Fehlerbehandlung bei Netzwerkunterbrechungen
             hideLoader();
             appendBubble("bot", "Verbindung zur Cloud unterbrochen.");
             console.error(err);
         }
     }
 });
-   
 
-function appendBubble(role, text) {
-    const bubble = document.createElement("div");
-    bubble.className = `asst-msg ${role}`;
-    bubble.innerText = text;
-    msgContainer.appendChild(bubble);
-    msgContainer.scrollTop = msgContainer.scrollHeight;
-}
-
+// ==========================================
+// 5. LADE-INDIKATOR (ANALYSE-ANIMATION)
+// ==========================================
+// Zeigt die rotierende Lade-Animation an, während das Backend rechnet
 function showLoader() {
     const loader = document.createElement("div");
     loader.id = "asst-loader";
@@ -1195,6 +1207,7 @@ function showLoader() {
     msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
+// Entfernt die Lade-Animation, sobald die Antwort da ist
 function hideLoader() {
     const loader = document.getElementById("asst-loader");
     if (loader) loader.remove();
