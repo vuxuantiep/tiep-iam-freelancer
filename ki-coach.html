@@ -220,16 +220,30 @@
         #mic-btn.recording i { color: #ef4444 !important; }
 
         /* ── Upload zone ── */
+        /* =========================================================================
+        UPLOAD ZONE ZENTRIERUNG OPTIMIEREN
+        ========================================================================= */
         .upload-zone {
-            border: 1.5px dashed var(--border-hover);
-            border-radius: 14px;
-            padding: 1.25rem;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 30px 20px;
             text-align: center;
             cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
+            transition: all 0.2s ease;
+            background: var(--bg-card);
+            
+            /* 💡 DER TRICK: Flexbox aktivieren und Elemente untereinander zentrieren */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px; /* Erzeugt einen sauberen Abstand zwischen Icon, Text und Button */
         }
-        .upload-zone:hover { border-color: var(--accent); background: rgba(66,133,244,0.04); }
-        .upload-zone.has-file { border-color: var(--accent-2); background: rgba(52,168,83,0.05); }
+
+        .upload-zone:hover {
+            border-color: var(--border-hover);
+            background: #202123;
+        }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden relative">
@@ -253,9 +267,11 @@
 
         <div>
             <label for="resume-upload" class="upload-zone" id="upload-zone">
-                <i class="fas fa-file-alt text-2xl mb-2" style="color:var(--text-muted)"></i>
-                <p class="text-sm font-medium" style="color:var(--text-secondary)">Lebenslauf hochladen</p>
-                <p class="text-xs mt-1" style="color:var(--text-muted)">.docx oder .txt</p>
+                <div id="uploadZone" class="upload-zone">
+                    <i class="fas fa-file-upload text-3xl text-gray-400 mb-2"></i>
+                    <p class="text-sm font-medium text-gray-200">Lebenslauf hochladen</p>
+                    <p class="text-xs text-gray-500">PDF oder Word-Format</p>
+                </div>
             </label>
             <input type="file" id="resume-upload" accept=".docx,.txt" class="hidden">
             <p id="file-name" class="text-xs mt-2 text-center hidden" style="color:#5bba6f"></p>
