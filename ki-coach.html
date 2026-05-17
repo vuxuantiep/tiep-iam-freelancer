@@ -562,29 +562,48 @@ function speak(text) {
     if (!audioActive || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
 
-    // Entfernt Emojis und Sonderzeichen für eine flüssige Aussprache
+    // Entfernt Emojis und Sonderzeichen für eine saubere Aussprache
     let clean = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
     clean = clean.replace(/[*#_`>]/g, ' ').replace(/\s+/g, ' ').trim();
 
     const utterance = new SpeechSynthesisUtterance(clean);
-    const voices = window.speechSynthesis.getVoices();
+    utterance.lang = 'de-DE'; // Zwingt die Engine auf das deutsche Sprachpaket
 
-    // 🎯 Hier ist die optimierte Prioritätenliste für die beste deutsche Stimme:
-    const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural')) // 1. Echte Natürliche Stimme
-                || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google'))  // 2. Google Premium Deutsch
-                || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft'))// 3. Microsoft Premium (Edge)
-                || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('anna'))     // 4. Klassische Apple-Stimme (Anna)
-                || voices.find(v => v.lang.startsWith('de'));                                            // 5. Standard-Fallback
+    // Funktion zur Ermittlung der besten Stimme
+    const setBestVoice = () => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length === 0) return false;
 
-    if (voice) {
-        utterance.voice = voice;
+        // Prioritätenliste für die beste deutsche Stimme
+        const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural'))
+                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google'))
+                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft'))
+                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('anna'))
+                    || voices.find(v => v.lang.startsWith('de'));
+
+        if (voice) {
+            utterance.voice = voice;
+            return true;
+        }
+        return false;
+    };
+
+    // Versuche die Stimme direkt zu setzen
+    const success = setBestVoice();
+
+    // 🔄 Falls die Stimmenliste noch leer war, warten wir auf das Laden im Hintergrund
+    if (!success) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            setBestVoice();
+            utterance.rate = 1.05;
+            utterance.pitch = 1.00;
+            window.speechSynthesis.speak(utterance);
+        };
+    } else {
+        utterance.rate = 1.05;
+        utterance.pitch = 1.00;
+        window.speechSynthesis.speak(utterance);
     }
-    
-    utterance.lang = 'de-DE'; // Erzwingt das deutsche Sprachpaket
-    utterance.rate = 1.05;    // Geschwindigkeit minimal angehoben (klingt dynamischer)
-    utterance.pitch = 1.00;   // Natürliche Tonhöhe
-
-    window.speechSynthesis.speak(utterance);
 }
 
 if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
