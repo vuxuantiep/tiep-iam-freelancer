@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
     <style>
-        /* Bình luận giải thích: Sử dụng 100dvh để sửa lỗi thanh gõ chữ bị đẩy văng khỏi màn hình trên Safari/Chrome di động */
-        body { background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; height: 100dvh; }
+        body { background-color: #131314; color: #e3e3e3; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         
         .gemini-gradient {
             background: linear-gradient(92deg, #4285f4 0%, #1a73e8 25%, #34a853 50%, #4285f4 100%);
@@ -28,13 +27,12 @@
 
         @keyframes flow { to { background-position: 200% center; } }
 
-        /* Cấu hình Sidebar trượt mượt mà trên mobile */
+        /* Sidebar Anpassung für flüssige Bedienung */
         .sidebar { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 0; overflow: hidden; background-color: #1e1f20; z-index: 50; }
         .sidebar.open { width: 280px; }
         
         .chat-container { max-width: 800px; margin: 0 auto; width: 100%; }
         
-        /* Hộp nhập liệu bo tròn phong cách tối giản */
         .input-area { 
             background-color: #1e1f20; 
             border-radius: 32px; 
@@ -56,7 +54,7 @@
         #chat-scroll::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 10px; }
     </style>
 </head>
-<body class="flex overflow-hidden relative w-full h-full">
+<body class="flex h-screen overflow-hidden relative">
 
     <div id="sidebar" class="sidebar flex flex-col h-full border-r border-gray-800 absolute lg:relative">
         <div class="p-6 border-b border-gray-800">
@@ -76,37 +74,36 @@
         <div class="p-6 text-[10px] text-gray-600 border-t border-gray-800 italic uppercase">Tiep Intelligence v2.5</div>
     </div>
 
-    <div class="flex-1 flex flex-col bg-[#131314] h-full relative min-w-0">
-        
-        <header class="p-4 flex items-center justify-between border-b border-b-gray-800/50 bg-[#131314] z-10 w-full">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-briefcase logo-glow text-xl"></i>
-                <h1 class="text-xl md:text-2xl gemini-gradient">Tiep Coach</h1>
-            </div>
+    <div class="flex-1 flex flex-col bg-[#131314] h-full relative">
+        <header class="p-4 flex items-center justify-between border-b border-gray-800/50 bg-[#131314] z-10">
+            <button id="menu-btn" class="text-xl p-2 hover:bg-gray-800 rounded-full transition-colors"><i class="fas fa-bars"></i></button>
+            <h1 class="text-2xl gemini-gradient">Tiep Coach</h1>
             
-            <div class="flex items-center gap-3">
-                <button id="toggle-audio-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-800/60 border border-gray-700 hover:border-blue-500 transition-all">
-                    <span id="audio-label" class="text-[9px] uppercase font-bold text-gray-400 tracking-wider">Audio: An</span>
+            <div class="flex items-center gap-4">
+                <button id="toggle-audio-btn" class="flex items-center gap-3 px-4 py-2 rounded-full bg-gray-800/60 border border-gray-700 hover:border-blue-500 transition-all group">
+                    <span id="audio-label" class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Audio: An</span>
+                    <div id="audio-visualizer" class="flex gap-1 items-center h-3">
+                        <div class="w-0.5 h-full bg-blue-500 rounded-full"></div>
+                        <div class="w-0.5 h-2 bg-blue-400 rounded-full"></div>
+                        <div class="w-0.5 h-3 bg-blue-500 rounded-full"></div>
+                    </div>
                 </button>
-                
-                <button id="menu-btn" class="text-xl p-2 hover:bg-gray-800 rounded-full transition-colors text-gray-300">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <i class="fas fa-briefcase logo-glow text-xl"></i>
             </div>
         </header>
 
-        <div id="chat-scroll" class="flex-1 overflow-y-auto p-4 md:p-6 pb-24">
+        <div id="chat-scroll" class="flex-1 overflow-y-auto p-4 md:p-6 pb-28">
             <div id="chat-history" class="chat-container space-y-6 py-4">
                 <div class="flex gap-4">
                     <div class="w-10 h-10 rounded-full gemini-bg-gradient flex-shrink-0 flex items-center justify-center shadow-lg"><i class="fas fa-robot text-white text-sm"></i></div>
                     <div class="p-5 bg-[#1e1f20] border border-gray-800 text-gray-200 msg-bubble max-w-[85%] shadow-sm text-sm md:text-base">
-                        Hallo! Ich bin dein **Tiep Coach**. Ich bin bereit, deinen Lebenslauf auf Top-Niveau zu optimieren oder dein Ikigai zu entschlüsseln. Lad ein Dokument im Menü hoch, um loszulegen!
+                        Hallo! Ich bin dein **Tiep Coach**. Ich bin bereit, deinen Lebenslauf auf Top-Niveau zu optimieren oder dein Ikigai zu entschlüsseln. Lad ein Dokument hoch, um loszulegen!
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="fixed bottom-0 left-0 right-0 p-4 bg-[#131314]/95 backdrop-blur border-t border-gray-800/60 z-20">
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-[#131314] border-t border-gray-800/60 z-20">
             <div class="chat-container">
                 <div class="input-area flex items-center gap-3 shadow-xl">
                     <input type="text" id="user-input" class="flex-1 bg-transparent outline-none text-white text-base py-1 placeholder-gray-500" placeholder="Schreibe eine Nachricht..." autocomplete="off">
@@ -134,19 +131,18 @@
         const scroll = document.getElementById('chat-scroll');
         const audioBtn = document.getElementById('toggle-audio-btn');
         const audioLabel = document.getElementById('audio-label');
+        const audioVisualizer = document.getElementById('audio-visualizer');
 
-        // Sự kiện đóng mở Sidebar công cụ
         menuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
 
-        // Xử lý bật tắt âm thanh
         audioBtn.addEventListener('click', () => {
             audioActive = !audioActive;
             audioLabel.innerText = audioActive ? "Audio: An" : "Audio: Aus";
             audioLabel.style.color = audioActive ? "#9ca3af" : "#ef4444";
+            audioVisualizer.style.opacity = audioActive ? "1" : "0.2";
             if(!audioActive) window.speechSynthesis.cancel();
         });
 
-        // Đọc dữ liệu tệp văn bản đính kèm
         fileInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file) {
