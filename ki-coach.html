@@ -174,7 +174,25 @@
             transition: background 0.15s, border-color 0.15s;
         }
         .sidebar-btn:hover { background: #25272b; border-color: var(--border-hover); }
-        .sidebar-btn.active { border-color: var(--accent); background: rgba(66,133,244,0.08); }
+        /* ✨ Visuelles Highlight für den aktuell aktiven Modus-Button */
+        .sidebar-btn.active {
+            background: rgba(167, 139, 250, 0.15) !important;
+            border-color: #a78bfa !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(167, 139, 250, 0.2);
+        }
+
+        /* 🎙️ Pulsierender Effekt während der Sprachaufnahme (Audio-Feature) */
+        .recording-active {
+            color: #ef4444 !important; /* Wechselt das Mikrofon-Icon zu hellem Rot */
+            animation: pulse-mic 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-mic {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
         /* ── Stage pills (Ikigai) ── */
         .stage-pill {
@@ -283,11 +301,6 @@
         </button>
 
         <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
-
-        <button id="analyze-btn" class="sidebar-btn hidden" style="border-color:var(--accent);background:rgba(66,133,244,0.08)">
-            <i class="fas fa-search-plus" style="color:var(--accent)"></i>
-            <span>Lebenslauf analysieren</span>
-        </button>
 
         <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
 
@@ -747,34 +760,31 @@ async function askAI(userMsg, systemMsg) {
 // =========================================================================
 // OPTIMIERTE SENDE-LOGIK FÜR DEN INTERVIEW-MODUS (SCHRITT 4)
 // =========================================================================
-function handleSend() {
-    const msg = userInput.value.trim();
-    if (!msg) return;
-    addMessage('user', msg);
+// ════════ INTELIGENTE NACHRICHTEN-STEUERUNG (DYNAMISCHE PROMPTS) ════════
+async function handleSend() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
     userInput.value = '';
     userInput.style.height = 'auto';
+    addMessage('user', text);
+    messageCount++;
 
-    // 1. Dem System sagen, welchen Prompt es beim Absenden nutzen soll
-    const sys = currentMode === 'cv' ? SYSTEM_CV
-              : currentMode === 'ikigai' ? SYSTEM_IKIGAI
-              : currentMode === 'interview' ? SYSTEM_INTERVIEW // 🎭 Verwendet das HR-Manager Profil im Gespräch
-              : SYSTEM_DEFAULT;
-              
-    // 2. Wenn wir uns im Interview befinden, verändern wir den Live-Status
+    // 🧠 Dynamische Ermittlung des System-Prompts basierend auf currentMode
+    let activeSystemPrompt = SYSTEM_DEFAULT; // Basis-Standard
+    
     if (currentMode === 'interview') {
-        interviewStatus.textContent = "HR-Manager tippt eine Antwort...";
+        activeSystemPrompt = SYSTEM_INTERVIEW;
+    } else if (currentMode === 'ikigai') {
+        activeSystemPrompt = SYSTEM_IKIGAI;
+    } else if (currentMode === 'cv') {
+        activeSystemPrompt = SYSTEM_CV;
     }
 
-    askAI(msg, sys);
+    // 🛡️ WICHTIG: Hier muss activeSystemPrompt übergeben werden!
+    await askAI(text, activeSystemPrompt); 
+    checkShowCTA();
 }
-
-sendBtn.addEventListener('click', handleSend);
-userInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-    }
-});
 
 // ════════ FILE UPLOAD ════════
 fileInput.addEventListener('change', async (e) => {
@@ -808,12 +818,21 @@ fileInput.addEventListener('change', async (e) => {
     if (window.innerWidth < 768) closeSidebar();
 });
 
-// ════════ ANALYZE ════════
+// ════════ LEBENSLAUF ANALYSIEREN (MODUS-WECHSEL OPTIMIERT) ════════
 analyzeBtn.addEventListener('click', () => {
     if (window.innerWidth < 768) closeSidebar();
+    
+    // Zwingend den Modus wechseln
     setMode('cv');
-    addMessage('user', 'Bitte führe eine umfassende Lebenslauf-Optimierung durch.');
-    askAI('Führe eine umfassende Lebenslauf-Analyse und Optimierung durch. Strukturiere klar nach: Gesamteinschätzung, Stärken, Verbesserungsvorschläge, ATS-Tipps.', SYSTEM_CV);
+    
+    // 💡 WICHTIG: Verlauf leeren, damit die KI das vorherige HR-Interview komplett vergisst!
+    conversationHistory = []; 
+    chatHistory.innerHTML = '';
+    
+    addMessage('user', 'Bitte analysiere meinen Lebenslauf basierend auf der hochgeladenen Datei.');
+    
+    // Analyse mit dem reinen CV-Systemprompt starten
+    askAI(`Hier ist mein Lebenslauf textuell: ${extractedText}. Führe eine vollständige Optimierung und Analyse durch.`, SYSTEM_CV);
 });
 
 // ════════ IKIGAI ════════
@@ -866,30 +885,139 @@ clearBtn.addEventListener('click', () => {
     uploadZone.classList.remove('has-file');
     fileNameEl.classList.add('hidden');
     fileInput.value = '';
+    // 💡 Modus komplett zurücksetzen und Panel verstecken
+    setMode('default');
     addMessage('ai', 'Gespräch zurückgesetzt. Wie kann ich dir helfen?');
     if (window.innerWidth < 768) closeSidebar();
 });
 
-// ════════ MODE ════════
+// ═══════════════════════════════════════════════════════════════════════════
+// 🧠 MODE STEUERUNG (SAUBER FORMATIONIERT & EINZIGARTIG)
+// ═══════════════════════════════════════════════════════════════════════════
 function setMode(mode) {
     currentMode = mode;
+    
+    // Visuelle Highlights aller Sidebar-Buttons zurücksetzen
+    analyzeBtn.classList.remove('active');
+    ikigaiBtn.classList.remove('active');
+    if (typeof startInterviewBtn !== 'undefined' && startInterviewBtn) {
+        startInterviewBtn.classList.remove('active');
+    }
+    
+    // Modus-spezifische Anpassungen (UI & Prompts)
     if (mode === 'cv') {
         modeLabel.textContent = '📄 Lebenslauf-Modus';
         modeLabel.classList.remove('hidden');
-        interviewPanel.classList.add('hidden'); // Verstecken, wenn im CV-Modus
+        analyzeBtn.classList.add('active');
+        
+        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
+            interviewPanel.classList.add('hidden');
+        }
+        userInput.placeholder = 'Frag mich etwas zu deinem Lebenslauf...';
+        
     } else if (mode === 'ikigai') {
         modeLabel.textContent = '☯️ Ikigai-Modus';
         modeLabel.classList.remove('hidden');
-        interviewPanel.classList.add('hidden'); // Verstecken, wenn im Ikigai-Modus
+        ikigaiBtn.classList.add('active');
+        
+        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
+            interviewPanel.classList.add('hidden');
+        }
+        userInput.placeholder = 'Beantworte die Fragen für deine Ikigai-Analyse...';
+        
     } else if (mode === 'interview') {
-    modeLabel.textContent = '🎭 Interview-Simulation';
-    modeLabel.classList.remove('hidden');
-    userInput.placeholder = 'Kopiere hier die Stellenbeschreibung oder antworte dem HR-Manager...'; // ✨ Dynamischer Text
+        modeLabel.textContent = '🎭 Interview-Simulation';
+        modeLabel.classList.remove('hidden');
+        if (typeof startInterviewBtn !== 'undefined' && startInterviewBtn) {
+            startInterviewBtn.classList.add('active');
+        }
+        
+        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
+            interviewPanel.classList.remove('hidden');
+        }
+        userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
+        
     } else {
-    modeLabel.classList.add('hidden');
-    interviewPanel.classList.add('hidden');
-    userInput.placeholder = 'Frag mich etwas oder tippe \'Ikigai\'...'; // 🔄 Zurücksetzen auf Standard
+        // Standard-Zustand (Default)
+        modeLabel.classList.add('hidden');
+        if (typeof interviewPanel !== 'undefined' && interviewPanel) {
+            interviewPanel.classList.add('hidden');
+        }
+        userInput.placeholder = 'Frag mich etwas oder tippe \'Ikigai\'...';
     }
+} // 👈 Hier endet setMode vollkommen korrekt!
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🎙️ AUDIO-EINGABE (SPEECH-TO-TEXT LOGIK)
+// ═══════════════════════════════════════════════════════════════════════════
+let recognition;
+let isRecording = false;
+
+// Überprüfen, ob die Web Speech API vom Browser unterstützt wird
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    
+    recognition.lang = 'de-DE';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    // Sprache erfolgreich in Text transformiert
+    recognition.onresult = (event) => {
+        const speechToText = event.results[0][0].transcript;
+        
+        if (userInput.value.trim() === '') {
+            userInput.value = speechToText;
+        } else {
+            userInput.value += ' ' + speechToText;
+        }
+        
+        // Textarea-Höhe dynamisch mitwachsen lassen
+        userInput.style.height = 'auto';
+        userInput.style.height = userInput.scrollHeight + 'px';
+    };
+
+    // Aufnahme gestartet
+    recognition.onstart = () => {
+        isRecording = true;
+        micBtn.querySelector('i').classList.add('recording-active');
+        userInput.placeholder = "Ich höre zu... Sprechen Sie jetzt Ihre Antwort.";
+    };
+
+    // Aufnahme beendet
+    recognition.onend = () => {
+        isRecording = false;
+        micBtn.querySelector('i').classList.remove('recording-active');
+        
+        // Dynamischer Platzhalter-Reset je nach Modus
+        if (currentMode === 'interview') {
+            userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
+        } else {
+            userInput.placeholder = "Schreibe eine Nachricht…";
+        }
+    };
+
+    // Fehler-Handling
+    recognition.onerror = (event) => {
+        console.error("Spracherkennungs-Fehler:", event.error);
+        isRecording = false;
+        micBtn.querySelector('i').classList.remove('recording-active');
+    };
+
+    // Klick-Event-Steuerung für das Mikrofon
+    micBtn.addEventListener('click', () => {
+        if (isRecording) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    });
+
+} else {
+    // Falls der Browser inkompatibel ist, das Icon verstecken
+    micBtn.style.display = 'none';
+    console.log("Web Speech API wird von diesem Browser nicht unterstützt.");
 }
 </script>
 </body>
