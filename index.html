@@ -6,7 +6,6 @@
 <title>Tiep Vu Xuan – KI-Automatisierung & Enterprise Lösungen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -372,113 +371,14 @@
     .nav-links { display: none; }
     .hero-stats { flex-wrap: wrap; gap: 32px; }
   }
-
-  /* ====================================================================
-    📱 REPSONSIVE OPTIMIERUNG (HEADER, SCHRIFTEN & HAMBURGER MENÜ)
-    ==================================================================== */
-
-  .hamburger-menu {
-    display: none;
-    font-size: 22px;
-    color: var(--text-dark);
-    cursor: pointer;
-    background: none;
-    border: none;
-    outline: none;
-    z-index: 101;
-  }
-
-  @media (max-width: 768px) {
-    .hamburger-menu {
-      display: block;
-    }
-
-    .nav-links {
-      display: flex !important; /* WICHTIG: Überschreibt das display: none von oben */
-      position: fixed;
-      top: 72px;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      flex-direction: column;
-      padding: 24px 0;
-      gap: 1.2rem;
-      width: 100%;
-      transform: translateY(-150%);
-      transition: transform 0.4s ease-in-out;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    }
-
-    .nav-links.active {
-      transform: translateY(0);
-    }
-
-    #home {
-      padding-top: 100px !important;
-      min-height: auto !important;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.75rem !important;
-      letter-spacing: 0.5px !important;
-      margin-bottom: 12px !important;
-    }
-
-    .hero-name {
-      font-size: 2.2rem !important;
-      line-height: 1.2 !important;
-      letter-spacing: -0.5px !important;
-      margin-bottom: 10px !important;
-    }
-
-    .hero-role {
-      font-size: 1.05rem !important;
-      line-height: 1.4 !important;
-      margin-bottom: 20px !important;
-    }
-
-    .hero-desc {
-      font-size: 0.95rem !important;
-      line-height: 1.6 !important;
-      margin-bottom: 30px !important;
-    }
-
-    .hero-btns {
-      gap: 12px !important;
-    }
-    .btn-primary, .btn-outline {
-      padding: 12px 24px !important;
-      font-size: 0.85rem !important;
-      flex: 1;
-      text-align: center;
-    }
-
-    .hero-stats {
-      margin-top: 35px !important;
-      padding-top: 25px !important;
-      gap: 24px !important;
-    }
-    .stat-num {
-      font-size: 1.6rem !important;
-    }
-    .stat-label {
-      font-size: 0.75rem !important;
-    }
-  }
-
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <a href="#home" class="nav-logo">Vu Xuan<span>Tiep</span></a>
-  <button class="hamburger-menu" id="hamburger-toggle" aria-label="Menü öffnen">
-    <i class="fas fa-bars"></i>
-  </button>
-
-  <ul class="nav-links" id="nav-menu">
+  <ul class="nav-links">
     <li><a href="#home">Home</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#ki-loesungen">KI Lösungen</a></li>
@@ -489,6 +389,7 @@
   <a href="#kontakt" class="nav-cta">Beratung anfragen</a>
 </nav>
 
+<!-- HERO -->
 <section id="home">
   <div class="container">
     <div class="hero-grid">
@@ -528,6 +429,7 @@
   </div>
 </section>
 
+<!-- SERVICES -->
 <section id="services">
   <div class="container">
     <span class="tag">Services</span>
@@ -582,6 +484,7 @@
   </div>
 </section>
 
+<!-- KI SOLUTIONS -->
 <section id="ki-loesungen">
   <div class="container">
     <span class="tag">KI Lösungen</span>
@@ -641,6 +544,7 @@
       </div>
     </div>
 
+    <!-- BERATUNGSMODELL -->
     <div class="consulting-box">
       <h3>Flexible Lösungen nach Ihren Bedürfnissen</h3>
       <p>
@@ -662,6 +566,7 @@
   </div>
 </section>
 
+<!-- PORTFOLIO -->
 <section id="portfolio">
   <div class="container">
     <span class="tag">Portfolio</span>
@@ -669,6 +574,7 @@
     <p class="section-lead">Real-world Projekte für unterschiedliche Branchen und Anforderungen.</p>
 
     <div class="portfolio-grid">
+      <!-- Lead Finder -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -695,6 +601,7 @@
         </div>
       </div>
 
+      <!-- CRM Agent -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -720,6 +627,7 @@
         </div>
       </div>
 
+      <!-- ERP Modernisierung -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -746,6 +654,7 @@
         </div>
       </div>
 
+      <!-- IAM -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -774,6 +683,7 @@
   </div>
 </section>
 
+<!-- EXPERIENCE -->
 <section id="experience">
   <div class="container">
     <span class="tag">Hintergrund</span>
@@ -827,6 +737,7 @@
   </div>
 </section>
 
+<!-- KONTAKT -->
 <section id="kontakt">
   <div class="container">
     <span class="tag">Kontakt</span>
@@ -907,6 +818,7 @@
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div>
     <div class="footer-logo">itiep<span>.de</span></div>
@@ -917,6 +829,47 @@
     <p><a href="https://itiep.de/Lebenslauf-TIEP.pdf" style="color:var(--text-muted); text-decoration:none; font-size:0.8rem;">Lebenslauf herunterladen →</a></p>
   </div>
 </footer>
+
+<script>
+  // Smooth nav
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+    });
+    links.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+    });
+  });
+
+  // Form
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
+    setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+  }
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    obs.observe(el);
+  });
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
     /* Haupt-Container links unten positioniert */
@@ -969,14 +922,14 @@
 
     /* Das KI-Gesicht im Header (wird erst sichtbar, wenn Chat offen ist) */
     #asst-header-avatar {
-        width: 0px; 
+        width: 0px; /* Startet bei 0 für die Einblend-Animation */
         height: 0px;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
         object-fit: cover;
     }
-    
+    /* Klasse wird via JavaScript vergeben, wenn geöffnet */
     #asst-header-avatar.visible {
         width: 28px;
         height: 28px;
@@ -1041,11 +994,11 @@
         font-size: 13.5px;
     }
 
-    /* 🌟 DER NEUE SCHWEBENDE BUTTON */
+    /* 🌟 DER NEUE SCHWEBENDE BUTTON (Ersetzt den blauen Kreis) */
     #asst-toggle-btn {
         width: 56px;
         height: 56px;
-        background: #ffffff; 
+        background: #ffffff; /* Weißer oder transparenter Hintergrund für das Logo */
         border: 2px solid var(--accent, #1e5a96);
         border-radius: 50%;
         display: flex;
@@ -1057,6 +1010,7 @@
         overflow: hidden;
     }
 
+    /* Das Bild der KI im schwebenden Zustand */
     #asst-toggle-btn img {
         width: 100%;
         height: 100%;
@@ -1064,6 +1018,7 @@
         transition: transform 0.3s ease;
     }
 
+    /* Hover-Effekt: Das Gesicht bewegt sich leicht */
     #asst-toggle-btn:hover {
         transform: scale(1.08);
         box-shadow: 0 8px 20px rgba(30, 90, 150, 0.3);
@@ -1072,6 +1027,7 @@
         transform: scale(1.05);
     }
 
+    /* Wenn der Chat geöffnet ist, schrumpft der Hauptbutton zusammen */
     #asst-toggle-btn.shrunk {
         width: 32px;
         height: 32px;
@@ -1123,166 +1079,82 @@
 </div>
 
 <script>
-// Erklärungs-Kommentar: Wartet, bis das gesamte HTML-Dokument geladen ist, bevor JS-Klicks registriert werden.
-document.addEventListener("DOMContentLoaded", () => {
+// Backend Verbindungs-URL
+const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev"; 
 
-  // ====================================================================
-  // 📱 STEUERUNG FÜR DAS HAMBURGER MENÜ (MOBIL)
-  // ====================================================================
-  const hamburgerToggle = document.getElementById('hamburger-toggle');
-  const navMenu = document.getElementById('nav-menu');
-  const navLinksList = document.querySelectorAll('.nav-links a');
+const toggleBtn = document.getElementById("asst-toggle-btn");
+const mainAvatar = document.getElementById("asst-main-avatar");
+const headerAvatar = document.getElementById("asst-header-avatar");
+const chatWin = document.getElementById("assistant-window");
+const chatInput = document.getElementById("asst-input");
+const msgContainer = document.getElementById("asst-messages");
+const closeBtn = document.getElementById("asst-close");
 
-  if (hamburgerToggle && navMenu) {
-    // Erklärungs-Kommentar: Klick-Event, um die Klasse '.active' hinzuzufügen/zu entfernen
-    hamburgerToggle.addEventListener('click', (e) => {
-      e.stopPropagation(); 
-      navMenu.classList.toggle('active');
-      
-      const icon = hamburgerToggle.querySelector('i');
-      if (navMenu.classList.contains('active')) {
-        icon.className = 'fas fa-times'; // Ändert das Icon zu einem X
-      } else {
-        icon.className = 'fas fa-bars';  // Ändert das Icon zurück zu den Strichen
-      }
-    });
+function toggleAssistant() {
+    if (chatWin.style.display === "flex") {
+        // Schließen-Modus
+        chatWin.style.display = "none";
+        toggleBtn.classList.remove("shrunk"); // Button wird wieder groß
+        headerAvatar.classList.remove("visible"); // Header-Gesicht verschwindet
+    } else {
+        // Öffnen-Modus
+        chatWin.style.display = "flex";
+        toggleBtn.classList.add("shrunk"); // Button schrumpft animiert zusammen
+        headerAvatar.classList.add("visible"); // Gesicht taucht oben im Chat auf
+        chatInput.focus();
+    }
+}
 
-    // Erklärungs-Kommentar: Schließt das Menü, sobald der Nutzer ein Ziel auswählt
-    navLinksList.forEach(link => {
-      link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        hamburgerToggle.querySelector('i').className = 'fas fa-bars';
-      });
-    });
+toggleBtn.onclick = toggleAssistant;
+closeBtn.onclick = toggleAssistant;
 
-    // Schließt das Menü, wenn in den freien Raum geklickt wird
-    document.addEventListener('click', (e) => {
-      if (!navMenu.contains(e.target) && !hamburgerToggle.contains(e.target)) {
-        navMenu.classList.remove('active');
-        hamburgerToggle.querySelector('i').className = 'fas fa-bars';
-      }
-    });
-  }
+// Chat-Eingabe über Enter-Taste
+chatInput.addEventListener("keypress", async function(event) {
+    if (event.key === "Enter" && chatInput.value.trim() !== "") {
+        const queryText = chatInput.value.trim();
+        
+        appendBubble("user", queryText);
+        chatInput.value = "";
+        showLoader();
 
-  // ====================================================================
-  // OBERER SCROLL-EFFEKT 
-  // ====================================================================
-  const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-links a');
-  window.addEventListener('scroll', () => {
-    let cur = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 100) cur = s.id;
-    });
-    links.forEach(a => {
-      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
-    });
-  });
-
-  // ====================================================================
-  // FADE-IN EFFEKT BEIM SCROLLEN 
-  // ====================================================================
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    obs.observe(el);
-  });
-
-  // ====================================================================
-  // CHATBOT WIDGET STEUERUNG 
-  // ====================================================================
-  const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev"; 
-
-  const toggleBtn = document.getElementById("asst-toggle-btn");
-  const headerAvatar = document.getElementById("asst-header-avatar");
-  const chatWin = document.getElementById("assistant-window");
-  const chatInput = document.getElementById("asst-input");
-  const msgContainer = document.getElementById("asst-messages");
-  const closeBtn = document.getElementById("asst-close");
-
-  function toggleAssistant() {
-      if (chatWin.style.display === "flex") {
-          chatWin.style.display = "none";
-          toggleBtn.classList.remove("shrunk");
-          headerAvatar.classList.remove("visible");
-      } else {
-          chatWin.style.display = "flex";
-          toggleBtn.classList.add("shrunk");
-          headerAvatar.classList.add("visible");
-          chatInput.focus();
-      }
-  }
-
-  if(toggleBtn) toggleBtn.onclick = toggleAssistant;
-  if(closeBtn) closeBtn.onclick = toggleAssistant;
-
-  if(chatInput) {
-    chatInput.addEventListener("keypress", async function(event) {
-        if (event.key === "Enter" && chatInput.value.trim() !== "") {
-            const queryText = chatInput.value.trim();
+        try {
+            const networkResponse = await fetch(COMPUTE_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: queryText })
+            });
+            const responseData = await networkResponse.json();
             
-            appendBubble("user", queryText);
-            chatInput.value = "";
-            showLoader();
-
-            try {
-                const networkResponse = await fetch(COMPUTE_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: queryText })
-                });
-                const responseData = await networkResponse.json();
-                
-                hideLoader();
-                appendBubble("bot", responseData.reply);
-            } catch (err) {
-                hideLoader();
-                appendBubble("bot", "Verbindung zur Cloud unterbrochen.");
-                console.error(err);
-            }
+            hideLoader();
+            appendBubble("bot", responseData.reply);
+        } catch (err) {
+            hideLoader();
+            appendBubble("bot", "Verbindung zur Cloud unterbrochen.");
+            console.error(err);
         }
-    });
-  }
-
-  function appendBubble(role, text) {
-      const bubble = document.createElement("div");
-      bubble.className = `asst-msg ${role}`;
-      bubble.innerText = text;
-      msgContainer.appendChild(bubble);
-      msgContainer.scrollTop = msgContainer.scrollHeight;
-  }
-
-  function showLoader() {
-      const loader = document.createElement("div");
-      loader.id = "asst-loader";
-      loader.className = "asst-msg loading";
-      loader.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> iTiep-Ki analysiert...';
-      msgContainer.appendChild(loader);
-      msgContainer.scrollTop = msgContainer.scrollHeight;
-  }
-
-  function hideLoader() {
-      const loader = document.getElementById("asst-loader");
-      if (loader) loader.remove();
-  }
+    }
 });
 
-// Formular-Submit außerhalb, da inline im HTML aufgerufen
-function handleSubmit(e) {
-  e.preventDefault();
-  document.getElementById('form-success').style.display = 'block';
-  e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
-  setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+function appendBubble(role, text) {
+    const bubble = document.createElement("div");
+    bubble.className = `asst-msg ${role}`;
+    bubble.innerText = text;
+    msgContainer.appendChild(bubble);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+function showLoader() {
+    const loader = document.createElement("div");
+    loader.id = "asst-loader";
+    loader.className = "asst-msg loading";
+    loader.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> iTiep-Ki analysiert...';
+    msgContainer.appendChild(loader);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+function hideLoader() {
+    const loader = document.getElementById("asst-loader");
+    if (loader) loader.remove();
 }
 </script>
 </body>
