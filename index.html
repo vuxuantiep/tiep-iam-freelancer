@@ -6,6 +6,7 @@
 <title>Tiep Vu Xuan – KI-Automatisierung & Enterprise Lösungen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -376,7 +377,6 @@
     📱 REPSONSIVE OPTIMIERUNG (HEADER, SCHRIFTEN & HAMBURGER MENÜ)
     ==================================================================== */
 
-  /* Der Hamburger-Button ist auf dem Desktop standardmäßig unsichtbar */
   .hamburger-menu {
     display: none;
     font-size: 22px;
@@ -389,12 +389,12 @@
   }
 
   @media (max-width: 768px) {
-    /* 1. Hamburger-Menü aktivieren und Navigations-Links einklappen */
     .hamburger-menu {
-      display: block; /* Zeigt den Button auf Smartphones an */
+      display: block;
     }
 
     .nav-links {
+      display: flex !important; /* WICHTIG: Überschreibt das display: none von oben */
       position: fixed;
       top: 72px;
       left: 0;
@@ -406,19 +406,17 @@
       padding: 24px 0;
       gap: 1.2rem;
       width: 100%;
-      transform: translateY(-150%); /* Schiebt das Menü unsichtbar nach oben */
+      transform: translateY(-150%);
       transition: transform 0.4s ease-in-out;
       box-shadow: 0 10px 25px rgba(0,0,0,0.05);
     }
 
-    /* Wird per JS ausgelöst: Lässt das Menü sanft von oben hineingleiten */
     .nav-links.active {
       transform: translateY(0);
     }
 
-    /* 2. Header-Bereich & Schriften optisch verkleinern (Schluss mit Riesen-Text) */
     #home {
-      padding-top: 100px !important; /* Verringert den riesigen oberen Abstand auf Mobile */
+      padding-top: 100px !important;
       min-height: auto !important;
     }
 
@@ -429,40 +427,38 @@
     }
 
     .hero-name {
-      font-size: 2.2rem !important; /* Begrenzt die enorme Größe deines Namens */
+      font-size: 2.2rem !important;
       line-height: 1.2 !important;
       letter-spacing: -0.5px !important;
       margin-bottom: 10px !important;
     }
 
     .hero-role {
-      font-size: 1.05rem !important; /* Passt die Unterüberschrift harmonisch an */
+      font-size: 1.05rem !important;
       line-height: 1.4 !important;
       margin-bottom: 20px !important;
     }
 
     .hero-desc {
-      font-size: 0.95rem !important; /* Optimale Lesegröße für Smartphone-Fließtext */
+      font-size: 0.95rem !important;
       line-height: 1.6 !important;
       margin-bottom: 30px !important;
     }
 
-    /* Buttons nebeneinander oder sauber untereinander */
     .hero-btns {
       gap: 12px !important;
     }
     .btn-primary, .btn-outline {
       padding: 12px 24px !important;
       font-size: 0.85rem !important;
-      flex: 1; /* Lässt Buttons den Platz gleichmäßig aufteilen */
+      flex: 1;
       text-align: center;
     }
 
-    /* 3. Statistiken für Mobile kompakter bauen */
     .hero-stats {
       margin-top: 35px !important;
       padding-top: 25px !important;
-      gap: 24px !important; /* Verringert den Abstand zwischen den Zahlen */
+      gap: 24px !important;
     }
     .stat-num {
       font-size: 1.6rem !important;
@@ -476,7 +472,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="#home" class="nav-logo">Vu Xuan<span>Tiep</span></a>
   <button class="hamburger-menu" id="hamburger-toggle" aria-label="Menü öffnen">
@@ -494,7 +489,6 @@
   <a href="#kontakt" class="nav-cta">Beratung anfragen</a>
 </nav>
 
-<!-- HERO -->
 <section id="home">
   <div class="container">
     <div class="hero-grid">
@@ -534,7 +528,6 @@
   </div>
 </section>
 
-<!-- SERVICES -->
 <section id="services">
   <div class="container">
     <span class="tag">Services</span>
@@ -589,7 +582,6 @@
   </div>
 </section>
 
-<!-- KI SOLUTIONS -->
 <section id="ki-loesungen">
   <div class="container">
     <span class="tag">KI Lösungen</span>
@@ -649,7 +641,6 @@
       </div>
     </div>
 
-    <!-- BERATUNGSMODELL -->
     <div class="consulting-box">
       <h3>Flexible Lösungen nach Ihren Bedürfnissen</h3>
       <p>
@@ -671,7 +662,6 @@
   </div>
 </section>
 
-<!-- PORTFOLIO -->
 <section id="portfolio">
   <div class="container">
     <span class="tag">Portfolio</span>
@@ -679,7 +669,6 @@
     <p class="section-lead">Real-world Projekte für unterschiedliche Branchen und Anforderungen.</p>
 
     <div class="portfolio-grid">
-      <!-- Lead Finder -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -706,7 +695,6 @@
         </div>
       </div>
 
-      <!-- CRM Agent -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -732,7 +720,6 @@
         </div>
       </div>
 
-      <!-- ERP Modernisierung -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -759,7 +746,6 @@
         </div>
       </div>
 
-      <!-- IAM -->
       <div class="port-card">
         <div class="port-header">
           <div>
@@ -788,7 +774,6 @@
   </div>
 </section>
 
-<!-- EXPERIENCE -->
 <section id="experience">
   <div class="container">
     <span class="tag">Hintergrund</span>
@@ -842,7 +827,6 @@
   </div>
 </section>
 
-<!-- KONTAKT -->
 <section id="kontakt">
   <div class="container">
     <span class="tag">Kontakt</span>
@@ -923,7 +907,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div>
     <div class="footer-logo">itiep<span>.de</span></div>
@@ -934,47 +917,6 @@
     <p><a href="https://itiep.de/Lebenslauf-TIEP.pdf" style="color:var(--text-muted); text-decoration:none; font-size:0.8rem;">Lebenslauf herunterladen →</a></p>
   </div>
 </footer>
-
-<script>
-  // Smooth nav
-  const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-links a');
-  window.addEventListener('scroll', () => {
-    let cur = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 100) cur = s.id;
-    });
-    links.forEach(a => {
-      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
-    });
-  });
-
-  // Form
-  function handleSubmit(e) {
-    e.preventDefault();
-    document.getElementById('form-success').style.display = 'block';
-    e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
-    setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
-  }
-
-  // Fade in on scroll
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    obs.observe(el);
-  });
-</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
     /* Haupt-Container links unten positioniert */
@@ -1027,14 +969,14 @@
 
     /* Das KI-Gesicht im Header (wird erst sichtbar, wenn Chat offen ist) */
     #asst-header-avatar {
-        width: 0px; /* Startet bei 0 für die Einblend-Animation */
+        width: 0px; 
         height: 0px;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
         object-fit: cover;
     }
-    /* Klasse wird via JavaScript vergeben, wenn geöffnet */
+    
     #asst-header-avatar.visible {
         width: 28px;
         height: 28px;
@@ -1099,11 +1041,11 @@
         font-size: 13.5px;
     }
 
-    /* 🌟 DER NEUE SCHWEBENDE BUTTON (Ersetzt den blauen Kreis) */
+    /* 🌟 DER NEUE SCHWEBENDE BUTTON */
     #asst-toggle-btn {
         width: 56px;
         height: 56px;
-        background: #ffffff; /* Weißer oder transparenter Hintergrund für das Logo */
+        background: #ffffff; 
         border: 2px solid var(--accent, #1e5a96);
         border-radius: 50%;
         display: flex;
@@ -1115,7 +1057,6 @@
         overflow: hidden;
     }
 
-    /* Das Bild der KI im schwebenden Zustand */
     #asst-toggle-btn img {
         width: 100%;
         height: 100%;
@@ -1123,7 +1064,6 @@
         transition: transform 0.3s ease;
     }
 
-    /* Hover-Effekt: Das Gesicht bewegt sich leicht */
     #asst-toggle-btn:hover {
         transform: scale(1.08);
         box-shadow: 0 8px 20px rgba(30, 90, 150, 0.3);
@@ -1132,7 +1072,6 @@
         transform: scale(1.05);
     }
 
-    /* Wenn der Chat geöffnet ist, schrumpft der Hauptbutton zusammen */
     #asst-toggle-btn.shrunk {
         width: 32px;
         height: 32px;
@@ -1184,162 +1123,166 @@
 </div>
 
 <script>
-// ====================================================================
-// 📱 NEU: STEUERUNG FÜR DAS HAMBURGER MENÜ (MOBIL)
-// ====================================================================
-const hamburgerToggle = document.getElementById('hamburger-toggle');
-const navMenu = document.getElementById('nav-menu');
-const navLinksList = document.querySelectorAll('.nav-links a');
+// Erklärungs-Kommentar: Wartet, bis das gesamte HTML-Dokument geladen ist, bevor JS-Klicks registriert werden.
+document.addEventListener("DOMContentLoaded", () => {
 
-if (hamburgerToggle && navMenu) {
-  // Erklärungs-Kommentar: Öffnet oder schließt das Menü beim Klick auf das Icon
-  hamburgerToggle.addEventListener('click', (e) => {
-    e.stopPropagation(); // Verhindert Fehler bei Klick-Überlagerungen
-    navMenu.classList.toggle('active');
-    
-    // Optisches Feedback: Ändert das Drei-Striche-Icon zu einem 'X' wenn geöffnet
-    const icon = hamburgerToggle.querySelector('i');
-    if (navMenu.classList.contains('active')) {
-      icon.className = 'fas fa-times';
-    } else {
-      icon.className = 'fas fa-bars';
-    }
-  });
+  // ====================================================================
+  // 📱 STEUERUNG FÜR DAS HAMBURGER MENÜ (MOBIL)
+  // ====================================================================
+  const hamburgerToggle = document.getElementById('hamburger-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  const navLinksList = document.querySelectorAll('.nav-links a');
 
-  // Erklärungs-Kommentar: Schließt das Menü automatisch, wenn ein Link angeklickt wird
-  navLinksList.forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu.classList.remove('active');
-      hamburgerToggle.querySelector('i').className = 'fas fa-bars';
+  if (hamburgerToggle && navMenu) {
+    // Erklärungs-Kommentar: Klick-Event, um die Klasse '.active' hinzuzufügen/zu entfernen
+    hamburgerToggle.addEventListener('click', (e) => {
+      e.stopPropagation(); 
+      navMenu.classList.toggle('active');
+      
+      const icon = hamburgerToggle.querySelector('i');
+      if (navMenu.classList.contains('active')) {
+        icon.className = 'fas fa-times'; // Ändert das Icon zu einem X
+      } else {
+        icon.className = 'fas fa-bars';  // Ändert das Icon zurück zu den Strichen
+      }
+    });
+
+    // Erklärungs-Kommentar: Schließt das Menü, sobald der Nutzer ein Ziel auswählt
+    navLinksList.forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        hamburgerToggle.querySelector('i').className = 'fas fa-bars';
+      });
+    });
+
+    // Schließt das Menü, wenn in den freien Raum geklickt wird
+    document.addEventListener('click', (e) => {
+      if (!navMenu.contains(e.target) && !hamburgerToggle.contains(e.target)) {
+        navMenu.classList.remove('active');
+        hamburgerToggle.querySelector('i').className = 'fas fa-bars';
+      }
+    });
+  }
+
+  // ====================================================================
+  // OBERER SCROLL-EFFEKT 
+  // ====================================================================
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+    });
+    links.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
     });
   });
 
-  // Schließt das Menü, wenn irgendwo außerhalb geklickt wird
-  document.addEventListener('click', (e) => {
-    if (!navMenu.contains(e.target) && !hamburgerToggle.contains(e.target)) {
-      navMenu.classList.remove('active');
-      hamburgerToggle.querySelector('i').className = 'fas fa-bars';
-    }
-  });
-}
+  // ====================================================================
+  // FADE-IN EFFEKT BEIM SCROLLEN 
+  // ====================================================================
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
 
-// ====================================================================
-// OBERER SCROLL-EFFEKT (Bestehender Code von dir)
-// ====================================================================
-const sections = document.querySelectorAll('section[id]');
-const links = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+  document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    obs.observe(el);
   });
-  links.forEach(a => {
-    a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
-  });
+
+  // ====================================================================
+  // CHATBOT WIDGET STEUERUNG 
+  // ====================================================================
+  const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev"; 
+
+  const toggleBtn = document.getElementById("asst-toggle-btn");
+  const headerAvatar = document.getElementById("asst-header-avatar");
+  const chatWin = document.getElementById("assistant-window");
+  const chatInput = document.getElementById("asst-input");
+  const msgContainer = document.getElementById("asst-messages");
+  const closeBtn = document.getElementById("asst-close");
+
+  function toggleAssistant() {
+      if (chatWin.style.display === "flex") {
+          chatWin.style.display = "none";
+          toggleBtn.classList.remove("shrunk");
+          headerAvatar.classList.remove("visible");
+      } else {
+          chatWin.style.display = "flex";
+          toggleBtn.classList.add("shrunk");
+          headerAvatar.classList.add("visible");
+          chatInput.focus();
+      }
+  }
+
+  if(toggleBtn) toggleBtn.onclick = toggleAssistant;
+  if(closeBtn) closeBtn.onclick = toggleAssistant;
+
+  if(chatInput) {
+    chatInput.addEventListener("keypress", async function(event) {
+        if (event.key === "Enter" && chatInput.value.trim() !== "") {
+            const queryText = chatInput.value.trim();
+            
+            appendBubble("user", queryText);
+            chatInput.value = "";
+            showLoader();
+
+            try {
+                const networkResponse = await fetch(COMPUTE_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: queryText })
+                });
+                const responseData = await networkResponse.json();
+                
+                hideLoader();
+                appendBubble("bot", responseData.reply);
+            } catch (err) {
+                hideLoader();
+                appendBubble("bot", "Verbindung zur Cloud unterbrochen.");
+                console.error(err);
+            }
+        }
+    });
+  }
+
+  function appendBubble(role, text) {
+      const bubble = document.createElement("div");
+      bubble.className = `asst-msg ${role}`;
+      bubble.innerText = text;
+      msgContainer.appendChild(bubble);
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+  }
+
+  function showLoader() {
+      const loader = document.createElement("div");
+      loader.id = "asst-loader";
+      loader.className = "asst-msg loading";
+      loader.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> iTiep-Ki analysiert...';
+      msgContainer.appendChild(loader);
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+  }
+
+  function hideLoader() {
+      const loader = document.getElementById("asst-loader");
+      if (loader) loader.remove();
+  }
 });
 
-// FORMULAR-SUBMIT (Bestehender Code von dir)
+// Formular-Submit außerhalb, da inline im HTML aufgerufen
 function handleSubmit(e) {
   e.preventDefault();
   document.getElementById('form-success').style.display = 'block';
   e.target.querySelectorAll('input,textarea,select').forEach(el => el.value = '');
   setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
-}
-
-// FADE-IN EFFEKT BEIM SCROLLEN (Bestehender Code von dir)
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.service-card, .port-card, .exp-item, .ki-feature').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-  obs.observe(el);
-});
-
-// ====================================================================
-// CHATBOT WIDGET STEUERUNG (Bestehender Code von dir)
-// ====================================================================
-const COMPUTE_URL = "https://tiep-coach-backend.vuxuantiep-b2f.workers.dev"; 
-
-const toggleBtn = document.getElementById("asst-toggle-btn");
-const mainAvatar = document.getElementById("asst-main-avatar");
-const headerAvatar = document.getElementById("asst-header-avatar");
-const chatWin = document.getElementById("assistant-window");
-const chatInput = document.getElementById("asst-input");
-const msgContainer = document.getElementById("asst-messages");
-const closeBtn = document.getElementById("asst-close");
-
-function toggleAssistant() {
-    if (chatWin.style.display === "flex") {
-        chatWin.style.display = "none";
-        toggleBtn.classList.remove("shrunk");
-        headerAvatar.classList.remove("visible");
-    } else {
-        chatWin.style.display = "flex";
-        toggleBtn.classList.add("shrunk");
-        headerAvatar.classList.add("visible");
-        chatInput.focus();
-    }
-}
-
-if(toggleBtn) toggleBtn.onclick = toggleAssistant;
-if(closeBtn) closeBtn.onclick = toggleAssistant;
-
-if(chatInput) {
-  chatInput.addEventListener("keypress", async function(event) {
-      if (event.key === "Enter" && chatInput.value.trim() !== "") {
-          const queryText = chatInput.value.trim();
-          
-          appendBubble("user", queryText);
-          chatInput.value = "";
-          showLoader();
-
-          try {
-              const networkResponse = await fetch(COMPUTE_URL, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ message: queryText })
-              });
-              const responseData = await networkResponse.json();
-              
-              hideLoader();
-              appendBubble("bot", responseData.reply);
-          } catch (err) {
-              hideLoader();
-              appendBubble("bot", "Verbindung zur Cloud unterbrochen.");
-              console.error(err);
-          }
-      }
-  });
-}
-
-function appendBubble(role, text) {
-    const bubble = document.createElement("div");
-    bubble.className = `asst-msg ${role}`;
-    bubble.innerText = text;
-    msgContainer.appendChild(bubble);
-    msgContainer.scrollTop = msgContainer.scrollHeight;
-}
-
-function showLoader() {
-    const loader = document.createElement("div");
-    loader.id = "asst-loader";
-    loader.className = "asst-msg loading";
-    loader.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> iTiep-Ki analysiert...';
-    msgContainer.appendChild(loader);
-    msgContainer.scrollTop = msgContainer.scrollHeight;
-}
-
-function hideLoader() {
-    const loader = document.getElementById("asst-loader");
-    if (loader) loader.remove();
 }
 </script>
 </body>
