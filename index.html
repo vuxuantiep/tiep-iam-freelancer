@@ -1109,30 +1109,31 @@ toggleBtn.onclick = toggleAssistant;
 closeBtn.onclick = toggleAssistant;
 
 // Chat-Eingabe über Enter-Taste
-chatInput.addEventListener("keypress", async function(event) {
-    if (event.key === "Enter" && chatInput.value.trim() !== "") {
+// Erklärungs-Kommentar: Dieser Event-Listener fängt das Drücken der Enter-Taste im Chat ab
+chatInput.addEventListener("keydown", async (e) => {
+    if (e.key === "Enter" && chatInput.value.trim() !== "") {
         const queryText = chatInput.value.trim();
         
+        // Nachricht im Chat-Fenster anzeigen und Eingabefeld leeren
         appendBubble("user", queryText);
         chatInput.value = "";
         showLoader();
 
+        // Erklärungs-Kommentar: Hier wird dein neuer, optimierter System-Prompt hinterlegt
+        // TRAGE HIER DEINE ECHTEN DATEN EIN:
+        const systemContext = "Du bist die offizielle KI-Assistenz von Vu Xuan Tiep (45 Jahre, geboren in Hanoi, ledig, keine Kinder). Alle Karriere-Details stehen im Lebenslauf weiter unten auf der Seite. Wenn du eine Information nicht findest oder der Nutzer Fragen zu Honoraren, Gehaltwünschen oder Preisangeboten stellt, antworte, dass du es nicht weißt, und gib höflich seine Kontaktdaten weiter: Telefon: +49 (0) 123 456789, E-Mail: deine-email@itiep.de.";
+
         try {
-            const networkResponse = await fetch(COMPUTE_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                // Erklärungs-Kommentar: Wir geben der KI bei jeder Anfrage unsichtbar im Hintergrund 
-            // deine System-Anweisung mit, damit sie deine Kontaktdaten kennt.
-            const systemContext = "Du bist die offizielle KI von Vu Xuan Tiep. Wenn der Kunde Fragen stellt, die du nicht beantworten kannst, oder wenn er direkt ein persönliches Gespräch oder eine Beratung mit Tiep wünscht, teile ihm höflich seine Kontaktdaten mit: Telefon: +49 (0) XXX XXXXXXX, E-Mail: kontakt@itiep.de.";
-            
+            // Erklärungs-Kommentar: Wir senden nun die Nachricht UND den system_prompt an dein Backend
             const networkResponse = await fetch(COMPUTE_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
                     message: queryText,
-                    system_prompt: systemContext // Übergibt den Kontext an dein FastAPI/n8n Backend
+                    system_prompt: systemContext // Übergibt den optimierten Kontext an dein Backend
                 })
             });
+            
             const responseData = await networkResponse.json();
             
             hideLoader();
