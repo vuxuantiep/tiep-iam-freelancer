@@ -857,32 +857,35 @@ ikigaiBtn.addEventListener('click', () => {
     askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai ist, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
 });
 
-// ════════ INTERVIEW SIMULATION (MIT JOB-SPEC-ERFASSUNG) ════════
-startInterviewBtn.addEventListener('click', () => {
-    if (window.innerWidth < 768) closeSidebar();
+// ════════ INTERVIEW SIMULATION (MIT JOB-SPEC-ERFASSUNG & ABSICHERUNG) ════════
+// 🛡️ Das 'if' prüft, ob der Button existiert. Wenn nicht, wird der Code übersprungen statt abzustürzen!
+if (startInterviewBtn) {
+    startInterviewBtn.addEventListener('click', () => {
+        if (window.innerWidth < 768) closeSidebar();
 
-    // 🛡️ 1. SICHERHEITSPRÜFUNG: Existiert ein Lebenslauf?
-    if (!extractedText || extractedText.trim() === '') {
-        setMode('cv'); 
-        addMessage('ai', 'Guten Tag! Bevor wir mit dem simulierten Vorstellungsgespräch starten können, benötige ich Ihren Lebenslauf. Bitte laden Sie diesen kurz im linken Menü hoch, damit ich mich optimal auf Sie vorbereiten kann! 📄✨');
-        return; 
-    }
-    
-    // 🚀 2. INTERVIEW INITIALISIEREN
-    setMode('interview');
-    conversationHistory = [];
-    chatHistory.innerHTML = '';
-    
-    // Visuelles Live-Panel in der Sidebar aktivieren
-    interviewPanel.classList.remove('hidden');
-    interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
-    
-    // Signal für den Start
-    addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
-    
-    // Die perfekte, zielgerichtete Einstiegsfrage über askAI triggern:
-    askAI('Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage: Auf welche konkrete Stelle ich mich bewerben möchte und warum. Frage mich außerdem aktiv, ob ich bereits ein konkretes Stellenangebot gefunden habe und sage mir, dass ich den Text der Ausschreibung oder Anforderungen einfach hier in den Chat kopieren kann, damit du das Interview ganz gezielt darauf ausrichten kannst.', SYSTEM_INTERVIEW);
-});
+        // 🛡️ 1. SICHERHEITSPRÜFUNG: Existiert ein Lebenslauf?
+        if (!extractedText || extractedText.trim() === '') {
+            setMode('cv'); 
+            addMessage('ai', 'Guten Tag! Bevor wir mit dem simulierten Vorstellungsgespräch starten können, benötige ich Ihren Lebenslauf. Bitte laden Sie diesen kurz im linken Menü hoch, damit ich mich optimal auf Sie vorbereiten kann! 📄✨');
+            return; 
+        }
+        
+        // 🚀 2. INTERVIEW INITIALISIEREN
+        setMode('interview');
+        conversationHistory = [];
+        chatHistory.innerHTML = '';
+        
+        // Visuelles Live-Panel in der Sidebar aktivieren
+        interviewPanel.classList.remove('hidden');
+        interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
+        
+        // Signal für den Start
+        addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
+        
+        // Die perfekte, zielgerichtete Einstiegsfrage über askAI triggern:
+        askAI('Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage: Auf welche konkrete Stelle ich mich bewerben möchte und warum. Frage mich außerdem aktiv, ob ich bereits ein konkretes Stellenangebot gefunden habe und sage mir, dass ich den Text der Ausschreibung oder Anforderungen einfach hier in den Chat kopieren kann, damit du das Interview ganz gezielt darauf ausrichten kannst.', SYSTEM_INTERVIEW);
+    });
+} 
 
 // ════════ CLEAR ════════
 clearBtn.addEventListener('click', () => {
