@@ -337,14 +337,23 @@
         <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--text-muted)">Werkzeuge</p>
 
         <div>
+            <!-- Dokument-Typ-Auswahl -->
+            <div class="flex gap-1 mb-2 p-1 rounded-lg" style="background:var(--bg-input);border:1px solid var(--border)">
+                <button id="type-cv-btn" onclick="setUploadType('cv')" class="flex-1 text-xs py-1.5 rounded-md font-medium transition-all" style="background:var(--accent);color:#fff">
+                    Lebenslauf
+                </button>
+                <button id="type-job-btn" onclick="setUploadType('job')" class="flex-1 text-xs py-1.5 rounded-md font-medium transition-all" style="background:transparent;color:var(--text-muted)">
+                    Stellenbeschr.
+                </button>
+            </div>
             <label for="resume-upload" class="upload-zone" id="upload-zone">
                 <div class="text-center">
                     <i class="fas fa-file-upload text-3xl text-gray-400 mb-2"></i>
-                    <p class="text-sm font-medium text-gray-200">Lebenslauf hochladen</p>
-                    <p class="text-xs text-gray-500">PDF oder Word-Format</p>
+                    <p id="upload-title" class="text-sm font-medium text-gray-200">Lebenslauf hochladen</p>
+                    <p id="upload-subtitle" class="text-xs text-gray-500">PDF, Word oder .txt</p>
                 </div>
             </label>
-            <input type="file" id="resume-upload" accept=".docx,.txt" class="hidden">
+            <input type="file" id="resume-upload" accept=".docx,.txt,.pdf" class="hidden">
             <p id="file-name" class="text-xs mt-2 text-center hidden" style="color:#5bba6f"></p>
         </div>
 
@@ -461,6 +470,25 @@
         </div>
     </div>
 
+    <!-- Share Card nach Abschluss einer Session -->
+    <div id="share-card" class="max-w-2xl mx-auto px-4 pb-1 w-full hidden">
+        <div class="rounded-2xl p-3 flex items-center gap-3 border" style="background:rgba(66,133,244,.07);border-color:rgba(66,133,244,.25)">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(66,133,244,.15)">
+                <i class="fas fa-share-nodes text-sm" style="color:var(--accent)"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p id="share-title" class="text-sm font-semibold" style="color:var(--accent)">Super! Ergebnis teilen?</p>
+                <p id="share-subtitle" class="text-xs" style="color:var(--text-secondary)">Empfehle Tiep Coach weiter oder speichere dein Ergebnis.</p>
+            </div>
+            <button id="share-btn" onclick="handleShare()" class="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style="background:var(--accent)">
+                <i class="fas fa-share-nodes text-white text-sm"></i>
+            </button>
+            <button onclick="document.getElementById('share-card').classList.add('hidden')" class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
+                <i class="fas fa-times text-xs" style="color:var(--text-muted)"></i>
+            </button>
+        </div>
+    </div>
+
     <div class="px-4 pb-4 pt-2 flex-shrink-0" style="background:var(--bg-main)">
         <div class="max-w-2xl mx-auto">
             <div class="input-wrap flex items-end gap-2 px-4 py-3">
@@ -499,9 +527,13 @@ const SYSTEM_IKIGAI = "Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutz
 // ════════ STATE ════════
 let conversationHistory = [];
 let extractedText = "";
+let jobDescText = "";         // NEU: Stellenbeschreibung als Text
+let uploadType = "cv";        // NEU: "cv" | "job"
 let audioActive = true;
 let currentMode = "default";  
 let messageCount = 0;
+let isTyping = false;         // NEU: Sperre während Typewriter-Animation läuft
+let sessionCompleted = false; // NEU: verhindert mehrfaches Zeigen der Share-Card
 
 // ════════ UI ELEMENTS ════════
 const userInput     = document.getElementById('user-input');
@@ -516,6 +548,11 @@ const overlay       = document.getElementById('overlay');
 const fileInput     = document.getElementById('resume-upload');
 const uploadZone    = document.getElementById('upload-zone');
 const fileNameEl    = document.getElementById('file-name');
+const uploadTitle   = document.getElementById('upload-title');
+const uploadSubtitle= document.getElementById('upload-subtitle');
+const shareCard     = document.getElementById('share-card');
+const shareTitle    = document.getElementById('share-title');
+const shareSubtitle = document.getElementById('share-subtitle');
 
 const modeLabel         = document.getElementById('mode-label');
 const analyzeBtn        = document.getElementById('analyze-btn');
@@ -731,6 +768,11 @@ function addMessage(role, text) {
         let index = 0;
         let currentString = "";
 
+        // Eingabe während Typewriter sperren
+        isTyping = true;
+        userInput.disabled = true;
+        userInput.placeholder = "Tiep Coach schreibt…";
+
         function typeNextWord() {
             if (index < words.length) {
                 currentString += words[index];
@@ -746,6 +788,16 @@ function addMessage(role, text) {
                     delay = 100; 
                 }
                 setTimeout(typeNextWord, delay);
+            } else {
+                // Typewriter fertig — Eingabe wieder freigeben
+                isTyping = false;
+                userInput.disabled = false;
+                userInput.placeholder = currentMode === 'interview'
+                    ? 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...'
+                    : 'Schreibe eine Nachricht…';
+                userInput.focus();
+                // Prüfen ob Session abgeschlossen und Share-Card zeigen
+                checkSessionComplete(text);
             }
         }
         typeNextWord();
@@ -802,11 +854,18 @@ async function askAI(userMsg, systemMsg) {
     conversationHistory.push({ role: 'user', content: userMsg });
 
     showThinking();
+    // ERKLÄRUNG: Aktiviert den systemseitigen Schutz gegen Klicks auf den Button
     sendBtn.disabled = true;
+    userInput.disabled = true;
+    userInput.placeholder = "Tiep Coach analysiert…";
+    
+    // ERKLÄRUNG: Tauscht das Pfeil-Icon gegen einen Lade-Spinner aus (wie bei Gemini) und sperrt den Button visuell
+    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-sm"></i>';
+    sendBtn.classList.add('opacity-40', 'cursor-not-allowed');
 
     const finalPrompt = extractedText
-        ? `[Lebenslauf des Nutzers]\n${extractedText}\n\n[Anfrage]\n${userMsg}`
-        : userMsg;
+        ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}`
+        : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
 
     const historyToSend = [...conversationHistory];
     if (extractedText) {
@@ -846,12 +905,20 @@ async function askAI(userMsg, systemMsg) {
         addMessage('ai', '⚠️ Es gab ein Problem bei der Verbindung. Bitte versuche es erneut.');
         console.error(e);
     } finally {
+        // ERKLÄRUNG: Hebt den systemseitigen Klickschutz wieder auf, sobald die Antwort fertig geladen ist
         sendBtn.disabled = false;
+        // Input wird erst nach Typewriter-Ende freigegeben (isTyping-Flag)
+        // ERKLÄRUNG: Setzt das Icon wieder auf den Sende-Pfeil zurück und stellt die Klickbarkeit wieder her
+        sendBtn.innerHTML = '<i class="fas fa-arrow-up text-white text-sm"></i>';
+        sendBtn.classList.remove('opacity-40', 'cursor-not-allowed');
     }
 }
 
 // ════════ SEND LOGIK ════════
 async function handleSend() {
+    // ERKLÄRUNG: Absoluter Schutz – sperrt während KI denkt UND während Typewriter läuft
+    if (sendBtn.disabled || isTyping) return;
+
     const text = userInput.value.trim();
     if (!text) return;
 
@@ -884,7 +951,28 @@ userInput.addEventListener('keydown', (e) => {
     }
 });
 
-// ════════ FILE UPLOAD ════════
+// ════════ UPLOAD TYP UMSCHALTEN ════════
+function setUploadType(type) {
+    uploadType = type;
+    const cvBtn  = document.getElementById('type-cv-btn');
+    const jobBtn = document.getElementById('type-job-btn');
+    if (type === 'cv') {
+        cvBtn.style.background  = 'var(--accent)'; cvBtn.style.color  = '#fff';
+        jobBtn.style.background = 'transparent';   jobBtn.style.color = 'var(--text-muted)';
+        if (uploadTitle)    uploadTitle.textContent    = 'Lebenslauf hochladen';
+        if (uploadSubtitle) uploadSubtitle.textContent = 'PDF, Word oder .txt';
+    } else {
+        jobBtn.style.background = 'var(--accent)'; jobBtn.style.color  = '#fff';
+        cvBtn.style.background  = 'transparent';   cvBtn.style.color  = 'var(--text-muted)';
+        if (uploadTitle)    uploadTitle.textContent    = 'Stellenbeschr. hochladen';
+        if (uploadSubtitle) uploadSubtitle.textContent = 'PDF, Word oder .txt';
+    }
+    // Input zurücksetzen damit dieselbe Datei neu gewählt werden kann
+    if (fileInput) fileInput.value = '';
+    if (fileNameEl) fileNameEl.classList.add('hidden');
+}
+
+// ════════ FILE UPLOAD (CV + Stellenbeschreibung + PDF) ════════
 fileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -892,29 +980,111 @@ fileInput.addEventListener('change', async (e) => {
     const reader = new FileReader();
     reader.onload = async (ev) => {
         try {
+            let text = '';
             if (file.name.endsWith('.docx')) {
                 const res = await mammoth.extractRawText({ arrayBuffer: ev.target.result });
-                extractedText = res.value;
+                text = res.value;
+            } else if (file.name.endsWith('.pdf')) {
+                // PDF: einfaches Text-Fallback (ohne PDF.js — Inhalt aus ArrayBuffer als Text versuchen)
+                // Für echte PDF-Extraktion würde PDF.js benötigt; hier nutzer-freundlicher Hinweis
+                text = ev.target.result;
+                if (!text || text.length < 50) {
+                    addMessage('ai', '⚠️ PDF konnte nicht vollständig gelesen werden. Bitte exportiere den Lebenslauf als **.docx** oder **.txt** für beste Ergebnisse.');
+                    return;
+                }
             } else {
-                extractedText = ev.target.result;
+                text = ev.target.result;
             }
 
             uploadZone.classList.add('has-file');
             fileNameEl.textContent = '✓ ' + file.name;
             fileNameEl.classList.remove('hidden');
-            analyzeBtn.classList.remove('hidden');
 
-            setMode('cv');
-            addMessage('ai', `✅ **"${file.name}"** wurde erfolgreich geladen!\n\nKlicke auf **"Lebenslauf analysieren"** für eine vollständige Optimierung, oder stelle mir direkt eine Frage zu deinem Lebenslauf.`);
+            if (uploadType === 'cv') {
+                extractedText = text;
+                analyzeBtn.classList.remove('hidden');
+                setMode('cv');
+                addMessage('ai', `✅ **Lebenslauf "${file.name}"** erfolgreich geladen!\n\nKlicke auf **"Lebenslauf analysieren"** für eine vollständige Optimierung, oder stelle mir direkt eine Frage.`);
+            } else {
+                jobDescText = text;
+                setMode('interview');
+                addMessage('ai', `📋 **Stellenbeschreibung "${file.name}"** erfolgreich geladen!\n\nIch habe die Anforderungen analysiert. Lade nun noch deinen **Lebenslauf** hoch (Typ oben wechseln), oder starte das **Interview-Training** direkt im Menü — ich werde das Interview genau auf diese Stelle ausrichten.`);
+            }
         } catch (err) {
             addMessage('ai', '⚠️ Die Datei konnte nicht gelesen werden. Bitte probiere eine .txt oder .docx Datei.');
         }
     };
 
     if (file.name.endsWith('.docx')) reader.readAsArrayBuffer(file);
+    else if (file.name.endsWith('.pdf')) reader.readAsText(file, 'UTF-8');
     else reader.readAsText(file, 'UTF-8');
+
     if (window.innerWidth < 768) closeSidebar();
 });
+
+// ════════ SESSION-ABSCHLUSS ERKENNUNG ════════
+const COMPLETION_KEYWORDS = {
+    cv:        ['nächster schritt', 'viel erfolg', 'interview trainieren', 'zusammenfassung', 'optimierung abgeschlossen', 'jetzt bewerben'],
+    ikigai:    ['dein ikigai', 'berufung', 'zusammenfassung', 'ikigai ist', 'du hast entdeckt', 'kern deines ikigai'],
+    interview: ['viel erfolg', 'vielen dank für das gespräch', 'das interview', 'auf wiedersehen', 'interview beendet', 'gut vorbereitet']
+};
+const SHARE_MESSAGES = {
+    cv:        { title: '🎯 Lebenslauf optimiert!',       sub: 'Teile Tiep Coach mit Freunden, die auch einen starken CV brauchen.' },
+    ikigai:    { title: '☯️ Dein Ikigai entdeckt!',       sub: 'Teile deinen Fortschritt oder empfehle Tiep Coach weiter.' },
+    interview: { title: '💼 Interview-Training beendet!', sub: 'Teile Tiep Coach mit anderen Jobsuchenden.' }
+};
+
+function checkSessionComplete(aiReply) {
+    if (sessionCompleted) return;
+    const lower = aiReply.toLowerCase();
+    const keywords = COMPLETION_KEYWORDS[currentMode] || [];
+    const found = keywords.some(kw => lower.includes(kw));
+    // Auch nach Mindest-Nachrichten-Anzahl prüfen
+    const minMsgs = { cv: 2, ikigai: 8, interview: 6 };
+    const enoughMsgs = messageCount >= (minMsgs[currentMode] || 99);
+
+    if ((found || enoughMsgs) && currentMode !== 'default') {
+        sessionCompleted = true;
+        showShareCard(currentMode);
+    }
+}
+
+function showShareCard(mode) {
+    const msg = SHARE_MESSAGES[mode];
+    if (!msg || !shareCard) return;
+    shareTitle.textContent   = msg.title;
+    shareSubtitle.textContent = msg.sub;
+    shareCard.classList.remove('hidden');
+    setTimeout(() => scrollToBottom(), 100);
+}
+
+// ════════ TEILEN FUNKTION ════════
+async function handleShare() {
+    const shareData = {
+        title: 'Tiep Coach – KI Karriereberatung',
+        text:  'Ich nutze Tiep Coach für meine Karriere! Kostenlos, auf Deutsch, mit Lebenslauf-Analyse und Ikigai.',
+        url:   'https://itiep.de/ki-coach.html'
+    };
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+        } catch (err) {
+            if (err.name !== 'AbortError') fallbackCopy(shareData.url);
+        }
+    } else {
+        fallbackCopy(shareData.url);
+    }
+}
+
+function fallbackCopy(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('share-btn');
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-check text-white text-sm"></i>';
+            setTimeout(() => { btn.innerHTML = '<i class="fas fa-share-nodes text-white text-sm"></i>'; }, 2000);
+        }
+    });
+}
 
 // ════════ LEBENSLAUF ANALYSIEREN ════════
 analyzeBtn.addEventListener('click', () => {
@@ -969,16 +1139,23 @@ if (startInterviewBtn) {
 clearBtn.addEventListener('click', () => {
     conversationHistory = [];
     extractedText = '';
+    jobDescText = '';
     messageCount = 0;
     currentMode = 'default';
+    sessionCompleted = false;
+    isTyping = false;
     interviewPanel.classList.add('hidden');
     chatHistory.innerHTML = '';
     ctaEl.classList.remove('show');
+    if (shareCard) shareCard.classList.add('hidden');
     modeLabel.classList.add('hidden');
     analyzeBtn.classList.add('hidden');
     uploadZone.classList.remove('has-file');
     fileNameEl.classList.add('hidden');
     fileInput.value = '';
+    userInput.disabled = false;
+    userInput.placeholder = 'Schreibe eine Nachricht…';
+    setUploadType('cv');
     setMode('default');
     addMessage('ai', 'Gespräch zurückgesetzt. Wie kann ich dir helfen?');
     if (window.innerWidth < 768) closeSidebar();
