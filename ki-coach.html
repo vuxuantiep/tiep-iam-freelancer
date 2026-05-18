@@ -256,6 +256,15 @@
             border-color: var(--border-hover);
             background: #202123;
         }
+    
+        /* Sanfter Puls-Effekt für den Gedulds-Text */
+        .animate-pulse-soft {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .4; }
+        }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden relative">
@@ -707,7 +716,7 @@ async function askAI(userMsg, systemMsg) {
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const aiReply = data.choices[0].message.content || "...";
+        const aiReply = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : (data.reply || "...");
 
         removeThinking();
         conversationHistory.push({ role: 'assistant', content: aiReply });
@@ -909,6 +918,9 @@ function injectAnalysisOptions(container, analyticalText) {
     scrollToBottom();
 }
 
+// ════════ ⚙️ ERWEITERTE THINKING-BUBBLE MIT TIMEOUT-TEXT ════════
+let patienceTimer = null; // Globaler Speicher für den 3-Sekunden-Timer
+
 function showThinking() {
     removeThinking();
     const div = document.createElement('div');
@@ -920,21 +932,43 @@ function showThinking() {
             <i class="fas fa-robot text-white text-xs"></i>
         </div>
         <div class="flex-1">
-            <div class="rounded-2xl rounded-tl-sm p-3 inline-flex items-center gap-1.5 dot-pulse" style="background:var(--bg-card);border:1px solid var(--border)">
-                <span></span><span></span><span></span>
+            <div class="flex flex-col gap-2">
+                <div class="rounded-2xl rounded-tl-sm p-3 inline-flex items-center gap-1.5 dot-pulse animate-pulse" style="background:var(--bg-card);border:1px solid var(--border); width: fit-content;">
+                    <span></span><span></span><span></span>
+                </div>
+                <div id="patience-text" class="text-xs text-gray-500 italic hidden opacity-0 transition-opacity duration-500 pl-1">
+                    Bitte noch einen Moment Geduld, gerade sind viele KI-Modelle beschäftigt... keine Sorge, gleich kommt die Antwort...
+                </div>
             </div>
         </div>
     </div>`;
     chatHistory.appendChild(div);
     scrollToBottom();
+
+    // ⏳ TIMER STARTEN: Nach genau 3 Sekunden (3000ms) deinen Text weich einblenden
+    patienceTimer = setTimeout(() => {
+        const patienceTextEl = div.querySelector('#patience-text');
+        if (patienceTextEl) {
+            patienceTextEl.classList.remove('hidden');
+            setTimeout(() => {
+                patienceTextEl.classList.remove('opacity-0');
+                patienceTextEl.classList.add('opacity-100', 'animate-pulse-soft');
+            }, 50);
+        }
+    }, 3000);
 }
 
 function removeThinking() {
+    // Falls die KI schneller als 3 Sekunden war, stoppen wir den Timer sofort!
+    if (patienceTimer) {
+        clearTimeout(patienceTimer);
+        patienceTimer = null;
+    }
     const el = document.getElementById('thinking-bubble');
     if (el) el.remove();
 }
 
-// ════════ 🚀 USER CORE INTERACTIONS ════════
+// ════════ 🚀 USER CORE INTERACTIONS (KORRIGIERT) ════════
 async function handleSend() {
     const text = userInput.value.trim();
     if (!text || sendBtn.disabled) return;
@@ -948,6 +982,7 @@ async function handleSend() {
     else if (currentMode === 'interview') activeSystemPrompt = SYSTEM_INTERVIEW;
     else if (currentMode === 'ikigai') activeSystemPrompt = SYSTEM_IKIGAI;
 
+    // Ruft intern showThinking() auf, wo jetzt unser Timer startet
     await askAI(text, activeSystemPrompt);
     checkShowCTA();
 }
