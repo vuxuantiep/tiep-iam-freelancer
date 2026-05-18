@@ -312,10 +312,8 @@
 <div id="overlay"></div>
 
 <div id="sidebar" class="flex flex-col h-full">
-    <!-- Erklärungs-Kommentar: flex-row und flex-nowrap verhindern den Zeilenumbruch komplett. Das Logo bleibt links, das Kreuz rechts. -->
     <div class="p-4 border-b flex flex-row flex-nowrap justify-between items-center gap-2 flex-shrink-0" style="border-color:var(--border)">
         
-        <!-- LINKER BEREICH: Logo und Beschreibung komplett umbruchgeschützt -->
         <div class="flex-1 min-w-0 overflow-hidden">
             <div class="flex items-center gap-2 flex-nowrap">
                 <div class="w-7 h-7 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
@@ -326,7 +324,6 @@
             <p class="text-[11px] mt-0.5 truncate whitespace-nowrap" style="color:var(--text-muted)">KI Karriereberatung</p>
         </div>
         
-        <!-- RECHTER BEREICH: Der Schließen-Button ist absolut fixiert und geschützt vor Verschiebungen -->
         <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors flex-shrink-0" title="Menü schließen">
             <i class="fas fa-times"></i>
         </button>
@@ -337,7 +334,6 @@
         <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--text-muted)">Werkzeuge</p>
 
         <div>
-            <!-- Dokument-Typ-Auswahl -->
             <div class="flex gap-1 mb-2 p-1 rounded-lg" style="background:var(--bg-input);border:1px solid var(--border)">
                 <button id="type-cv-btn" onclick="setUploadType('cv')" class="flex-1 text-xs py-1.5 rounded-md font-medium transition-all" style="background:var(--accent);color:#fff">
                     Lebenslauf
@@ -464,41 +460,16 @@
                 <p class="text-sm font-semibold" style="color:#5bba6f">Bereit für den nächsten Schritt?</p>
                 <p class="text-xs mt-0.5" style="color:var(--text-secondary)">Ein echter Coach kann dir noch gezielter helfen.</p>
             </div>
-            <a href="mailto:coach@tiep.de" class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold text-white transition-opacity hover:opacity-80" style="background:linear-gradient(120deg,#34a853,#1a73e8)">
-                Jetzt buchen
+            <a href="mailto:coach@tiep.de" class="flex-shrink-0 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20">
+                Coach kontaktieren
             </a>
         </div>
     </div>
 
-    <!-- Share Card nach Abschluss einer Session -->
-    <div id="share-card" class="max-w-2xl mx-auto px-4 pb-1 w-full hidden">
-        <div class="rounded-2xl p-3 flex items-center gap-3 border" style="background:rgba(66,133,244,.07);border-color:rgba(66,133,244,.25)">
-            <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(66,133,244,.15)">
-                <i class="fas fa-share-nodes text-sm" style="color:var(--accent)"></i>
-            </div>
-            <div class="flex-1 min-w-0">
-                <p id="share-title" class="text-sm font-semibold" style="color:var(--accent)">Super! Ergebnis teilen?</p>
-                <p id="share-subtitle" class="text-xs" style="color:var(--text-secondary)">Empfehle Tiep Coach weiter oder speichere dein Ergebnis.</p>
-            </div>
-            <button id="share-btn" onclick="handleShare()" class="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style="background:var(--accent)">
-                <i class="fas fa-share-nodes text-white text-sm"></i>
-            </button>
-            <button onclick="document.getElementById('share-card').classList.add('hidden')" class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors">
-                <i class="fas fa-times text-xs" style="color:var(--text-muted)"></i>
-            </button>
-        </div>
-    </div>
-
-    <div class="px-4 pb-4 pt-2 flex-shrink-0" style="background:var(--bg-main)">
+    <div class="p-4 flex-shrink-0" style="background:var(--bg-main)">
         <div class="max-w-2xl mx-auto">
             <div class="input-wrap flex items-end gap-2 px-4 py-3">
-                <textarea
-                    id="user-input"
-                    rows="1"
-                    class="flex-1 bg-transparent outline-none resize-none text-sm"
-                    style="color:var(--text-primary);max-height:120px;overflow-y:auto;line-height:1.5"
-                    placeholder="Schreibe eine Nachricht…"
-                ></textarea>
+                <textarea id="user-input" rows="1" class="flex-1 bg-transparent outline-none resize-none text-sm" style="color:var(--text-primary);max-height:120px;overflow-y:auto;line-height:1.5" placeholder="Schreibe eine Nachricht…"></textarea>
                 <div class="flex items-center gap-1 flex-shrink-0">
                     <button id="mic-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
                         <i class="fas fa-microphone text-sm" style="color:var(--text-muted)"></i>
@@ -514,121 +485,67 @@
 </div>
 
 <script>
-// ════════ CONFIG ════════
+// ════════ ⚙️ CONFIG & PROMPTS ════════
 const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
 const SYSTEM_DEFAULT = "Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown. Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden emotionalen Hürden ein echter Coach wertvolle Unterstützung bieten kann.";
-
-const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. Strukturiere deine Antwort streng nach folgenden Punkten:\n1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)\n2. Stärken & markante Kernkompetenzen\n3. Konkrete Verbesserungsvorschläge (Format, Formulierungen, ATS-Optimierung)\n4. 🚀 PASSENDE JOB-PROFILE & SUCHPORTALE: Schlage basierend auf dem Profil 3 konkrete Berufsfelder vor. Nenne explizit die besten Suchportale für diese Branchen (z.B. LinkedIn, Indeed, StepStone oder spezialisierte Plattformen).\n5. 💡 NÄCHSTER SCHRITT: Beende deine Antwort immer mit einem freundlichen Satz, dass der Nutzer jetzt links im Menü auf den lila Button 'Interview trainieren' klicken kann, um eine reale Vorstellungsgespräch-Simulation für diese Berufsfelder zu starten.`;
-
-const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager in einem realen, professionellen Vorstellungsgespräch auf dem deutschen Arbeitsmarkt. Deine Verhaltensregeln:\n1. Einstieg & Job-Anpassung: In der ersten Runde nennt dir der Nutzer seine Wunschstelle und kopiert eventuell eine konkrete Stellenausschreibung oder Anforderungen in den Chat. Analysiere diese Anforderungen SOFORT im Hintergrund und gleiche sie mit dem Lebenslauf des Nutzers ab.\n2. Zielgerichtete Fragen: Richte das gesamte restliche Interview exakt an diesem spezifischen Stellenangebot und den Anforderungen aus. Stelle Fragen zu den dort geforderten Qualifikationen, Tools oder Aufgaben.\n3. ⚠️ WICHTIGSTE REGEL: Stelle IMMER NUR EINE FRAGE auf einmal! Warte die Antwort des Nutzers zwingend ab, bevor du weiterredest.\n4. Dynamik: Reagiere professionell und direkt auf die Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).\n5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
-
+const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. Strukturiere deine Antwort streng nach folgenden Punkten:\n1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)\n2. Stärken & markante Kompetenzen\n3. Schwachstellen, Lücken oder formale Fehler\n4. Konkrete Formulierungsvorschläge für Bulletpoints im CV\n5. Nächste Schritte (z.B. Anschreiben-Entwurf oder Vorbereitung auf Interviews).\n\nBleibe motivierend, aber absolut ehrlich und detailorientiert.`;
+const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager und Interviewer. Du simulierst mit dem Nutzer ein realistisches, professionelles Vorstellungsgespräch für seine Wunschbranche basierend auf seinem eingereichten Lebenslauf.\n\nRichtlinien:\n1. Stelle immer nur GENAU EINE Frage auf einmal.\n2. Warte die Antwort des Nutzers ab, bevor du reagierst.\n3. Reagiere authentisch auf die Antworten: Gehe auf das Gesagte ein, hake bei Unklarheiten nach oder stelle tiefergehende Fachfragen.\n4. Gib wertvolles, direktes Feedback zu den Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).\n5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
 const SYSTEM_IKIGAI = "Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutzer feinfühlig Schritt für Schritt. Stelle immer nur GENAU EINE Frage auf einmal, um den Nutzer nicht zu überfordern. Sei herzlich, reagiere auf die Antworten eingehend und bestärkend.";
 
-// ════════ STATE ════════
+// ════════ 📊 STATE MANAGEMENT ════════
 let conversationHistory = [];
 let extractedText = "";
-let jobDescText = "";         // NEU: Stellenbeschreibung als Text
-let uploadType = "cv";        // NEU: "cv" | "job"
+let jobDescText = ""; // Hält die hochgeladene Stellenbeschreibung
+let uploadType = "cv"; // Aktuelle Auswahl: "cv" oder "job"
 let audioActive = true;
-let currentMode = "default";  
+let currentMode = "default";
 let messageCount = 0;
-let isTyping = false;         // NEU: Sperre während Typewriter-Animation läuft
-let sessionCompleted = false; // NEU: verhindert mehrfaches Zeigen der Share-Card
+let isTyping = false; // Verhindert Klicks während der Typewriter-Animation
 
-// ════════ UI ELEMENTS ════════
-const userInput     = document.getElementById('user-input');
-const sendBtn       = document.getElementById('send-btn');
-const clearBtn      = document.getElementById('clear-btn');
-const chatScroll    = document.getElementById('chat-scroll');
-
-const menuBtn       = document.getElementById('menu-btn');
-const sidebar       = document.getElementById('sidebar');
-const overlay       = document.getElementById('overlay');
-
-const fileInput     = document.getElementById('resume-upload');
-const uploadZone    = document.getElementById('upload-zone');
-const fileNameEl    = document.getElementById('file-name');
-const uploadTitle   = document.getElementById('upload-title');
-const uploadSubtitle= document.getElementById('upload-subtitle');
-const shareCard     = document.getElementById('share-card');
-const shareTitle    = document.getElementById('share-title');
-const shareSubtitle = document.getElementById('share-subtitle');
-
-const modeLabel         = document.getElementById('mode-label');
-const analyzeBtn        = document.getElementById('analyze-btn');
-const ikigaiBtn         = document.getElementById('ikigai-btn');
+// ════════ 🔍 UI ELEMENTS DOM REFERENCE ════════
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const clearBtn = document.getElementById('clear-btn');
+const chatScroll = document.getElementById('chat-scroll');
+const menuBtn = document.getElementById('menu-btn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const fileInput = document.getElementById('resume-upload');
+const uploadZone = document.getElementById('upload-zone');
+const fileNameEl = document.getElementById('file-name');
+const uploadTitle = document.getElementById('upload-title');
+const uploadSubtitle = document.getElementById('upload-subtitle');
+const modeLabel = document.getElementById('mode-label');
+const analyzeBtn = document.getElementById('analyze-btn');
+const ikigaiBtn = document.getElementById('ikigai-btn');
 const startInterviewBtn = document.getElementById('start-interview-btn');
-const interviewPanel    = document.getElementById('interview-panel');
-const interviewStatus   = document.getElementById('interview-status');
+const interviewPanel = document.getElementById('interview-panel');
+const interviewStatus = document.getElementById('interview-status');
+const micBtn = document.getElementById('mic-btn');
+const audioBtn = document.getElementById('toggle-audio-btn');
+const audioIcon = document.getElementById('audio-icon');
+const audioLabel = document.getElementById('audio-label');
+const ctaEl = document.getElementById('live-coach-cta');
 
-const micBtn        = document.getElementById('mic-btn');
-const audioBtn      = document.getElementById('toggle-audio-btn');
-const audioIcon     = document.getElementById('audio-icon');
-const audioLabel    = document.getElementById('audio-label');
-
-const ctaEl         = document.getElementById('live-coach-cta');
-
-// ════════ SIDEBAR OPERATIONS ════════
-function openSidebar() {
-    if (sidebar) sidebar.classList.add('open');
-    if (overlay) overlay.classList.add('show');
-}
-
-function closeSidebar() {
-    if (sidebar) sidebar.classList.remove('open');
-    if (overlay) overlay.classList.remove('show');
-}
-
-// ════════ NAVIGATION & SIDEBAR EVENT LISTENERS ════════
-if (menuBtn) {
-    menuBtn.addEventListener('click', openSidebar);
-}
-if (overlay) {
-    overlay.addEventListener('click', closeSidebar);
-}
-const closeBtn = document.querySelector('.sidebar-btn'); 
-if (closeBtn) { 
-    closeBtn.addEventListener('click', closeSidebar);
-}
-
-// ════════ AUTO-RESIZE TEXTAREA ════════
-userInput.addEventListener('input', () => {
-    userInput.style.height = 'auto';
-    userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
-});
-
-// ════════ AUDIO STEUERUNG ════════
-audioBtn.addEventListener('click', () => {
-    audioActive = !audioActive;
-    audioIcon.className = audioActive ? 'fas fa-volume-up text-sm' : 'fas fa-volume-xmark text-sm';
-    audioIcon.style.color = audioActive ? 'var(--accent)' : 'var(--text-muted)';
-    audioLabel.textContent = audioActive ? 'Audio' : 'Stumm';
-    if (!audioActive) window.speechSynthesis.cancel();
-});
-
-function speak(text) {
+// ════════ 🔊 AUDIO SYSTEM (TTS) ════════
+function speakText(text) {
     if (!audioActive || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
+    window.speechSynthesis.cancel(); // Stoppt laufende Sprachausgaben
 
-    // Entfernt Emojis und Sonderzeichen für eine saubere Aussprache
     let clean = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
     clean = clean.replace(/[*#_`>]/g, ' ').replace(/\s+/g, ' ').trim();
-
+    
     const utterance = new SpeechSynthesisUtterance(clean);
-    utterance.lang = 'de-DE'; // Zwingt die Engine auf das deutsche Sprachpaket
+    utterance.lang = 'de-DE';
 
-    // Funktion zur Ermittlung der besten Stimme
     const setBestVoice = () => {
         const voices = window.speechSynthesis.getVoices();
         if (voices.length === 0) return false;
-
-        // Prioritätenliste für die beste deutsche Stimme
-        const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural'))
-                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google'))
-                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft'))
-                    || voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('anna'))
-                    || voices.find(v => v.lang.startsWith('de'));
-
+        const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural')) ||
+                      voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google')) ||
+                      voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft')) ||
+                      voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('anna')) ||
+                      voices.find(v => v.lang.startsWith('de'));
         if (voice) {
             utterance.voice = voice;
             return true;
@@ -636,11 +553,7 @@ function speak(text) {
         return false;
     };
 
-    // Versuche die Stimme direkt zu setzen
-    const success = setBestVoice();
-
-    // 🔄 Falls die Stimmenliste noch leer war, warten wir auf das Laden im Hintergrund
-    if (!success) {
+    if (!setBestVoice()) {
         window.speechSynthesis.onvoiceschanged = () => {
             setBestVoice();
             utterance.rate = 1.05;
@@ -656,219 +569,126 @@ function speak(text) {
 
 if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 
-// ════════ MIC / SPEECH RECOGNITION ════════
+// ════════ 🎙️ SPEECH RECOGNITION (STT) ════════
+let recognition = null;
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-
+    const SpeechObj = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechObj();
     recognition.lang = 'de-DE';
-    recognition.continuous = false;
     recognition.interimResults = false;
-
-    let isRecording = false;
-
-    recognition.onresult = (event) => {
-        const speechToText = event.results[0][0].transcript;
-        if (userInput.value.trim() === '') {
-            userInput.value = speechToText;
-        } else {
-            userInput.value += ' ' + speechToText;
-        }
-        userInput.style.height = 'auto';
-        userInput.style.height = userInput.scrollHeight + 'px';
-    };
+    recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
-        isRecording = true;
-        micBtn.querySelector('i').classList.add('recording-active');
-        userInput.placeholder = "Ich höre zu... Sprechen Sie jetzt Ihre Antwort.";
+        micBtn.classList.add('recording');
+        micBtn.querySelector('i').className = 'fas fa-microphone recording-active';
+    };
+
+    recognition.onerror = () => {
+        stopMicStyles();
     };
 
     recognition.onend = () => {
-        isRecording = false;
-        micBtn.querySelector('i').classList.remove('recording-active');
-        if (currentMode === 'interview') {
-            userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
-        } else {
-            userInput.placeholder = "Schreibe eine Nachricht…";
+        stopMicStyles();
+    };
+
+    recognition.onresult = (event) => {
+        const speechToText = event.results[0][0].transcript;
+        if (userInput) {
+            userInput.value = speechToText;
+            userInput.dispatchEvent(new Event('input'));
+            handleSend();
         }
     };
+}
 
-    recognition.onerror = (event) => {
-        console.error("Spracherkennungs-Fehler:", event.error);
-        isRecording = false;
-        micBtn.querySelector('i').classList.remove('recording-active');
-    };
+function stopMicStyles() {
+    if (micBtn) {
+        micBtn.classList.remove('recording');
+        micBtn.querySelector('i').className = 'fas fa-microphone text-gray-400';
+    }
+}
 
+if (micBtn) {
     micBtn.addEventListener('click', () => {
-        if (isRecording) {
+        if (!recognition) {
+            alert("Spracherkennung wird von deinem Browser leider nicht unterstützt.");
+            return;
+        }
+        if (micBtn.classList.contains('recording')) {
             recognition.stop();
         } else {
             recognition.start();
         }
     });
-
-} else {
-    micBtn.style.display = 'none';
-    console.log("Web Speech API wird von diesem Browser nicht unterstützt.");
 }
 
-// ════════ MARKDOWN RENDER ════════
-function renderMarkdown(text) {
-    if (window.marked) {
-        marked.setOptions({ breaks: true, gfm: true });
-        return marked.parse(text);
+// ════════ 🛠️ UTILITIES ════════
+function escHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function parseMarkdown(text) {
+    if (window.marked && typeof window.marked.parse === 'function') {
+        return window.marked.parse(text);
     }
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                .replace(/\*(.*?)\*/g, '<em>$1</em>')
                .replace(/\n/g, '<br>');
 }
 
-// ════════ CHATAUSGABE ════════
-const chatHistory = document.getElementById('chat-history');
-function addMessage(role, text) {
-    const div = document.createElement('div');
-    div.className = 'msg-enter';
-
-    if (role === 'user') {
-        div.innerHTML = `
-            <div class="flex gap-3 items-start justify-end">
-                <div class="flex-1 flex flex-col items-end">
-                    <div class="flex items-center gap-2 mb-1.5">
-                        <span class="text-xs" style="color:var(--text-muted)">Du</span>
-                    </div>
-                    <div class="rounded-2xl rounded-tr-sm px-4 py-3 max-w-sm" style="background:#1e3a5f;border:1px solid #2a4a7f">
-                        <p class="text-sm" style="white-space:pre-wrap;color:var(--text-primary)">${escHtml(text)}</p>
-                    </div>
-                </div>
-                <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#25272b;border:1px solid var(--border);color:var(--text-secondary)">DU</div>
-            </div>`;
-        chatHistory.appendChild(div);
-        scrollToBottom();
-    } else {
-        div.innerHTML = `
-            <div class="flex gap-3 items-start">
-                <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
-                    <i class="fas fa-robot text-white text-xs"></i>
-                </div>
-                <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1.5">
-                        <span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span>
-                        <span class="text-xs" style="color:var(--text-muted)">${getTime()}</span>
-                    </div>
-                    <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble animate-content" style="background:var(--bg-card);border:1px solid var(--border)">
-                    </div>
-                </div>
-            </div>`;
-        
-        chatHistory.appendChild(div);
-        const bubbleContainer = div.querySelector('.animate-content');
-        
-        let words = text.split(/(\s+)/);
-        let index = 0;
-        let currentString = "";
-
-        // Eingabe während Typewriter sperren
-        isTyping = true;
-        userInput.disabled = true;
-        userInput.placeholder = "Tiep Coach schreibt…";
-
-        function typeNextWord() {
-            if (index < words.length) {
-                currentString += words[index];
-                bubbleContainer.innerHTML = renderMarkdown(currentString);
-                index++;
-                scrollToBottom();
-
-                let delay = 25;
-                const lastWord = words[index - 1];
-                if (/[.!?]/.test(lastWord)) {
-                    delay = 220; 
-                } else if (/,/.test(lastWord)) {
-                    delay = 100; 
-                }
-                setTimeout(typeNextWord, delay);
-            } else {
-                // Typewriter fertig — Eingabe wieder freigeben
-                isTyping = false;
-                userInput.disabled = false;
-                userInput.placeholder = currentMode === 'interview'
-                    ? 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...'
-                    : 'Schreibe eine Nachricht…';
-                userInput.focus();
-                // Prüfen ob Session abgeschlossen und Share-Card zeigen
-                checkSessionComplete(text);
-            }
-        }
-        typeNextWord();
-    }
-}
-
-function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
 function getTime() {
-    return new Date().toLocaleTimeString('de', { hour:'2-digit', minute:'2-digit' });
+    return new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 }
 
-// ════════ THINKING INDICATOR ════════
-function showThinking() {
-    const div = document.createElement('div');
-    div.id = 'thinking';
-    div.className = 'msg-enter';
-    div.innerHTML = `
-        <div class="flex gap-3 items-start">
-            <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
-                <i class="fas fa-robot text-white text-xs"></i>
-            </div>
-            <div class="rounded-2xl rounded-tl-sm px-5 py-4" style="background:var(--bg-card);border:1px solid var(--border)">
-                <div class="dot-pulse flex gap-1.5">
-                    <span></span><span></span><span></span>
-                </div>
-            </div>
-        </div>`;
-    chatHistory.appendChild(div);
-    scrollToBottom();
-}
-function removeThinking() {
-    const el = document.getElementById('thinking');
-    if (el) el.remove();
-}
-
-// ════════ SCROLL REPARATUR ════════
 function scrollToBottom() {
     if (chatScroll) {
-        setTimeout(() => { chatScroll.scrollTop = chatScroll.scrollHeight; }, 60);
+        setTimeout(() => {
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+        }, 60);
     }
 }
 
-// ════════ LIVE COACH CTA ════════
 function checkShowCTA() {
     if (messageCount >= 4 && !ctaEl.classList.contains('show')) {
         ctaEl.classList.add('show');
     }
 }
 
-// ════════ ASK AI ════════
+function setMode(mode) {
+    currentMode = mode;
+    if (!modeLabel) return;
+    if (mode === 'cv') {
+        modeLabel.textContent = "📄 Lebenslauf-Optimierung";
+        modeLabel.classList.remove('hidden');
+    } else if (mode === 'interview') {
+        modeLabel.textContent = "💼 Interview-Simulation";
+        modeLabel.classList.remove('hidden');
+    } else if (mode === 'ikigai') {
+        modeLabel.textContent = "☯️ Ikigai-Analyse";
+        modeLabel.classList.remove('hidden');
+    } else {
+        modeLabel.classList.add('hidden');
+        if (interviewPanel) interviewPanel.classList.add('hidden');
+    }
+}
+
+// ════════ 🤖 ASK AI CORE FUNCTION (WITH LOCKS) ════════
 async function askAI(userMsg, systemMsg) {
     conversationHistory.push({ role: 'user', content: userMsg });
-
     showThinking();
-    // ERKLÄRUNG: Aktiviert den systemseitigen Schutz gegen Klicks auf den Button
+
+    // 🔒 Systemweiter Schutz gegen Klicks während der Verarbeitung
     sendBtn.disabled = true;
     userInput.disabled = true;
     userInput.placeholder = "Tiep Coach analysiert…";
-    
-    // ERKLÄRUNG: Tauscht das Pfeil-Icon gegen einen Lade-Spinner aus (wie bei Gemini) und sperrt den Button visuell
     sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-sm"></i>';
     sendBtn.classList.add('opacity-40', 'cursor-not-allowed');
 
-    const finalPrompt = extractedText
-        ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}`
-        : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
-
+    // Kontext zusammenbauen (Lebenslauf und/oder Stellenbeschreibung falls vorhanden)
+    const finalPrompt = extractedText ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}` : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
     const historyToSend = [...conversationHistory];
-    if (extractedText) {
+    if (extractedText || jobDescText) {
         historyToSend[historyToSend.length - 1] = { role: 'user', content: finalPrompt };
     }
 
@@ -887,92 +707,292 @@ async function askAI(userMsg, systemMsg) {
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const reply = data.choices[0].message.content;
+        const aiReply = data.choices[0].message.content || "...";
 
         removeThinking();
-        conversationHistory.push({ role: 'assistant', content: reply });
-        
-        addMessage('ai', reply);
-        speak(reply);
-
-        if (currentMode === 'interview') {
-            interviewStatus.textContent = "HR-Manager hört zu...";
-        }
+        conversationHistory.push({ role: 'assistant', content: aiReply });
         messageCount++;
-        checkShowCTA();
-    } catch (e) {
+
+        if (interviewPanel && currentMode === 'interview' && interviewStatus) {
+            interviewStatus.textContent = "HR-Manager hat gesprochen.";
+        }
+
+        // Ausgabe mit Schreibmaschinen-Effekt zur Erhöhung der UX
+        await addMessageTypewriter('ai', aiReply, systemMsg === SYSTEM_CV);
+        speakText(aiReply);
+
+    } catch (err) {
+        console.error(err);
         removeThinking();
-        addMessage('ai', '⚠️ Es gab ein Problem bei der Verbindung. Bitte versuche es erneut.');
-        console.error(e);
+        addMessage('ai', 'Entschuldigung, es gab ein Verbindungsproblem. Bitte versuche es gleich noch einmal.');
     } finally {
-        // ERKLÄRUNG: Hebt den systemseitigen Klickschutz wieder auf, sobald die Antwort fertig geladen ist
+        // 🔓 Entsperrung aller Eingabeelemente nach Abschluss der Animation
         sendBtn.disabled = false;
-        // Input wird erst nach Typewriter-Ende freigegeben (isTyping-Flag)
-        // ERKLÄRUNG: Setzt das Icon wieder auf den Sende-Pfeil zurück und stellt die Klickbarkeit wieder her
+        userInput.disabled = false;
+        userInput.placeholder = "Schreibe eine Nachricht…";
         sendBtn.innerHTML = '<i class="fas fa-arrow-up text-white text-sm"></i>';
         sendBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        scrollToBottom();
     }
 }
 
-// ════════ SEND LOGIK ════════
+// ════════ 💬 CHAT RENDERING ENGINE ════════
+const chatHistory = document.getElementById('chat-history');
+
+function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'msg-enter';
+    if (role === 'user') {
+        div.innerHTML = `
+        <div class="flex gap-3 items-start justify-end">
+            <div class="flex-1 flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-xs" style="color:var(--text-muted)">Du</span>
+                </div>
+                <div class="rounded-2xl rounded-tl-sm px-4 py-3 max-w-sm" style="background:#1e3a5f;border:1px solid #2a4a7f">
+                    <p class="text-sm" style="white-space:pre-wrap;color:var(--text-primary)">${escHtml(text)}</p>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#25272b;border:1px solid var(--border);color:var(--text-secondary)">DU</div>
+        </div>`;
+    } else {
+        div.innerHTML = `
+        <div class="flex gap-3 items-start">
+            <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                <i class="fas fa-robot text-white text-xs"></i>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span>
+                    <span class="text-xs" style="color:var(--text-muted)">${getTime()}</span>
+                </div>
+                <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble" style="background:var(--bg-card);border:1px solid var(--border)">
+                    ${parseMarkdown(text)}
+                </div>
+            </div>
+        </div>`;
+    }
+    chatHistory.appendChild(div);
+    scrollToBottom();
+}
+
+// ⌨️ Fortschrittlicher Typewriter-Effekt für Markdown-Text (Erweitert für interaktive Buttons)
+function addMessageTypewriter(role, text, isAnalysis = false) {
+    return new Promise((resolve) => {
+        const div = document.createElement('div');
+        div.className = 'msg-enter';
+        
+        div.innerHTML = `
+        <div class="flex gap-3 items-start">
+            <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                <i class="fas fa-robot text-white text-xs"></i>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span>
+                    <span class="text-xs" style="color:var(--text-muted)">${getTime()}</span>
+                </div>
+                <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble-live" style="background:var(--bg-card);border:1px solid var(--border)"></div>
+                <div class="options-container mt-3 hidden flex flex-wrap gap-2"></div>
+            </div>
+        </div>`;
+        
+        chatHistory.appendChild(div);
+        const container = div.querySelector('.prose-bubble-live');
+        const optionsContainer = div.querySelector('.options-container');
+        
+        let currentLen = 0;
+        const speed = text.length > 200 ? 5 : 15; // Beschleunigt die Ausgabe bei langen Antworten
+        
+        function type() {
+            if (currentLen < text.length) {
+                currentLen += 3; // Rendert Blöcke für eine flüssige Animation
+                container.innerHTML = parseMarkdown(text.slice(0, currentLen));
+                scrollToBottom();
+                setTimeout(type, speed);
+            } else {
+                container.className = 'rounded-2xl rounded-tl-sm p-4 prose-bubble';
+                container.innerHTML = parseMarkdown(text);
+                
+                // Falls es sich um die Lebenslauf-Analyse handelt, füge die gewünschten Interaktionsmöglichkeiten an
+                if (isAnalysis && optionsContainer) {
+                    injectAnalysisOptions(optionsContainer, text);
+                }
+                
+                resolve();
+            }
+        }
+        type();
+    });
+}
+
+// Hilfsfunktion: Injiziert die klickbaren Action-Buttons nahtlos am Nachrichten-Ende
+function injectAnalysisOptions(container, analyticalText) {
+    container.classList.remove('hidden');
+    
+    // Element für Option 1 erzeugen
+    const option1Wrap = document.createElement('div');
+    option1Wrap.className = 'relative inline-block';
+    option1Wrap.innerHTML = `
+        <button class="px-3 py-1.5 rounded-xl text-xs font-medium border text-white flex items-center gap-1.5 transition-colors" style="background:#25272b; border-color:var(--border); font-family:'DM Sans', sans-serif;">
+            <i class="fas fa-share-alt text-blue-400"></i>
+            <span>Option 1: Exportieren / Teilen</span>
+            <i class="fas fa-chevron-down text-[10px] opacity-60"></i>
+        </button>
+        <div class="dropdown-menu hidden absolute left-0 bottom-full mb-2 w-56 rounded-xl shadow-xl border p-1 z-50 flex flex-col gap-0.5" style="background:var(--bg-card); border-color:var(--border);">
+            <button class="download-docx-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200 transition-colors">
+                <i class="fas fa-file-word text-blue-400"></i> .docx herunterladen
+            </button>
+            <button class="email-coach-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200 transition-colors">
+                <i class="fas fa-envelope text-green-400"></i> An echten Coach senden
+            </button>
+        </div>
+    `;
+    
+    // Element für Option 2 erzeugen
+    const option2Btn = document.createElement('button');
+    option2Btn.className = 'px-3 py-1.5 rounded-xl text-xs font-medium border text-white flex items-center gap-1.5 transition-colors';
+    option2Btn.style.cssText = 'background:rgba(66,133,244,0.08); border-color:var(--accent); font-family:\'DM Sans\', sans-serif;';
+    option2Btn.innerHTML = `
+        <i class="fas fa-comment-dots text-blue-400"></i>
+        <span>Option 2: Analyse fortführen & weitersprechen</span>
+    `;
+    
+    // Dropdown Event-Handling für Option 1
+    const mainTrigger = option1Wrap.querySelector('button');
+    const dropdown = option1Wrap.querySelector('.dropdown-menu');
+    
+    mainTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('hidden');
+    });
+    
+    document.addEventListener('click', () => dropdown.classList.add('hidden'));
+    
+    // Klick auf ".docx herunterladen"
+    option1Wrap.querySelector('.download-docx-btn').addEventListener('click', () => {
+        try {
+            // Generiert eine saubere Textdatei als temporären DOCX-Ersatz-Blob
+            const header = "TIEP COACH - LEBENSLAUF-ANALYSE\n=================================\n\n";
+            const blob = new Blob([header + analyticalText], { type: "application/msword" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Lebenslauf_Analyse_TiepCoach.doc";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error("Fehler beim Datei-Export:", err);
+        }
+    });
+    
+    // Klick auf "Per E-Mail weiterleiten"
+    option1Wrap.querySelector('.email-coach-btn').addEventListener('click', () => {
+        const mailtoSubject = encodeURIComponent("Tiep Coach - Auswertung meiner Lebenslauf-Analyse");
+        const mailtoBody = encodeURIComponent("Hallo Coach,\n\nhier ist das Ergebnis meiner automatischen Lebenslauf-Analyse vom Tiep Coach:\n\n" + analyticalText);
+        window.location.href = `mailto:coach@tiep.de?subject=${mailtoSubject}&body=${mailtoBody}`;
+    });
+    
+    // Klick auf Option 2: Fokussiert das Textfeld und setzt einen Prompt-Vorschlag
+    option2Btn.addEventListener('click', () => {
+        if (userInput) {
+            userInput.value = "Lass uns die Analyse vertiefen. Ich habe noch Fragen zu den vorgeschlagenen Schritten…";
+            userInput.focus();
+            userInput.dispatchEvent(new Event('input'));
+        }
+    });
+    
+    container.appendChild(option1Wrap);
+    container.appendChild(option2Btn);
+    scrollToBottom();
+}
+
+function showThinking() {
+    removeThinking();
+    const div = document.createElement('div');
+    div.id = 'thinking-bubble';
+    div.className = 'msg-enter';
+    div.innerHTML = `
+    <div class="flex gap-3 items-start">
+        <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+            <i class="fas fa-robot text-white text-xs"></i>
+        </div>
+        <div class="flex-1">
+            <div class="rounded-2xl rounded-tl-sm p-3 inline-flex items-center gap-1.5 dot-pulse" style="background:var(--bg-card);border:1px solid var(--border)">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>`;
+    chatHistory.appendChild(div);
+    scrollToBottom();
+}
+
+function removeThinking() {
+    const el = document.getElementById('thinking-bubble');
+    if (el) el.remove();
+}
+
+// ════════ 🚀 USER CORE INTERACTIONS ════════
 async function handleSend() {
-    // ERKLÄRUNG: Absoluter Schutz – sperrt während KI denkt UND während Typewriter läuft
-    if (sendBtn.disabled || isTyping) return;
-
     const text = userInput.value.trim();
-    if (!text) return;
+    if (!text || sendBtn.disabled) return;
 
-    userInput.value = '';
-    userInput.style.height = 'auto';
+    userInput.value = "";
+    userInput.rows = 1;
     addMessage('user', text);
-    messageCount++;
 
     let activeSystemPrompt = SYSTEM_DEFAULT;
-    
-    if (currentMode === 'interview') {
-        activeSystemPrompt = SYSTEM_INTERVIEW;
-    } else if (currentMode === 'ikigai') {
-        activeSystemPrompt = SYSTEM_IKIGAI;
-    } else if (currentMode === 'cv') {
-        activeSystemPrompt = SYSTEM_CV;
-    }
+    if (currentMode === 'cv') activeSystemPrompt = SYSTEM_CV;
+    else if (currentMode === 'interview') activeSystemPrompt = SYSTEM_INTERVIEW;
+    else if (currentMode === 'ikigai') activeSystemPrompt = SYSTEM_IKIGAI;
 
-    await askAI(text, activeSystemPrompt); 
+    await askAI(text, activeSystemPrompt);
     checkShowCTA();
 }
 
-// ════════ EVENT LISTENERS FÜR DAS SENDEN ════════
 sendBtn.addEventListener('click', handleSend);
-
 userInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault(); 
+        e.preventDefault();
         handleSend();
     }
 });
 
-// ════════ UPLOAD TYP UMSCHALTEN ════════
+// Dynamische Textarea-Höhe beim Tippen
+userInput.addEventListener('input', () => {
+    userInput.style.height = 'auto';
+    userInput.style.height = userInput.scrollHeight + 'px';
+});
+
+// ════════ 🔄 MODE CHANGING / SELECTION ════════
 function setUploadType(type) {
     uploadType = type;
-    const cvBtn  = document.getElementById('type-cv-btn');
+    const cvBtn = document.getElementById('type-cv-btn');
     const jobBtn = document.getElementById('type-job-btn');
+    
     if (type === 'cv') {
-        cvBtn.style.background  = 'var(--accent)'; cvBtn.style.color  = '#fff';
-        jobBtn.style.background = 'transparent';   jobBtn.style.color = 'var(--text-muted)';
-        if (uploadTitle)    uploadTitle.textContent    = 'Lebenslauf hochladen';
+        cvBtn.style.background = 'var(--accent)';
+        cvBtn.style.color = '#fff';
+        jobBtn.style.background = 'transparent';
+        jobBtn.style.color = 'var(--text-muted)';
+        if (uploadTitle) uploadTitle.textContent = 'Lebenslauf hochladen';
         if (uploadSubtitle) uploadSubtitle.textContent = 'PDF, Word oder .txt';
     } else {
-        jobBtn.style.background = 'var(--accent)'; jobBtn.style.color  = '#fff';
-        cvBtn.style.background  = 'transparent';   cvBtn.style.color  = 'var(--text-muted)';
-        if (uploadTitle)    uploadTitle.textContent    = 'Stellenbeschr. hochladen';
+        jobBtn.style.background = 'var(--accent)';
+        jobBtn.style.color = '#fff';
+        cvBtn.style.background = 'transparent';
+        cvBtn.style.color = 'var(--text-muted)';
+        if (uploadTitle) uploadTitle.textContent = 'Stellenbeschr. hochladen';
         if (uploadSubtitle) uploadSubtitle.textContent = 'PDF, Word oder .txt';
     }
-    // Input zurücksetzen damit dieselbe Datei neu gewählt werden kann
+    
     if (fileInput) fileInput.value = '';
     if (fileNameEl) fileNameEl.classList.add('hidden');
 }
 
-// ════════ FILE UPLOAD (CV + Stellenbeschreibung + PDF) ════════
+// ════════ 📂 PARSING ENGINE (PDF, DOCX, TXT) ════════
 fileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -985,219 +1005,210 @@ fileInput.addEventListener('change', async (e) => {
                 const res = await mammoth.extractRawText({ arrayBuffer: ev.target.result });
                 text = res.value;
             } else if (file.name.endsWith('.pdf')) {
-                // PDF: einfaches Text-Fallback (ohne PDF.js — Inhalt aus ArrayBuffer als Text versuchen)
-                // Für echte PDF-Extraktion würde PDF.js benötigt; hier nutzer-freundlicher Hinweis
-                text = ev.target.result;
-                if (!text || text.length < 50) {
-                    addMessage('ai', '⚠️ PDF konnte nicht vollständig gelesen werden. Bitte exportiere den Lebenslauf als **.docx** oder **.txt** für beste Ergebnisse.');
-                    return;
-                }
+                text = await parsePdfText(ev.target.result);
             } else {
                 text = ev.target.result;
             }
-
-            uploadZone.classList.add('has-file');
-            fileNameEl.textContent = '✓ ' + file.name;
-            fileNameEl.classList.remove('hidden');
 
             if (uploadType === 'cv') {
                 extractedText = text;
-                analyzeBtn.classList.remove('hidden');
                 setMode('cv');
-                addMessage('ai', `✅ **Lebenslauf "${file.name}"** erfolgreich geladen!\n\nKlicke auf **"Lebenslauf analysieren"** für eine vollständige Optimierung, oder stelle mir direkt eine Frage.`);
+                if (fileNameEl) {
+                    fileNameEl.textContent = `📄 CV geladen: ${file.name}`;
+                    fileNameEl.classList.remove('hidden');
+                }
+                if (analyzeBtn) analyzeBtn.classList.remove('hidden');
+                addMessage('ai', `Dein Lebenslauf **(${file.name})** wurde erfolgreich geladen! Du kannst ihn nun über den Button links analysieren lassen oder direkt das Interview-Training starten.`);
             } else {
                 jobDescText = text;
-                setMode('interview');
-                addMessage('ai', `📋 **Stellenbeschreibung "${file.name}"** erfolgreich geladen!\n\nIch habe die Anforderungen analysiert. Lade nun noch deinen **Lebenslauf** hoch (Typ oben wechseln), oder starte das **Interview-Training** direkt im Menü — ich werde das Interview genau auf diese Stelle ausrichten.`);
+                if (fileNameEl) {
+                    fileNameEl.textContent = `💼 Jobbeschreibung geladen: ${file.name}`;
+                    fileNameEl.classList.remove('hidden');
+                }
+                addMessage('ai', `Die Stellenbeschreibung **(${file.name})** wurde erfolgreich importiert! Wenn du nun die Interview-Simulation startest, passe ich mich präzise an diese Anforderungen an.`);
             }
+
         } catch (err) {
-            addMessage('ai', '⚠️ Die Datei konnte nicht gelesen werden. Bitte probiere eine .txt oder .docx Datei.');
+            console.error(err);
+            alert("Fehler beim Lesen des Dokuments.");
         }
     };
 
-    if (file.name.endsWith('.docx')) reader.readAsArrayBuffer(file);
-    else if (file.name.endsWith('.pdf')) reader.readAsText(file, 'UTF-8');
-    else reader.readAsText(file, 'UTF-8');
-
+    if (file.name.endsWith('.docx') || file.name.endsWith('.pdf')) {
+        reader.readAsArrayBuffer(file);
+    } else {
+        reader.readAsText(file, 'UTF-8');
+    }
     if (window.innerWidth < 768) closeSidebar();
 });
 
-// ════════ SESSION-ABSCHLUSS ERKENNUNG ════════
-const COMPLETION_KEYWORDS = {
-    cv:        ['nächster schritt', 'viel erfolg', 'interview trainieren', 'zusammenfassung', 'optimierung abgeschlossen', 'jetzt bewerben'],
-    ikigai:    ['dein ikigai', 'berufung', 'zusammenfassung', 'ikigai ist', 'du hast entdeckt', 'kern deines ikigai'],
-    interview: ['viel erfolg', 'vielen dank für das gespräch', 'das interview', 'auf wiedersehen', 'interview beendet', 'gut vorbereitet']
-};
-const SHARE_MESSAGES = {
-    cv:        { title: '🎯 Lebenslauf optimiert!',       sub: 'Teile Tiep Coach mit Freunden, die auch einen starken CV brauchen.' },
-    ikigai:    { title: '☯️ Dein Ikigai entdeckt!',       sub: 'Teile deinen Fortschritt oder empfehle Tiep Coach weiter.' },
-    interview: { title: '💼 Interview-Training beendet!', sub: 'Teile Tiep Coach mit anderen Jobsuchenden.' }
-};
-
-function checkSessionComplete(aiReply) {
-    if (sessionCompleted) return;
-    const lower = aiReply.toLowerCase();
-    const keywords = COMPLETION_KEYWORDS[currentMode] || [];
-    const found = keywords.some(kw => lower.includes(kw));
-    // Auch nach Mindest-Nachrichten-Anzahl prüfen
-    const minMsgs = { cv: 2, ikigai: 8, interview: 6 };
-    const enoughMsgs = messageCount >= (minMsgs[currentMode] || 99);
-
-    if ((found || enoughMsgs) && currentMode !== 'default') {
-        sessionCompleted = true;
-        showShareCard(currentMode);
+// Behilfsmäßiger clientseitiger PDF-Text-Extraktor
+async function parsePdfText(arrayBuffer) {
+    try {
+        if (!window.pdfjsLib) {
+            await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js");
+            window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+        }
+        const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const txtDoc = await page.getTextContent();
+            fullText += txtDoc.items.map(item => item.str).join(" ") + "\n";
+        }
+        return fullText;
+    } catch (e) {
+        console.error("PDF-Parsing-Fehler:", e);
+        return "Fehler bei der PDF-Textextraktion.";
     }
 }
 
-function showShareCard(mode) {
-    const msg = SHARE_MESSAGES[mode];
-    if (!msg || !shareCard) return;
-    shareTitle.textContent   = msg.title;
-    shareSubtitle.textContent = msg.sub;
-    shareCard.classList.remove('hidden');
-    setTimeout(() => scrollToBottom(), 100);
-}
-
-// ════════ TEILEN FUNKTION ════════
-async function handleShare() {
-    const shareData = {
-        title: 'Tiep Coach – KI Karriereberatung',
-        text:  'Ich nutze Tiep Coach für meine Karriere! Kostenlos, auf Deutsch, mit Lebenslauf-Analyse und Ikigai.',
-        url:   'https://itiep.de/ki-coach.html'
-    };
-    if (navigator.share) {
-        try {
-            await navigator.share(shareData);
-        } catch (err) {
-            if (err.name !== 'AbortError') fallbackCopy(shareData.url);
-        }
-    } else {
-        fallbackCopy(shareData.url);
-    }
-}
-
-function fallbackCopy(url) {
-    navigator.clipboard.writeText(url).then(() => {
-        const btn = document.getElementById('share-btn');
-        if (btn) {
-            btn.innerHTML = '<i class="fas fa-check text-white text-sm"></i>';
-            setTimeout(() => { btn.innerHTML = '<i class="fas fa-share-nodes text-white text-sm"></i>'; }, 2000);
-        }
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
     });
 }
 
-// ════════ LEBENSLAUF ANALYSIEREN ════════
-analyzeBtn.addEventListener('click', () => {
-    if (window.innerWidth < 768) closeSidebar();
-    
-    setMode('cv');
-    conversationHistory = []; 
-    chatHistory.innerHTML = '';
-    
-    addMessage('user', 'Bitte analysiere meinen Lebenslauf basierend auf der hochgeladenen Datei.');
-    askAI(`Hier ist mein Lebenslauf textuell: ${extractedText}. Führe eine vollständige Optimierung und Analyse durch.`, SYSTEM_CV);
-});
+// Drag & Drop Features für die Upload-Zone
+if (uploadZone) {
+    ['dragenter', 'dragover'].forEach(name => {
+        uploadZone.addEventListener(name, (e) => { e.preventDefault(); uploadZone.style.borderColor = "var(--accent)"; }, false);
+    });
+    ['dragleave', 'drop'].forEach(name => {
+        uploadZone.addEventListener(name, (e) => { e.preventDefault(); uploadZone.style.borderColor = "var(--border)"; }, false);
+    });
+    uploadZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length && fileInput) {
+            fileInput.files = files;
+            fileInput.dispatchEvent(new Event('change'));
+        }
+    }, false);
+}
 
-// ════════ IKIGAI ════════
-ikigaiBtn.addEventListener('click', () => {
-    if (window.innerWidth < 768) closeSidebar();
-    setMode('ikigai');
-    conversationHistory = [];
-    chatHistory.innerHTML = '';
-    addMessage('user', 'Ich möchte meine Ikigai-Berufung entdecken.');
-    askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai ist, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
-});
+// ════════ 🎛️ SIDEBAR SIDE ACTIONS (ANALYZE, IKIGAI, INTERVIEW) ════════
+if (analyzeBtn) {
+    analyzeBtn.addEventListener('click', () => {
+        if (window.innerWidth < 768) closeSidebar();
+        if (!extractedText) return;
+        setMode('cv');
+        addMessage('user', 'Analysiere bitte meinen Lebenslauf.');
+        askAI('Führe eine strukturierte Lebenslaufanalyse basierend auf meinem Profil durch.', SYSTEM_CV);
+    });
+}
 
-// ════════ INTERVIEW SIMULATION ════════
+if (ikigaiBtn) {
+    ikigaiBtn.addEventListener('click', () => {
+        if (window.innerWidth < 768) closeSidebar();
+        setMode('ikigai');
+        conversationHistory = [];
+        chatHistory.innerHTML = '';
+        addMessage('user', 'Ich möchte meine Ikigai-Berufung entdecken.');
+        askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai is, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
+    });
+}
+
 if (startInterviewBtn) {
     startInterviewBtn.addEventListener('click', () => {
         if (window.innerWidth < 768) closeSidebar();
-
         if (!extractedText || extractedText.trim() === '') {
-            setMode('cv'); 
+            setMode('cv');
             addMessage('ai', 'Guten Tag! Bevor wir mit dem simulierten Vorstellungsgespräch starten können, benötige ich Ihren Lebenslauf. Bitte laden Sie diesen kurz im linken Menü hoch, damit ich mich optimal auf Sie vorbereiten kann! 📄✨');
-            return; 
+            return;
         }
-        
         setMode('interview');
         conversationHistory = [];
         chatHistory.innerHTML = '';
-        
         if (interviewPanel) {
             interviewPanel.classList.remove('hidden');
         }
         if (interviewStatus) {
             interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
         }
-        
         addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
-        askAI('Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage: Auf welche konkrete Stelle ich mich bewerben möchte und warum. Frage mich außerdem aktiv, ob ich bereits ein konkretes Stellenangebot gefunden habe und sage mir, dass ich den Text der Ausschreibung oder Anforderungen einfach hier in den Chat kopieren kann, damit du das Interview ganz gezielt darauf ausrichten kannst.', SYSTEM_INTERVIEW);
+        
+        let introPrompt = 'Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage: Auf welche konkrete Stelle ich mich bewerben möchte und warum.';
+        if (jobDescText) {
+            introPrompt += ' Beziehe dich dabei konkret auf die von mir bereitgestellte Stellenbeschreibung.';
+        } else {
+            introPrompt += ' Frage mich außerdem aktiv, ob ich bereits ein konkretes Stellenangebot gefunden habe und sage mir, dass ich den Text der Ausschreibung oder Anforderungen einfach hier hineinkopieren kann.';
+        }
+        askAI(introPrompt, SYSTEM_INTERVIEW);
     });
 }
 
-// ════════ CLEAR ════════
-clearBtn.addEventListener('click', () => {
-    conversationHistory = [];
-    extractedText = '';
-    jobDescText = '';
-    messageCount = 0;
-    currentMode = 'default';
-    sessionCompleted = false;
-    isTyping = false;
-    interviewPanel.classList.add('hidden');
-    chatHistory.innerHTML = '';
-    ctaEl.classList.remove('show');
-    if (shareCard) shareCard.classList.add('hidden');
-    modeLabel.classList.add('hidden');
-    analyzeBtn.classList.add('hidden');
-    uploadZone.classList.remove('has-file');
-    fileNameEl.classList.add('hidden');
-    fileInput.value = '';
-    userInput.disabled = false;
-    userInput.placeholder = 'Schreibe eine Nachricht…';
-    setUploadType('cv');
-    setMode('default');
-    addMessage('ai', 'Gespräch zurückgesetzt. Wie kann ich dir helfen?');
-    if (window.innerWidth < 768) closeSidebar();
-});
+// Audio-Toggle Button Handler
+if (audioBtn) {
+    audioBtn.addEventListener('click', () => {
+        audioActive = !audioActive;
+        if (audioActive) {
+            audioIcon.className = 'fas fa-volume-up text-sm';
+            audioIcon.style.color = 'var(--accent)';
+            audioLabel.textContent = 'Audio';
+        } else {
+            audioIcon.className = 'fas fa-volume-mute text-sm';
+            audioIcon.style.color = 'var(--text-muted)';
+            audioLabel.textContent = 'Stumm';
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        }
+    });
+}
 
-// ════════ MODE STEUERUNG ════════
-function setMode(mode) {
-    currentMode = mode;
-    
-    analyzeBtn.classList.remove('active');
-    ikigaiBtn.classList.remove('active');
-    if (startInterviewBtn) {
-        startInterviewBtn.classList.remove('active');
-    }
-    
-    if (mode === 'cv') {
-        modeLabel.textContent = '📄 Lebenslauf-Modus';
-        modeLabel.classList.remove('hidden');
-        analyzeBtn.classList.add('active');
-        if (interviewPanel) interviewPanel.classList.add('hidden');
-        userInput.placeholder = 'Frag mich etwas zu deinem Lebenslauf...';
-        
-    } else if (mode === 'ikigai') {
-        modeLabel.textContent = '☯️ Ikigai-Modus';
-        modeLabel.classList.remove('hidden');
-        ikigaiBtn.classList.add('active');
-        if (interviewPanel) interviewPanel.classList.add('hidden');
-        userInput.placeholder = 'Beantworte die Fragen für deine Ikigai-Analyse...';
-        
-    } else if (mode === 'interview') {
-        modeLabel.textContent = '🎭 Interview-Simulation';
-        modeLabel.classList.remove('hidden');
-        if (startInterviewBtn) startInterviewBtn.classList.add('active');
-        if (interviewPanel) interviewPanel.classList.remove('hidden');
-        userInput.placeholder = 'Kopiere hier das Stellenangebot oder antworte dem HR-Manager...';
-        
-    } else {
-        modeLabel.classList.add('hidden');
-        if (interviewPanel) interviewPanel.classList.add('hidden');
-        userInput.placeholder = 'Frag mich etwas oder tippe \'Ikigai\'...';
+// Reset Button Handler
+if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+        conversationHistory = [];
+        extractedText = "";
+        jobDescText = "";
+        messageCount = 0;
+        setMode('default');
+        if (fileNameEl) fileNameEl.classList.add('hidden');
+        if (fileInput) fileInput.value = '';
+        if (analyzeBtn) analyzeBtn.classList.add('hidden');
+        chatHistory.innerHTML = `
+        <div class="msg-enter">
+            <div class="flex gap-3 items-start">
+                <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                    <i class="fas fa-robot text-white text-xs"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <span class="text-xs font-semibold" style="color:var(--accent)">Tiep Coach</span>
+                        <span class="text-xs" style="color:var(--text-muted)">jetzt</span>
+                    </div>
+                    <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble" style="background:var(--bg-card);border:1px solid var(--border)">
+                        <p>Das Gespräch wurde erfolgreich zurückgesetzt. Wie kann ich dir heute bei deiner Karriere helfen?</p>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        if (ctaEl) ctaEl.classList.remove('show');
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+    });
+}
+
+// ════════ 📱 SIDEBAR RESPONSIVE ACTIONS ════════
+function toggleSidebar() {
+    if (sidebar && overlay) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('show');
     }
 }
+
+function closeSidebar() {
+    if (sidebar && overlay) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+    }
+}
+
+if (menuBtn) menuBtn.addEventListener('click', toggleSidebar);
+if (overlay) overlay.addEventListener('click', closeSidebar);
 
 // ════════ 🔐 DSGVO & WILLKOMMEN LOGIK ════════
 document.addEventListener('DOMContentLoaded', () => {
