@@ -159,6 +159,25 @@
         #chat-scroll::-webkit-scrollbar-thumb { background: #2a2b2e; border-radius: 10px; }
 
         /* ── Sidebar buttons ── */
+        .sidebar-btn-sm {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.5rem;
+            border-radius: 0.6rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 0.72rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .sidebar-btn-sm:hover { background: rgba(255,255,255,0.05); border-color: var(--border-hover); }
+
         .sidebar-btn {
             width: 100%;
             text-align: left;
@@ -238,24 +257,42 @@
 
         /* ── Upload zone ── */
         .upload-zone {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
+            border: 1.5px dashed var(--border-hover);
+            border-radius: 10px;
+            padding: 10px 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            background: var(--bg-card);
+            background: var(--bg-input);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
+            gap: 10px;
+        }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(66,133,244,0.04); }
+
+        /* ── Sidebar tool button (mit Icon + 2-Zeilen Text) ── */
+        .sidebar-tool-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .sidebar-tool-btn:hover { background: rgba(255,255,255,0.04); border-color: var(--border-hover); }
+        .sidebar-tool-icon {
+            width: 30px; height: 30px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
         }
 
-        .upload-zone:hover {
-            border-color: var(--border-hover);
-            background: #202123;
-        }
+        /* ── Divider ── */
+        .sidebar-divider { height: 1px; background: var(--border); margin: 2px 0; }
     
         /* Sanfter Puls-Effekt für den Gedulds-Text */
         .animate-pulse-soft {
@@ -321,96 +358,138 @@
 <div id="overlay"></div>
 
 <div id="sidebar" class="flex flex-col h-full">
-    <div class="p-4 border-b flex flex-row flex-nowrap justify-between items-center gap-2 flex-shrink-0" style="border-color:var(--border)">
-        
-        <div class="flex-1 min-w-0 overflow-hidden">
-            <div class="flex items-center gap-2 flex-nowrap">
-                <div class="w-7 h-7 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-briefcase text-white text-[10px]"></i>
-                </div>
-                <span class="g-text text-base font-medium truncate whitespace-nowrap" style="font-family:'DM Serif Display',serif;">Tiep Coach</span>
+
+    <!-- ── HEADER ── -->
+    <div class="flex items-center justify-between px-4 py-3 flex-shrink-0" style="border-bottom:1px solid var(--border)">
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 g-bg rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-briefcase text-white text-xs"></i>
             </div>
-            <p class="text-[11px] mt-0.5 truncate whitespace-nowrap" style="color:var(--text-muted)">KI Karriereberatung</p>
+            <div>
+                <p class="text-sm font-semibold leading-tight" style="font-family:'DM Serif Display',serif;background:linear-gradient(120deg,#4285f4,#34a853);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Tiep Coach</p>
+                <p class="text-[10px] leading-tight" style="color:var(--text-muted)">KI-Karriereberatung</p>
+            </div>
         </div>
-        
-        <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors flex-shrink-0" title="Menü schließen">
-            <i class="fas fa-times"></i>
+        <button onclick="closeSidebar()" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors" style="color:var(--text-muted)" title="Menü schließen">
+            <i class="fas fa-times text-xs"></i>
         </button>
-        
     </div>
 
-    <div class="p-4 space-y-3 flex-1 overflow-y-auto">
-        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:var(--text-muted)">Werkzeuge</p>
+    <!-- ── SCROLLBARER INHALTSBEREICH ── -->
+    <div class="flex-1 overflow-y-auto px-3 py-3 space-y-3">
 
+        <!-- Abschnitt: Dokumente -->
         <div>
-            <div class="flex gap-1 mb-2 p-1 rounded-lg" style="background:var(--bg-input);border:1px solid var(--border)">
-                <button id="type-cv-btn" onclick="setUploadType('cv')" class="flex-1 text-xs py-1.5 rounded-md font-medium transition-all" style="background:var(--accent);color:#fff">
+            <p class="text-[9px] font-bold uppercase tracking-[0.12em] mb-2 px-1" style="color:var(--text-muted)">📁 Dokument hochladen</p>
+
+            <!-- Tab-Schalter -->
+            <div class="flex gap-1 mb-2 p-0.5 rounded-lg" style="background:var(--bg-input);border:1px solid var(--border)">
+                <button id="type-cv-btn" onclick="setUploadType('cv')" class="flex-1 text-[11px] py-1.5 rounded-md font-semibold transition-all" style="background:var(--accent);color:#fff">
                     Lebenslauf
                 </button>
-                <button id="type-job-btn" onclick="setUploadType('job')" class="flex-1 text-xs py-1.5 rounded-md font-medium transition-all" style="background:transparent;color:var(--text-muted)">
+                <button id="type-job-btn" onclick="setUploadType('job')" class="flex-1 text-[11px] py-1.5 rounded-md font-medium transition-all" style="background:transparent;color:var(--text-muted)">
                     Stellenbeschr.
                 </button>
             </div>
+
+            <!-- Upload-Zone -->
             <label for="resume-upload" class="upload-zone" id="upload-zone">
-                <div class="text-center">
-                    <i class="fas fa-file-upload text-3xl text-gray-400 mb-2"></i>
-                    <p id="upload-title" class="text-sm font-medium text-gray-200">Lebenslauf hochladen</p>
-                    <p id="upload-subtitle" class="text-xs text-gray-500">PDF, Word oder .txt</p>
+                <i class="fas fa-cloud-upload-alt text-lg flex-shrink-0" style="color:var(--accent)"></i>
+                <div class="min-w-0">
+                    <p id="upload-title" class="text-xs font-medium" style="color:var(--text-primary)">Lebenslauf hochladen</p>
+                    <p id="upload-subtitle" class="text-[10px]" style="color:var(--text-muted)">PDF, Word oder .txt</p>
                 </div>
             </label>
             <input type="file" id="resume-upload" accept=".docx,.txt,.pdf" class="hidden">
-            <p id="file-name" class="text-xs mt-2 text-center hidden" style="color:#5bba6f"></p>
+            <p id="file-name" class="text-[10px] mt-1.5 text-center hidden truncate px-1" style="color:#5bba6f"></p>
         </div>
 
+        <!-- Analyse-Button (erscheint nach Upload) -->
         <button id="analyze-btn" class="sidebar-btn hidden" style="border-color:var(--accent);background:rgba(66,133,244,0.08)">
-            <i class="fas fa-search-plus" style="color:var(--accent)"></i>
-            <span>Lebenslauf analysieren</span>
+            <i class="fas fa-search-plus text-sm" style="color:var(--accent)"></i>
+            <span class="font-semibold" style="color:var(--text-primary)">Lebenslauf analysieren</span>
         </button>
 
-        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
+        <!-- Trennlinie -->
+        <div class="sidebar-divider"></div>
 
-        <button id="start-interview-btn" class="sidebar-btn" style="border-color:#a78bfa; background:rgba(167,139,250,0.05)">
-            <i class="fas fa-comments" style="color:#a78bfa"></i>
-            <span>Interview trainieren</span>
-        </button>
+        <!-- Abschnitt: Werkzeuge -->
+        <div>
+            <p class="text-[9px] font-bold uppercase tracking-[0.12em] mb-2 px-1" style="color:var(--text-muted)">⚡ Werkzeuge</p>
+            <div class="space-y-1.5">
 
-        <div id="interview-panel" class="hidden rounded-xl p-4 text-center transition-all duration-300" style="background:#1e1f21; border:1px dashed #a78bfa">
-            <div class="flex justify-center items-center gap-2 mb-2">
+                <!-- Interview -->
+                <button id="start-interview-btn" class="sidebar-tool-btn" style="--tool-color:#a78bfa">
+                    <div class="sidebar-tool-icon" style="background:rgba(167,139,250,0.12)">
+                        <i class="fas fa-comments text-xs" style="color:#a78bfa"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs font-semibold" style="color:var(--text-primary)">Interview trainieren</p>
+                        <p class="text-[10px]" style="color:var(--text-muted)">Vorstellungsgespräch üben</p>
+                    </div>
+                </button>
+
+                <!-- Ikigai -->
+                <button id="ikigai-btn" class="sidebar-tool-btn" style="--tool-color:#60a5fa">
+                    <div class="sidebar-tool-icon" style="background:rgba(96,165,250,0.12)">
+                        <i class="fas fa-dharmachakra text-xs" style="color:#60a5fa"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs font-semibold" style="color:var(--text-primary)">Ikigai entdecken</p>
+                        <p class="text-[10px]" style="color:var(--text-muted)">Berufung & Sinn finden</p>
+                    </div>
+                </button>
+
+                <!-- Businessplan -->
+                <button id="businessplan-btn" class="sidebar-tool-btn" style="--tool-color:#f59e0b">
+                    <div class="sidebar-tool-icon" style="background:rgba(245,158,11,0.12)">
+                        <i class="fas fa-chart-line text-xs" style="color:#f59e0b"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs font-semibold" style="color:var(--text-primary)">Businessplan erstellen</p>
+                        <p class="text-[10px]" style="color:var(--text-muted)">Schritt für Schritt aufbauen</p>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Interview Panel (nur aktiv sichtbar) -->
+        <div id="interview-panel" class="hidden rounded-xl p-3 text-center" style="background:rgba(167,139,250,0.06);border:1px dashed rgba(167,139,250,0.35)">
+            <div class="flex items-center justify-center gap-2 mb-2">
                 <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </span>
-                <h3 class="text-xs font-semibold uppercase tracking-wider text-purple-400">Simulation aktiv</h3>
+                <span class="text-[10px] font-bold uppercase tracking-widest" style="color:#a78bfa">Simulation aktiv</span>
             </div>
-            
-            <div class="w-16 h-16 rounded-full mx-auto my-2 flex items-center justify-center shadow-lg shadow-purple-500/10 animate-pulse" style="background:linear-gradient(135deg, #6d28d9, #4f46e5)">
-                <i class="fas fa-user-tie text-2xl text-white"></i>
-            </div>
-            <p id="interview-status" class="text-xs text-gray-400">HR-Manager ist bereit...</p>
+            <p id="interview-status" class="text-[10px]" style="color:var(--text-muted)">HR-Manager ist bereit...</p>
         </div>
 
-        <div style="border-top:1px solid var(--border); margin: 0.5rem 0;"></div>
+        <!-- Trennlinie -->
+        <div class="sidebar-divider"></div>
 
-        <button id="ikigai-btn" class="sidebar-btn">
-            <i class="fas fa-dharmachakra" style="color:#a78bfa"></i>
-            <span>Ikigai entdecken</span>
+        <!-- Reset -->
+        <button id="clear-btn" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-colors hover:bg-white/5" style="color:var(--text-muted)">
+            <i class="fas fa-rotate-left text-xs"></i>
+            <span class="text-xs">Gespräch zurücksetzen</span>
         </button>
 
-        <button id="clear-btn" class="sidebar-btn">
-            <i class="fas fa-rotate-left" style="color:var(--text-muted)"></i>
-            <span style="color:var(--text-secondary)">Gespräch zurücksetzen</span>
-        </button>
     </div>
 
-    <div class="p-4 border-t" style="border-color:var(--border)">
-        <div class="flex items-center gap-2 mb-2">
-            <span class="model-badge">KI-Modell: kostenlos</span>
+    <!-- ── FOOTER ── -->
+    <div class="px-4 py-3 flex-shrink-0" style="border-top:1px solid var(--border);background:var(--bg-card)">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-[11px] font-medium" style="color:var(--text-secondary)">Tiep Intelligence <span style="color:var(--text-muted)">v3.0</span></p>
+                <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">
+                    <a href="https://itiep.de" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--text-muted)">itiep.de</a> &copy; 2026
+                </p>
+            </div>
+            <span class="model-badge">kostenlos</span>
         </div>
-        <p class="text-xs" style="color:var(--text-muted)">Tiep Intelligence v3.0</p>
-        <p class="text-[10px] mt-1.5 opacity-50 tracking-wide">
-            Powered by: <span class="g-text">vuxuantiep</span> &copy; <a href="https://itiep.de" target="_blank" rel="noopener noreferrer" class="hover:underline text-gray-400 hover:text-white transition-colors">itiep.de</a> - 2026
-        </p>
     </div>
+
 </div>
 
 <div class="flex-1 flex flex-col h-full min-w-0" style="background:var(--bg-main)">
@@ -447,11 +526,20 @@
                             <p>Willkommen! Ich bin dein <strong>Tiep Coach</strong> – dein KI-Karrierebegleiter.</p>
                             <p style="margin-top:0.5rem">Ich helfe dir bei:</p>
                             <ul>
-                                <li>📄 <strong>Lebenslauf-Optimierung</strong> – lade dein Dokument hoch</li>
+                                <li>📄 <strong>Lebenslauf-Optimierung</strong> – lade dein Dokument links hoch</li>
+                                <li>💼 <strong>Interview-Training</strong> – übe dein Vorstellungsgespräch</li>
                                 <li>☯️ <strong>Ikigai-Analyse</strong> – finde deine Berufung</li>
+                                <li>📊 <strong>Businessplan erstellen</strong> – Schritt für Schritt</li>
                                 <li>💬 <strong>Karriereberatung</strong> – stell mir deine Fragen</li>
                             </ul>
-                            <p style="margin-top:0.5rem;color:#9aa0a6;font-size:0.875rem">Bei tiefgreifenden Themen vermittle ich dich gerne an einen <strong style="color:#5bba6f">echten Coach</strong>.</p>
+                            
+                            <!-- 💡 Hinweis auf Auslastung des kostenlosen KI-Modells -->
+                            <div style="margin-top:0.75rem; padding:10px 12px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.3); border-radius:8px; font-size:0.85rem; color:#f59e0b;">
+                                <i class="fas fa-info-circle" style="margin-right:4px;"></i>
+                                <strong>Wichtiger Hinweis:</strong> Bitte hab bei Anfragen etwas Geduld. Da die KI in der kostenlosen Version läuft, sind die Modelle zeitweise stark ausgelastet. Eine Antwort kann daher manchmal 10–15 Sekunden dauern.
+                            </div>
+
+                            <p style="margin-top:0.75rem;color:#9aa0a6;font-size:0.875rem">Alle Werkzeuge findest du im <strong style="color:#5bba6f">linken Menü</strong>. Bei tiefgreifenden Themen vermittle ich dich gerne an einen echten Coach.</p>
                         </div>
                     </div>
                 </div>
@@ -461,7 +549,7 @@
     </div>
 
     <div id="live-coach-cta" class="max-w-2xl mx-auto px-4 py-2 w-full">
-        <div class="rounded-2xl p-4 flex items-center gap-4" style="background:rgba(52,168,83,0.08);border:1px solid rgba(52,168,83,0.25)">
+        <div class="rounded-2xl p-4 flex items-center gap-4 relative" style="background:rgba(52,168,83,0.08);border:1px solid rgba(52,168,83,0.25)">
             <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center" style="background:rgba(52,168,83,0.15)">
                 <i class="fas fa-user-tie" style="color:#5bba6f"></i>
             </div>
@@ -472,6 +560,9 @@
             <a href="mailto:coach@tiep.de" class="flex-shrink-0 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20">
                 Coach kontaktieren
             </a>
+            <button id="cta-close-btn" onclick="document.getElementById('live-coach-cta').classList.remove('show')" class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors" title="Schließen" style="color:var(--text-muted)">
+                <i class="fas fa-times text-xs"></i>
+            </button>
         </div>
     </div>
 
@@ -496,7 +587,41 @@
 <script>
 // ════════ ⚙️ CONFIG & PROMPTS ════════
 const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
-const SYSTEM_DEFAULT = "Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown. Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden emotionalen Hürden ein echter Coach wertvolle Unterstützung bieten kann.";
+const SYSTEM_DEFAULT = `Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown.
+
+WICHTIG – Du kennst die vollständige Oberfläche dieser App und weist den Nutzer proaktiv auf die richtigen Funktionen hin:
+
+📌 LINKE SIDEBAR – Verfügbare Werkzeuge:
+1. **Lebenslauf hochladen** (Upload-Zone, oben): Tab "Lebenslauf" wählen → PDF, Word (.docx) oder .txt hochladen. Danach erscheint automatisch der Button "Lebenslauf analysieren".
+2. **Stellenbeschreibung hochladen**: Tab "Stellenbeschr." in derselben Upload-Zone wählen → für maßgeschneiderte Bewerbungstipps und Interview-Vorbereitung.
+3. **Lebenslauf analysieren**: Erscheint nach dem Lebenslauf-Upload. Startet eine tiefe, strukturierte CV-Analyse.
+4. **Interview trainieren**: Simuliert ein realistisches Vorstellungsgespräch. Funktioniert am besten mit hochgeladenem Lebenslauf.
+5. **Ikigai entdecken**: Geführte Selbstreflexions-Analyse zur Berufsfindung.
+6. **Businessplan erstellen**: Hilft beim Aufbau eines professionellen Businessplans Schritt für Schritt.
+7. **Gespräch zurücksetzen**: Löscht den aktuellen Chat-Verlauf.
+
+Erkennungsregeln – Wenn der Nutzer fragt oder schreibt:
+- "Lebenslauf hochladen / analysieren / optimieren" → Weise auf die Upload-Zone oben links hin: Tab "Lebenslauf" wählen, Datei hochladen, dann "Lebenslauf analysieren" klicken.
+- "Stellenanzeige / Jobdescription einreichen" → Tab "Stellenbeschr." in der Sidebar.
+- "Interview üben / Bewerbungsgespräch trainieren" → Button "Interview trainieren" in der Sidebar.
+- "Businessplan / Geschäftsplan erstellen" → Button "Businessplan erstellen" in der Sidebar.
+- "Berufung / Sinn / was soll ich machen" → Button "Ikigai entdecken" in der Sidebar.
+
+Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden Karrierefragen ein echter Coach wertvolle Unterstützung bieten kann.`;
+const SYSTEM_BUSINESSPLAN = `Du bist ein erfahrener Unternehmensberater und Business-Coach. Begleite den Nutzer Schritt für Schritt bei der Erstellung eines professionellen Businessplans auf Deutsch.
+
+Struktur eines vollständigen Businessplans:
+1. Executive Summary (Kurzübersicht der Geschäftsidee)
+2. Geschäftsidee & Vision
+3. Marktanalyse & Zielgruppe
+4. Wettbewerbsanalyse
+5. Geschäftsmodell & Leistungsangebot
+6. Marketing & Vertriebsstrategie
+7. Operativer Plan (Team, Prozesse, Ressourcen)
+8. Finanzplanung (Investitionen, Umsatzprognose, Break-even)
+9. Risikobewertung & Gegenmaßnahmen
+
+Beginne damit, die Geschäftsidee und Branche des Nutzers kennenzulernen. Stelle immer nur EINE gezielte Frage auf einmal und baue den Plan iterativ auf. Sei direkt, strukturiert und motivierend. Fasse am Ende jedes Abschnitts das Ergebnis kurz zusammen.`;
 const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. Strukturiere deine Antwort streng nach folgenden Punkten:\n1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)\n2. Stärken & markante Kompetenzen\n3. Schwachstellen, Lücken oder formale Fehler\n4. Konkrete Formulierungsvorschläge für Bulletpoints im CV\n5. Nächste Schritte (z.B. Anschreiben-Entwurf oder Vorbereitung auf Interviews).\n\nBleibe motivierend, aber absolut ehrlich und detailorientiert.`;
 const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager und Interviewer. Du simulierst mit dem Nutzer ein realistisches, professionelles Vorstellungsgespräch für seine Wunschbranche basierend auf seinem eingereichten Lebenslauf.\n\nRichtlinien:\n1. Stelle immer nur GENAU EINE Frage auf einmal.\n2. Warte die Antwort des Nutzers ab, bevor du reagierst.\n3. Reagiere authentisch auf die Antworten: Gehe auf das Gesagte ein, hake bei Unklarheiten nach oder stelle tiefergehende Fachfragen.\n4. Gib wertvolles, direktes Feedback zu den Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).\n5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
 const SYSTEM_IKIGAI = "Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutzer feinfühlig Schritt für Schritt. Stelle immer nur GENAU EINE Frage auf einmal, um den Nutzer nicht zu überfordern. Sei herzlich, reagiere auf die Antworten eingehend und bestärkend.";
@@ -528,6 +653,7 @@ const modeLabel = document.getElementById('mode-label');
 const analyzeBtn = document.getElementById('analyze-btn');
 const ikigaiBtn = document.getElementById('ikigai-btn');
 const startInterviewBtn = document.getElementById('start-interview-btn');
+const businessplanBtn = document.getElementById('businessplan-btn');
 const interviewPanel = document.getElementById('interview-panel');
 const interviewStatus = document.getElementById('interview-status');
 const micBtn = document.getElementById('mic-btn');
@@ -658,8 +784,9 @@ function scrollToBottom() {
     }
 }
 
+// CTA nur nach echten Analyse-Ergebnissen anzeigen (CV, Interview, Businessplan)
 function checkShowCTA() {
-    if (messageCount >= 4 && !ctaEl.classList.contains('show')) {
+    if (['cv', 'interview', 'businessplan'].includes(currentMode) && !ctaEl.classList.contains('show')) {
         ctaEl.classList.add('show');
     }
 }
@@ -676,73 +803,129 @@ function setMode(mode) {
     } else if (mode === 'ikigai') {
         modeLabel.textContent = "☯️ Ikigai-Analyse";
         modeLabel.classList.remove('hidden');
+    } else if (mode === 'businessplan') {
+        modeLabel.textContent = "📊 Businessplan-Erstellung";
+        modeLabel.classList.remove('hidden');
     } else {
         modeLabel.classList.add('hidden');
         if (interviewPanel) interviewPanel.classList.add('hidden');
     }
 }
 
-// ════════ 🤖 ASK AI CORE FUNCTION (WITH LOCKS) ════════
+// ════════ 🤖 ASK AI CORE FUNCTION ════════
+let currentAbortController = null; // Globaler AbortController für manuellen Abbruch
+
 async function askAI(userMsg, systemMsg) {
     conversationHistory.push({ role: 'user', content: userMsg });
     showThinking();
 
-    // 🔒 Systemweiter Schutz gegen Klicks während der Verarbeitung
     sendBtn.disabled = true;
     userInput.disabled = true;
     userInput.placeholder = "Tiep Coach analysiert…";
     sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-sm"></i>';
     sendBtn.classList.add('opacity-40', 'cursor-not-allowed');
 
-    // Kontext zusammenbauen (Lebenslauf und/oder Stellenbeschreibung falls vorhanden)
-    const finalPrompt = extractedText ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}` : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
+    const finalPrompt = extractedText
+        ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}`
+        : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
     const historyToSend = [...conversationHistory];
     if (extractedText || jobDescText) {
         historyToSend[historyToSend.length - 1] = { role: 'user', content: finalPrompt };
     }
 
-    try {
-        const res = await fetch(`${WORKER_URL}/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: 'openrouter/free',
-                messages: [
-                    { role: 'system', content: systemMsg },
-                    ...historyToSend
-                ]
-            })
-        });
+    // Fallback-Modelle: erst freier Router, dann gezielt stabile Gratis-Modelle
+    const MODEL_SEQUENCE = [
+        'openrouter/free',
+        'meta-llama/llama-3-8b-instruct:free',
+        'mistralai/mistral-7b-instruct:free'
+    ];
+    const TIMEOUT_MS = 90000; // 90 Sekunden pro Versuch
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        const aiReply = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : (data.reply || "...");
+    let aiReply = null;
+    let lastError = null;
+    let userCancelled = false;
 
+    for (let attempt = 0; attempt < MODEL_SEQUENCE.length; attempt++) {
+        if (userCancelled) break;
+
+        const model = MODEL_SEQUENCE[attempt];
+        currentAbortController = new AbortController();
+
+        // Statustext in der Thinking-Bubble aktualisieren
+        updateThinkingStatus(attempt);
+
+        // Harter Timeout: nach 90s automatisch abbrechen und nächstes Modell versuchen
+        const timeoutId = setTimeout(() => {
+            if (currentAbortController) currentAbortController.abort();
+        }, TIMEOUT_MS);
+
+        try {
+            if (attempt > 0) {
+                userInput.placeholder = `Suche alternatives Modell (${attempt + 1}/${MODEL_SEQUENCE.length})…`;
+                await new Promise(r => setTimeout(r, 2000)); // 2s Pause zwischen Versuchen
+            }
+
+            const res = await fetch(`${WORKER_URL}/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                signal: currentAbortController.signal,
+                body: JSON.stringify({
+                    model,
+                    messages: [
+                        { role: 'system', content: systemMsg },
+                        ...historyToSend
+                    ]
+                })
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+
+            if (data.choices?.[0]?.message?.content)              aiReply = data.choices[0].message.content;
+            else if (typeof data.reply === 'string' && data.reply.trim())    aiReply = data.reply;
+            else if (typeof data.content === 'string' && data.content.trim()) aiReply = data.content;
+            else if (typeof data.message === 'string' && data.message.trim()) aiReply = data.message;
+            else if (typeof data.text === 'string' && data.text.trim())       aiReply = data.text;
+
+            if (!aiReply) throw new Error('Leere Antwort vom Server.');
+
+            break; // Erfolg – Schleife beenden
+
+        } catch (err) {
+            clearTimeout(timeoutId);
+            if (err.name === 'AbortError' && userCancelled) break;
+            lastError = err;
+            console.warn(`[Tiep Coach] Modell ${model} fehlgeschlagen:`, err.message);
+        }
+    }
+
+    currentAbortController = null;
+
+    if (aiReply) {
         removeThinking();
         conversationHistory.push({ role: 'assistant', content: aiReply });
         messageCount++;
-
         if (interviewPanel && currentMode === 'interview' && interviewStatus) {
             interviewStatus.textContent = "HR-Manager hat gesprochen.";
         }
-
-        // Ausgabe mit Schreibmaschinen-Effekt zur Erhöhung der UX
         await addMessageTypewriter('ai', aiReply, systemMsg === SYSTEM_CV);
         speakText(aiReply);
-
-    } catch (err) {
-        console.error(err);
+    } else if (userCancelled) {
         removeThinking();
-        addMessage('ai', 'Entschuldigung, es gab ein Verbindungsproblem. Bitte versuche es gleich noch einmal.');
-    } finally {
-        // 🔓 Entsperrung aller Eingabeelemente nach Abschluss der Animation
-        sendBtn.disabled = false;
-        userInput.disabled = false;
-        userInput.placeholder = "Schreibe eine Nachricht…";
-        sendBtn.innerHTML = '<i class="fas fa-arrow-up text-white text-sm"></i>';
-        sendBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-        scrollToBottom();
+        addMessage('ai', '⏹️ **Anfrage abgebrochen.** Du kannst jederzeit eine neue Frage stellen.');
+    } else {
+        removeThinking();
+        addMessage('ai', `⚠️ **Alle KI-Modelle sind aktuell überlastet.**\n\nBitte warte 30–60 Sekunden und versuche es dann erneut. Das ist ein temporäres Problem der kostenlosen Server.\n\n*Fehlerdetail: ${lastError?.message || 'Keine Antwort'}*`);
     }
+
+    sendBtn.disabled = false;
+    userInput.disabled = false;
+    userInput.placeholder = "Schreibe eine Nachricht…";
+    sendBtn.innerHTML = '<i class="fas fa-arrow-up text-white text-sm"></i>';
+    sendBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+    scrollToBottom();
 }
 
 // ════════ 💬 CHAT RENDERING ENGINE ════════
@@ -849,8 +1032,8 @@ function injectAnalysisOptions(container, analyticalText) {
             <i class="fas fa-chevron-down text-[10px] opacity-60"></i>
         </button>
         <div class="dropdown-menu hidden absolute left-0 bottom-full mb-2 w-56 rounded-xl shadow-xl border p-1 z-50 flex flex-col gap-0.5" style="background:var(--bg-card); border-color:var(--border);">
-            <button class="download-docx-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200 transition-colors">
-                <i class="fas fa-file-word text-blue-400"></i> .docx herunterladen
+            <button class="download-pdf-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200 transition-colors">
+                <i class="fas fa-file-pdf text-red-400"></i> Als PDF speichern
             </button>
             <button class="email-coach-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200 transition-colors">
                 <i class="fas fa-envelope text-green-400"></i> An echten Coach senden
@@ -878,22 +1061,55 @@ function injectAnalysisOptions(container, analyticalText) {
     
     document.addEventListener('click', () => dropdown.classList.add('hidden'));
     
-    // Klick auf ".docx herunterladen"
-    option1Wrap.querySelector('.download-docx-btn').addEventListener('click', () => {
+    // Klick auf "Als PDF speichern"
+    option1Wrap.querySelector('.download-pdf-btn').addEventListener('click', () => {
         try {
-            // Generiert eine saubere Textdatei als temporären DOCX-Ersatz-Blob
-            const header = "TIEP COACH - LEBENSLAUF-ANALYSE\n=================================\n\n";
-            const blob = new Blob([header + analyticalText], { type: "application/msword" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "Lebenslauf_Analyse_TiepCoach.doc";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            const modeLabels = { cv: 'Lebenslauf-Analyse', interview: 'Interview-Auswertung', businessplan: 'Businessplan', default: 'Karriere-Analyse' };
+            const title = `Tiep Coach – ${modeLabels[currentMode] || modeLabels.default}`;
+            const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+            // Markdown → sauberes HTML für den Print-Dialog
+            const contentHtml = window.marked ? window.marked.parse(analyticalText) : analyticalText.replace(/\n/g,'<br>');
+
+            const printWin = window.open('', '_blank', 'width=800,height=900');
+            printWin.document.write(`<!DOCTYPE html><html lang="de"><head>
+<meta charset="UTF-8">
+<title>${title}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;color:#1a1a1a;background:#fff;padding:40px 50px}
+  header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #4285f4;padding-bottom:12px;margin-bottom:24px}
+  header h1{font-family:'DM Serif Display',serif;font-size:20px;color:#4285f4}
+  header span{font-size:11px;color:#666}
+  h1,h2,h3{font-family:'DM Serif Display',serif;color:#1a1a1a;margin:16px 0 6px}
+  h2{font-size:15px;border-bottom:1px solid #e0e0e0;padding-bottom:4px}
+  h3{font-size:13px;color:#4285f4}
+  p{margin:6px 0}
+  ul,ol{padding-left:18px;margin:6px 0}
+  li{margin:3px 0}
+  strong{font-weight:600;color:#1a1a1a}
+  em{color:#555}
+  hr{border:none;border-top:1px solid #e0e0e0;margin:16px 0}
+  blockquote{border-left:3px solid #4285f4;padding-left:12px;color:#555;margin:8px 0}
+  footer{margin-top:32px;padding-top:10px;border-top:1px solid #e0e0e0;font-size:10px;color:#999;text-align:center}
+  @media print{body{padding:20px 30px}@page{margin:15mm}}
+</style>
+</head><body>
+<header>
+  <h1>Tiep Coach – ${modeLabels[currentMode] || modeLabels.default}</h1>
+  <span>Erstellt am ${date} &nbsp;|&nbsp; itiep.de</span>
+</header>
+<main>${contentHtml}</main>
+<footer>Dieses Dokument wurde automatisch von Tiep Coach (KI-Karriereberatung) erstellt. &copy; ${new Date().getFullYear()} vuxuantiep &ndash; itiep.de</footer>
+</body></html>`);
+            printWin.document.close();
+            printWin.onload = () => {
+                printWin.focus();
+                printWin.print();
+            };
         } catch (err) {
-            console.error("Fehler beim Datei-Export:", err);
+            console.error('PDF-Export Fehler:', err);
         }
     });
     
@@ -918,8 +1134,22 @@ function injectAnalysisOptions(container, analyticalText) {
     scrollToBottom();
 }
 
-// ════════ ⚙️ ERWEITERTE THINKING-BUBBLE MIT TIMEOUT-TEXT ════════
-let patienceTimer = null; // Globaler Speicher für den 3-Sekunden-Timer
+// ════════ ⚙️ THINKING-BUBBLE MIT ABBRECHEN-BUTTON ════════
+let patienceTimer = null;
+const THINKING_STAGES = [
+    { delay: 0,     text: 'Verbinde mit KI-Server…' },
+    { delay: 8000,  text: 'Warte auf freies KI-Modell…' },
+    { delay: 20000, text: 'Modell lädt – kann bis zu 30 Sek. dauern…' },
+    { delay: 40000, text: 'Noch aktiv – suche alternatives Modell…' },
+    { delay: 65000, text: 'Fast fertig – letzter Versuch läuft…' },
+];
+
+function updateThinkingStatus(attemptIndex) {
+    const el = document.querySelector('#thinking-status-text');
+    if (!el) return;
+    const msgs = ['Analysiere deine Anfrage…', 'Versuche alternatives Modell…', 'Letzter Versuch mit stabilem Modell…'];
+    el.textContent = msgs[attemptIndex] || msgs[0];
+}
 
 function showThinking() {
     removeThinking();
@@ -933,11 +1163,14 @@ function showThinking() {
         </div>
         <div class="flex-1">
             <div class="flex flex-col gap-2">
-                <div class="rounded-2xl rounded-tl-sm p-3 inline-flex items-center gap-1.5 dot-pulse animate-pulse" style="background:var(--bg-card);border:1px solid var(--border); width: fit-content;">
+                <div class="rounded-2xl rounded-tl-sm p-3 inline-flex items-center gap-2 dot-pulse" style="background:var(--bg-card);border:1px solid var(--border);width:fit-content">
                     <span></span><span></span><span></span>
                 </div>
-                <div id="patience-text" class="text-xs text-gray-500 italic hidden opacity-0 transition-opacity duration-500 pl-1">
-                    Bitte noch einen Moment Geduld, gerade sind viele KI-Modelle beschäftigt... keine Sorge, gleich kommt die Antwort...
+                <div class="flex items-center gap-2 pl-1">
+                    <span id="thinking-status-text" class="text-[11px] italic transition-all duration-500" style="color:var(--text-muted)">Verbinde mit KI-Server…</span>
+                    <button id="thinking-cancel-btn" onclick="cancelThinking()" class="text-[10px] px-2 py-0.5 rounded-full border transition-colors hover:bg-red-500/10" style="color:#ef4444;border-color:rgba(239,68,68,0.3)">
+                        Abbrechen
+                    </button>
                 </div>
             </div>
         </div>
@@ -945,27 +1178,170 @@ function showThinking() {
     chatHistory.appendChild(div);
     scrollToBottom();
 
-    // ⏳ TIMER STARTEN: Nach genau 3 Sekunden (3000ms) deinen Text weich einblenden
-    patienceTimer = setTimeout(() => {
-        const patienceTextEl = div.querySelector('#patience-text');
-        if (patienceTextEl) {
-            patienceTextEl.classList.remove('hidden');
-            setTimeout(() => {
-                patienceTextEl.classList.remove('opacity-0');
-                patienceTextEl.classList.add('opacity-100', 'animate-pulse-soft');
-            }, 50);
-        }
-    }, 3000);
+    // Stufenweise Statusmeldungen
+    patienceTimer = [];
+    THINKING_STAGES.forEach(({ delay, text }) => {
+        patienceTimer.push(setTimeout(() => {
+            const el = document.querySelector('#thinking-status-text');
+            if (el) el.textContent = text;
+        }, delay));
+    });
+}
+
+function cancelThinking() {
+    if (currentAbortController) {
+        currentAbortController.abort();
+        // Flag setzen damit askAI weiß: User hat abgebrochen
+        currentAbortController._userCancelled = true;
+    }
+    removeThinking();
+    // Eingabe wieder freigeben
+    sendBtn.disabled = false;
+    userInput.disabled = false;
+    userInput.placeholder = "Schreibe eine Nachricht…";
+    sendBtn.innerHTML = '<i class="fas fa-arrow-up text-white text-sm"></i>';
+    sendBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+    addMessage('ai', '⏹️ **Abgebrochen.** Du kannst jederzeit eine neue Frage stellen.');
+    scrollToBottom();
 }
 
 function removeThinking() {
-    // Falls die KI schneller als 3 Sekunden war, stoppen wir den Timer sofort!
-    if (patienceTimer) {
+    if (Array.isArray(patienceTimer)) {
+        patienceTimer.forEach(clearTimeout);
+    } else if (patienceTimer) {
         clearTimeout(patienceTimer);
-        patienceTimer = null;
     }
+    patienceTimer = null;
     const el = document.getElementById('thinking-bubble');
     if (el) el.remove();
+}
+
+// ════════ 💬 LOKALE ANTWORTEN – kein API-Call für Standardfragen ════════
+// ════════════════════════════════════════════════════════════════
+// 💬 LOKALE ANTWORTEN – HIER KANNST DU SELBST PFLEGEN!
+// ════════════════════════════════════════════════════════════════
+//
+// WIE ES FUNKTIONIERT:
+//   Jeder Eintrag hat:
+//     patterns: [ /regulärer ausdruck/i ]  ← Texte die erkannt werden
+//     reply: `Antworttext in Markdown`      ← Was der Coach antwortet
+//
+// NEUEN EINTRAG HINZUFÜGEN – einfach ans Ende der Liste kopieren:
+//   {
+//     patterns: [/dein muster/i, /alternatives muster/i],
+//     reply: `Deine Antwort hier. **Fett**, *kursiv*, Listen mit -`
+//   },
+//
+// REGEX-TIPPS:
+//   /text/i         → Groß-/Kleinschreibung egal
+//   /hallo|hi|hey/i → Mehrere Wörter = ODER
+//   /^hallo$/i      → Exakt nur "hallo" (^ = Anfang, $ = Ende)
+//   /lebenslauf/i   → Enthält das Wort "lebenslauf" irgendwo
+// ════════════════════════════════════════════════════════════════
+const LOCAL_RESPONSES = [
+    // ── Begrüßungen ──
+    {
+        patterns: [/^(hallo|hi|hey|guten tag|guten morgen|guten abend|servus|moin|na|hej|salut)[\s!?.,]*$/i],
+        reply: `👋 **Hallo!** Schön, dass du da bist.\n\nIch bin **Tiep Coach** – dein KI-Karrierebegleiter. Womit kann ich dir heute helfen?\n\n- 📄 **Lebenslauf hochladen & analysieren** → Tab "Lebenslauf" links\n- 💼 **Interview trainieren** → Button links\n- 📊 **Businessplan erstellen** → Button links\n- ☯️ **Ikigai entdecken** → Button links\n\nOder stelle mir direkt deine Karrierefrage! 🚀`
+    },
+    // ── Was kannst du / Funktionen ──
+    {
+        patterns: [/was kannst du( mir)?( (helfen|anbieten|machen|tun))?/i, /wie (kannst|kann) (du|ich) (mir |dir )?helfen/i, /wobei (hilfst|kannst) du/i, /was (bietest|hast) du an/i],
+        reply: `Ich bin **Tiep Coach** – dein KI-Karrierebegleiter! Hier ist, was ich für dich tun kann: 💼\n\n- 📄 **Lebenslauf analysieren & optimieren** – lade dein PDF oder Word-Dokument im linken Menü hoch\n- 💼 **Interview-Simulation** – übe ein echtes Vorstellungsgespräch mit HR-Feedback\n- 📊 **Businessplan erstellen** – Schritt für Schritt strukturiert aufbauen\n- ☯️ **Ikigai-Analyse** – finde heraus, welcher Beruf wirklich zu dir passt\n- 💬 **Karrierefragen** – Gehaltsverhandlung, Jobwechsel, Bewerbungsstrategie und mehr\n\nAlle Werkzeuge findest du im **☰ Menü** (oben links). Womit möchtest du starten?`
+    },
+    // ── Wer bist du ──
+    {
+        patterns: [/^(wer bist du|was bist du|wie funktionierst du)[\s!?.,]*$/i],
+        reply: `Ich bin **Tiep Coach**, ein KI-gestützter Karriereberater von [itiep.de](https://itiep.de). 🤖\n\nIch helfe dir bei Lebenslauf, Interview, Businessplan und Karriereplanung. Alles kostenlos und ohne Datenspeicherung.\n\nSchreib mir einfach, was dich beschäftigt!`
+    },
+    // ── Wie geht's ──
+    {
+        patterns: [/^(wie geht('s| es)( dir)?|wie läuft('s| es)|alles gut\??|alles okay\??)[\s!?.,]*$/i],
+        reply: `Mir geht es bestens – bereit für deine Karrierefragen! 💪\n\nWas beschäftigt dich heute?`
+    },
+    // ── Danke ──
+    {
+        patterns: [/^(danke|danke schön|dankeschön|vielen dank|merci|thx|thanks|ty)[\s!?.,]*$/i],
+        reply: `😊 **Sehr gerne!** Ich freue mich, wenn ich helfen konnte.\n\nGibt es noch etwas, wobei ich dich unterstützen kann?`
+    },
+    // ── Hilfe / Wo anfangen ──
+    {
+        patterns: [/^(hilfe|help|hilf mir|wie fange ich an|wo fange ich an|was soll ich (tun|machen))[\s!?.,]*$/i],
+        reply: `Kein Problem! So startest du am besten: 😊\n\n1. **Lebenslauf hochladen** → ☰ Menü öffnen → Tab **"Lebenslauf"** → Datei hochladen\n2. Auf **"Lebenslauf analysieren"** klicken → du erhältst sofort detailliertes Feedback\n3. Oder direkt eine Frage stellen – z. B. *"Wie optimiere ich meinen Lebenslauf für IT-Jobs?"*\n\nWas ist dein Ziel heute?`
+    },
+    // ── Tschüss / Auf Wiedersehen ──
+    {
+        patterns: [/^(tschüss|tschüs|auf wiedersehen|bye|ciao|bis dann|bis bald|good ?bye)[\s!?.,]*$/i],
+        reply: `Bis bald! 👋 Ich wünsche dir viel Erfolg bei deiner Karriere.\n\nWenn du wieder Hilfe brauchst – ich bin immer hier. 🚀`
+    },
+    // ── Gehaltsverhandlung ──
+    {
+        patterns: [/gehalt(sverhandlung)?|gehaltserhöhung|lohn(erhöhung)?|vergütung|was (soll|kann) ich verdienen/i],
+        reply: `Gehaltsverhandlung ist ein wichtiges Thema! 💰 Hier ein schneller Überblick:\n\n**Vorbereitung:**\n- Recherchiere Marktgehälter (Glassdoor, Gehaltsreporter, Stepstone)\n- Kenne deinen Marktwert (Erfahrung, Skills, Region)\n- Setze dir eine klare Zielspanne (Wunsch + Minimum)\n\n**Im Gespräch:**\n- Nenne als Erster eine Zahl – wer zuerst nennt, setzt den Anker\n- Begründe mit Mehrwert, nicht mit persönlichem Bedarf\n- Verhandle auch über Benefits (Home Office, Weiterbildung, Urlaub)\n\nMöchtest du, dass ich eine **konkrete Verhandlungsstrategie** für deine Situation ausarbeite?`
+    },
+    // ── Jobwechsel ──
+    {
+        patterns: [/jobwechsel|stelle wechseln|neuen job|neue stelle|kündigen|kündigung|arbeitgeber wechseln/i],
+        reply: `Ein Jobwechsel ist eine große Entscheidung – lass uns das strukturiert angehen! 🔄\n\n**Gute Gründe für einen Wechsel:**\n- Kein Wachstum / keine Entwicklungsmöglichkeiten\n- Unterbezahlung trotz Gespräch\n- Toxische Arbeitsatmosphäre\n- Karriereziele nicht erreichbar\n\n**Meine Empfehlung:**\n1. Lade deinen Lebenslauf hoch → ich analysiere dein Profil\n2. Wir entwickeln eine Wechselstrategie für deine Branche\n3. Optional: Interview-Training für Vorstellungsgespräche\n\nMöchtest du starten?`
+    },
+
+    // ════ HIER KANNST DU NEUE EINTRÄGE HINZUFÜGEN ════
+    // Kopiere das Muster oben und füge es vor dieser Zeile ein.
+
+];
+
+// CV-bezogene Fragen – Muster
+const CV_PATTERNS = [
+    /lebenslauf/i, /cv\b/i, /bewerbung/i, /bewerbungsunterlagen/i,
+    /optimier/i, /analysier/i, /verbessern/i, /überarbeiten/i,
+    /anschreiben/i, /stellenbeschreibung/i, /profil (schärfen|optimieren)/i,
+    /mein (cv|lebenslauf)/i, /meinen (cv|lebenslauf)/i
+];
+
+// Interview-bezogene Fragen – Muster
+const INTERVIEW_PATTERNS = [
+    /interview/i, /vorstellungsgespräch/i, /gespräch (üben|trainieren|simulieren)/i,
+    /interview (üben|trainieren|simulieren)/i, /bewerbungsgespräch/i
+];
+
+// Businessplan-bezogene Fragen – Muster
+const BUSINESS_PATTERNS = [
+    /businessplan/i, /business plan/i, /geschäftsplan/i, /geschäftsidee/i,
+    /unternehmen (gründen|aufbauen|planen)/i, /startup/i, /selbstständig/i
+];
+
+const CV_UPLOAD_HINT = `📂 **Lebenslauf noch nicht hochgeladen**\n\nUm dir bei deinem Lebenslauf helfen zu können, brauche ich zuerst dein Dokument.\n\n**So geht's:**\n1. Öffne das **☰ Menü** (oben links)\n2. Wähle den Tab **"Lebenslauf"**\n3. Lade deine Datei hoch (**PDF, Word oder .txt**)\n4. Klicke danach auf **"Lebenslauf analysieren"**\n\nSobald du das getan hast, kann ich deinen CV detailliert analysieren und konkrete Verbesserungsvorschläge geben! 💪`;
+
+const INTERVIEW_UPLOAD_HINT = `📂 **Lebenslauf fehlt noch**\n\nFür eine realistische Interview-Simulation benötige ich zuerst deinen Lebenslauf – damit ich als HR-Manager gezielt auf **dein Profil, deine Stärken und deine Lücken** eingehen kann.\n\n**So startest du:**\n1. Öffne das **☰ Menü** (oben links)\n2. Tab **"Lebenslauf"** wählen → Datei hochladen\n3. Dann den Button **"Interview trainieren"** klicken\n\nNach dem Upload startet die Simulation automatisch auf dich zugeschnitten! 🎤`;
+
+const BUSINESS_UPLOAD_HINT = `📂 **Lebenslauf für den Businessplan empfohlen**\n\nMit deinem Lebenslauf kann ich deinen Businessplan viel besser auf deine **bisherigen Erfahrungen, Stärken und Kompetenzen** abstimmen.\n\n**Empfehlung:**\n1. Öffne das **☰ Menü** (oben links)\n2. Tab **"Lebenslauf"** wählen → Datei hochladen\n3. Dann den Button **"Businessplan erstellen"** klicken\n\nOder klicke einfach direkt auf **"Businessplan erstellen"** im Menü – ohne Lebenslauf starten wir allgemein. Du entscheidest! 📊`;
+
+function tryLocalResponse(text) {
+    const trimmed = text.trim();
+
+    // Feste Standardantworten zuerst prüfen
+    for (const entry of LOCAL_RESPONSES) {
+        if (entry.patterns.some(p => p.test(trimmed))) {
+            return entry.reply;
+        }
+    }
+
+    // CV-Fragen ohne hochgeladenen Lebenslauf → Upload-Hinweis
+    if (!extractedText && CV_PATTERNS.some(p => p.test(trimmed))) {
+        return CV_UPLOAD_HINT;
+    }
+
+    // Interview-Fragen ohne Lebenslauf → freundlicher Hinweis
+    if (!extractedText && INTERVIEW_PATTERNS.some(p => p.test(trimmed))) {
+        return INTERVIEW_UPLOAD_HINT;
+    }
+
+    // Businessplan-Fragen ohne Lebenslauf → Empfehlung
+    if (!extractedText && BUSINESS_PATTERNS.some(p => p.test(trimmed))) {
+        return BUSINESS_UPLOAD_HINT;
+    }
+
+    return null;
 }
 
 // ════════ 🚀 USER CORE INTERACTIONS (KORRIGIERT) ════════
@@ -977,12 +1353,21 @@ async function handleSend() {
     userInput.rows = 1;
     addMessage('user', text);
 
+    // Lokale Antwort – kein API-Call nötig
+    const localReply = tryLocalResponse(text);
+    if (localReply && currentMode === 'default') {
+        await addMessageTypewriter('ai', localReply, false);
+        messageCount++;
+        checkShowCTA();
+        return;
+    }
+
     let activeSystemPrompt = SYSTEM_DEFAULT;
     if (currentMode === 'cv') activeSystemPrompt = SYSTEM_CV;
     else if (currentMode === 'interview') activeSystemPrompt = SYSTEM_INTERVIEW;
     else if (currentMode === 'ikigai') activeSystemPrompt = SYSTEM_IKIGAI;
+    else if (currentMode === 'businessplan') activeSystemPrompt = SYSTEM_BUSINESSPLAN;
 
-    // Ruft intern showThinking() auf, wo jetzt unser Timer startet
     await askAI(text, activeSystemPrompt);
     checkShowCTA();
 }
@@ -1148,12 +1533,28 @@ if (ikigaiBtn) {
     });
 }
 
+if (businessplanBtn) {
+    businessplanBtn.addEventListener('click', () => {
+        if (window.innerWidth < 768) closeSidebar();
+        if (!extractedText || extractedText.trim() === '') {
+            addMessage('ai', BUSINESS_UPLOAD_HINT);
+            scrollToBottom();
+            return;
+        }
+        setMode('businessplan');
+        conversationHistory = [];
+        chatHistory.innerHTML = '';
+        addMessage('user', 'Ich möchte einen Businessplan erstellen.');
+        askAI('Begrüße mich kurz und erkläre in 2 Sätzen, wie wir vorgehen werden. Stelle dann die erste Frage: Was ist meine Geschäftsidee und in welcher Branche möchte ich tätig sein?', SYSTEM_BUSINESSPLAN);
+    });
+}
+
 if (startInterviewBtn) {
     startInterviewBtn.addEventListener('click', () => {
         if (window.innerWidth < 768) closeSidebar();
         if (!extractedText || extractedText.trim() === '') {
-            setMode('cv');
-            addMessage('ai', 'Guten Tag! Bevor wir mit dem simulierten Vorstellungsgespräch starten können, benötige ich Ihren Lebenslauf. Bitte laden Sie diesen kurz im linken Menü hoch, damit ich mich optimal auf Sie vorbereiten kann! 📄✨');
+            addMessage('ai', INTERVIEW_UPLOAD_HINT);
+            scrollToBottom();
             return;
         }
         setMode('interview');
@@ -1266,7 +1667,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (userJob) {
                     welcomeText += ` Ich habe notiert, dass du dich für den Bereich **${userJob}** interessierst.`;
                 }
-                welcomeText += `\n\nDein System ist jetzt startbereit. Lade links deinen Lebenslauf hoch oder leg direkt los!`;
+                welcomeText += `\n\nDein System ist jetzt startbereit. Lade links deinen Lebenslauf hoch oder leg direkt los!\n\n⚠️ **Wichtiger Hinweis:** Bitte hab bei deinen Anfragen etwas Geduld. Da die KI-Modelle in dieser kostenlosen Version laufen, sind sie zeitweise sehr schnell ausgelastet. Eine Antwort kann daher manchmal 10–15 Sekunden dauern.`;
                 
                 // Chat-Verlauf leeren und neue personalisierte Nachricht anzeigen
                 chatHistory.innerHTML = '';
