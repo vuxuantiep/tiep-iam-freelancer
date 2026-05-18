@@ -312,10 +312,10 @@
 <div id="overlay"></div>
 
 <div id="sidebar" class="flex flex-col h-full">
-    <!-- Erklärungs-Kommentar: Flex-Container mit flex-row und flex-nowrap verhindert jeglichen Zeilenumbruch. Das Logo bleibt fest links, das Schließen-Kreuz fest rechts. -->
+    <!-- Erklärungs-Kommentar: flex-row und flex-nowrap verhindern den Zeilenumbruch komplett. Das Logo bleibt links, das Kreuz rechts. -->
     <div class="p-4 border-b flex flex-row flex-nowrap justify-between items-center gap-2 flex-shrink-0" style="border-color:var(--border)">
         
-        <!-- LINKER BEREICH: Das gesamte Logo mit Beschreibung in einer umbruchsgeschützten Box -->
+        <!-- LINKER BEREICH: Logo und Beschreibung komplett umbruchgeschützt -->
         <div class="flex-1 min-w-0 overflow-hidden">
             <div class="flex items-center gap-2 flex-nowrap">
                 <div class="w-7 h-7 g-bg rounded-lg flex items-center justify-center flex-shrink-0">
@@ -326,7 +326,7 @@
             <p class="text-[11px] mt-0.5 truncate whitespace-nowrap" style="color:var(--text-muted)">KI Karriereberatung</p>
         </div>
         
-        <!-- RECHTER BEREICH: Der Schließen-Button ist absolut geschützt vor Verschiebungen -->
+        <!-- RECHTER BEREICH: Der Schließen-Button ist absolut fixiert und geschützt vor Verschiebungen -->
         <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors flex-shrink-0" title="Menü schließen">
             <i class="fas fa-times"></i>
         </button>
@@ -394,7 +394,7 @@
         </div>
         <p class="text-xs" style="color:var(--text-muted)">Tiep Intelligence v3.0</p>
         <p class="text-[10px] mt-1.5 opacity-50 tracking-wide">
-            Powered by: <span class="g-text">vuxuantiep</span> © itiep.de
+            Powered by: <span class="g-text">vuxuantiep</span> &copy; <a href="https://itiep.de" target="_blank" rel="noopener noreferrer" class="hover:underline text-gray-400 hover:text-white transition-colors">itiep.de</a> - 2026
         </p>
     </div>
 </div>
