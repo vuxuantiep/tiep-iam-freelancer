@@ -836,18 +836,13 @@ async function askAI(userMsg, systemMsg) {
     currentAbortController = new AbortController();
 
     try {
-        // 🌟 SCHRITT 4: Eine einzige, saubere Anfrage an deinen intelligenten Worker senden.
-        // Das Routing (Groq -> OpenRouter -> Pi) übernimmt das Backend jetzt komplett allein!
-        // Wir nehmen das /chat am Ende weg, da es in deiner WORKER_URL Variable vermutlich schon drin steckt
+        // 🌟 SCHRITT 4: Anfrage an den Worker senden (Das Backend regelt das Routing!)
         const res = await fetch(`${WORKER_URL}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             signal: currentAbortController.signal,
             body: JSON.stringify({
-                messages: [
-                    { role: 'system', content: systemMsg },
-                    ...historyToSend
-                ]
+                messages: historyToSend
             })
         });
 
