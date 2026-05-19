@@ -558,22 +558,25 @@
         </div>
     </div>
 
-    <div class="p-4 flex-shrink-0" style="background:var(--bg-main)">
-        <div class="max-w-2xl mx-auto">
-            <div class="input-wrap flex items-end gap-2 px-4 py-3">
-                <textarea id="user-input" rows="1" class="flex-1 bg-transparent outline-none resize-none text-sm" style="color:var(--text-primary);max-height:120px;overflow-y:auto;line-height:1.5" placeholder="Schreibe eine Nachricht…"></textarea>
-                <div class="flex items-center gap-1 flex-shrink-0">
-                    <button id="mic-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
-                        <i class="fas fa-microphone text-sm" style="color:var(--text-muted)"></i>
-                    </button>
-                    <button id="send-btn" class="w-9 h-9 g-bg rounded-full flex items-center justify-center hover:opacity-90 transition-opacity">
-                        <i class="fas fa-arrow-up text-white text-sm"></i>
-                    </button>
-                </div>
-            </div>
-            <p class="text-center text-xs mt-1.5" style="color:var(--text-muted)">Enter zum Senden • KI-Karriereberatung • Keine Speicherung</p>
-        </div>
+    <div class="p-6 border-t border-[#2a2b2e] bg-[#0f0f10]">
+    <div class="max-w-4xl mx-auto relative flex items-center bg-[#1e1f21] rounded-2xl border border-[#2a2b2e] focus-within:border-[#4285f4] transition-all duration-200 shadow-lg px-4 py-3">
+        
+        <input 
+            type="text" 
+            id="user-input" 
+            class="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none pr-12 text-base" 
+            placeholder="Schreibe eine Nachricht…"
+        >
+        
+        <button 
+            id="send-btn" 
+            class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#4285f4] hover:bg-[#3574de] active:scale-95 text-white rounded-xl flex items-center justify-center transition-all shadow-md"
+        >
+            <i class="fas fa-arrow-up text-white text-sm"></i>
+        </button>
+
     </div>
+</div>
 </div>
 
 <script>
