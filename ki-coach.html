@@ -838,7 +838,8 @@ async function askAI(userMsg, systemMsg) {
     try {
         // 🌟 SCHRITT 4: Eine einzige, saubere Anfrage an deinen intelligenten Worker senden.
         // Das Routing (Groq -> OpenRouter -> Pi) übernimmt das Backend jetzt komplett allein!
-        const res = await fetch(`${WORKER_URL}/chat`, {
+        // Wir nehmen das /chat am Ende weg, da es in deiner WORKER_URL Variable vermutlich schon drin steckt
+        const res = await fetch(`${WORKER_URL}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             signal: currentAbortController.signal,
