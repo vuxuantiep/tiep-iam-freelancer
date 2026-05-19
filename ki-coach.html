@@ -808,7 +808,16 @@ function setMode(mode) {
 let currentAbortController = null; // Globaler AbortController für manuellen Abbruch
 
 async function askAI(userMsg, systemMsg) {
-    conversationHistory.push({ role: 'user', content: userMsg });
+    // 🌟 SCHRITT 1: Den finalen Prompt bauen (Kombination aus Lebenslauf, Job & Nachricht)
+    const finalPrompt = extractedText
+        ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}`
+        : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
+
+    // 🌟 SCHRITT 2: Den Prompt mit Lebenslauf fest im echten Verlauf speichern,
+    // damit die KI ihn auch bei der 2., 3. oder 4. Frage im Gedächtnis behält!
+    conversationHistory.push({ role: 'user', content: finalPrompt });
+
+    // UI-Elemente während der Analyse sperren und Lade-Animation zeigen
     showThinking();
 
     sendBtn.disabled = true;
@@ -817,13 +826,11 @@ async function askAI(userMsg, systemMsg) {
     sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-sm"></i>';
     sendBtn.classList.add('opacity-40', 'cursor-not-allowed');
 
-    const finalPrompt = extractedText
-        ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}`
-        : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
+    // 🌟 SCHRITT 3: Verlauf für die API vorbereiten
+    // Da finalPrompt bereits oben fest in die history gepusht wurde, kopieren wir sie einfach 1:1
     const historyToSend = [...conversationHistory];
-    if (extractedText || jobDescText) {
-        historyToSend[historyToSend.length - 1] = { role: 'user', content: finalPrompt };
-    }
+
+    // ════════ AB HIER BLEIBT ALLES EXAKT WIE BEI DIR ════════
 
     // Fallback-Modelle: erst freier Router, dann gezielt stabile Gratis-Modelle
     const MODEL_SEQUENCE = [
@@ -875,7 +882,7 @@ async function askAI(userMsg, systemMsg) {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
 
-            if (data.choices?.[0]?.message?.content)              aiReply = data.choices[0].message.content;
+            if (data.choices?.[0]?.message?.content)               aiReply = data.choices[0].message.content;
             else if (typeof data.reply === 'string' && data.reply.trim())    aiReply = data.reply;
             else if (typeof data.content === 'string' && data.content.trim()) aiReply = data.content;
             else if (typeof data.message === 'string' && data.message.trim()) aiReply = data.message;
