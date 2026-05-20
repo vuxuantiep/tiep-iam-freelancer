@@ -12,16 +12,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <style>
         :root {
-            --bg-main: #0f0f10;
-            --bg-card: #191a1b;
+            --bg-main:  #0f0f10;
+            --bg-card:  #191a1b;
             --bg-input: #1e1f21;
-            --border: #2a2b2e;
+            --border:   #2a2b2e;
             --border-hover: #3c4043;
-            --accent: #4285f4;
+            --accent:   #4285f4;
             --accent-2: #34a853;
-            --text-primary: #e8e8e8;
+            --text-primary:   #e8e8e8;
             --text-secondary: #9aa0a6;
-            --text-muted: #5f6368;
+            --text-muted:     #5f6368;
         }
 
         * { box-sizing: border-box; }
@@ -32,11 +32,14 @@
             font-family: 'DM Sans', system-ui, sans-serif;
             font-size: 15px;
             line-height: 1.6;
+            margin: 0;
+            overflow: hidden;
+            height: 100dvh;
         }
 
-        /* ── Gradient text ── */
+        /* ── Gradient utilities ── */
         .g-text {
-            background: linear-gradient(120deg, #4285f4 0%, #1a73e8 40%, #34a853 100%);
+            background: linear-gradient(120deg,#4285f4 0%,#1a73e8 40%,#34a853 100%);
             background-size: 200% auto;
             animation: flow 5s linear infinite;
             -webkit-background-clip: text;
@@ -45,7 +48,7 @@
             font-weight: 600;
         }
         .g-bg {
-            background: linear-gradient(120deg, #4285f4 0%, #1a73e8 50%, #34a853 100%);
+            background: linear-gradient(120deg,#4285f4 0%,#1a73e8 50%,#34a853 100%);
             background-size: 200% auto;
             animation: flow 5s linear infinite;
         }
@@ -63,7 +66,6 @@
         }
         #sidebar.open { width: 280px; }
 
-        /* Mobile: sidebar overlays */
         @media (max-width: 767px) {
             #sidebar {
                 position: fixed;
@@ -80,319 +82,410 @@
         }
 
         /* ── Chat bubble prose ── */
-        .prose-bubble h1, .prose-bubble h2, .prose-bubble h3 {
-            font-family: 'DM Serif Display', serif;
+        .prose-bubble h1,.prose-bubble h2,.prose-bubble h3 {
+            font-family: 'DM Serif Display',serif;
             color: #c5d5f5;
             margin: 0.75rem 0 0.35rem;
         }
-        .prose-bubble h2 { font-size: 1.05rem; }
-        .prose-bubble h3 { font-size: 0.95rem; }
-        .prose-bubble p { margin: 0.4rem 0; }
-        .prose-bubble ul, .prose-bubble ol {
-            padding-left: 1.25rem;
-            margin: 0.4rem 0;
-        }
-        .prose-bubble li { margin: 0.2rem 0; }
-        .prose-bubble strong { color: #c8d8ff; font-weight: 600; }
-        .prose-bubble em { color: #a8c8a0; font-style: italic; }
-        .prose-bubble code {
-            background: #25272b;
-            border-radius: 4px;
-            padding: 1px 6px;
-            font-size: 0.85em;
-            color: #89b4fa;
-            font-family: 'Courier New', monospace;
-        }
-        .prose-bubble hr {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 0.75rem 0;
-        }
-        .prose-bubble blockquote {
-            border-left: 3px solid var(--accent);
-            padding-left: 0.75rem;
-            color: var(--text-secondary);
-            margin: 0.5rem 0;
-        }
-
-        /* ── Input area ── */
-        .input-wrap {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .input-wrap:focus-within {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 1.5px rgba(66,133,244,0.3);
-        }
+        .prose-bubble h2 { font-size:1.05rem; }
+        .prose-bubble h3 { font-size:0.95rem; }
+        .prose-bubble p  { margin:0.4rem 0; }
+        .prose-bubble p:first-child { margin-top:0; }
+        .prose-bubble p:last-child  { margin-bottom:0; }
+        .prose-bubble ul,.prose-bubble ol { padding-left:1.25rem; margin:0.4rem 0; }
+        .prose-bubble li { margin:0.2rem 0; }
+        .prose-bubble strong { color:#c8d8ff; font-weight:600; }
+        .prose-bubble em    { color:#a8c8a0; font-style:italic; }
+        .prose-bubble code  { background:#25272b; border-radius:4px; padding:1px 6px; font-size:0.85em; color:#89b4fa; font-family:'Courier New',monospace; }
+        .prose-bubble hr    { border:none; border-top:1px solid var(--border); margin:0.75rem 0; }
+        .prose-bubble blockquote { border-left:3px solid var(--accent); padding-left:0.75rem; color:var(--text-secondary); margin:0.5rem 0; }
 
         /* ── Thinking dots ── */
         .dot-pulse span {
-            display: inline-block;
-            width: 7px; height: 7px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: dotBounce 1.2s ease-in-out infinite;
+            display:inline-block; width:7px; height:7px;
+            background:var(--accent); border-radius:50%;
+            animation:dotBounce 1.2s ease-in-out infinite;
         }
-        .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
-        .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+        .dot-pulse span:nth-child(2) { animation-delay:.2s; }
+        .dot-pulse span:nth-child(3) { animation-delay:.4s; }
         @keyframes dotBounce {
-            0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
+            0%,80%,100% { transform:scale(0.6); opacity:.4; }
+            40%          { transform:scale(1);   opacity:1;  }
         }
 
         /* ── Live Coach CTA ── */
-        #live-coach-cta {
-            display: none;
-            animation: fadeSlideUp 0.5s ease both;
-        }
-        #live-coach-cta.show { display: flex; }
+        #live-coach-cta { display:none; animation:fadeSlideUp .5s ease both; }
+        #live-coach-cta.show { display:flex; }
         @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity:0; transform:translateY(12px); }
+            to   { opacity:1; transform:translateY(0); }
         }
 
         /* ── Scrollbar ── */
-        #chat-scroll::-webkit-scrollbar { width: 5px; }
-        #chat-scroll::-webkit-scrollbar-track { background: transparent; }
-        #chat-scroll::-webkit-scrollbar-thumb { background: #2a2b2e; border-radius: 10px; }
+        #chat-scroll::-webkit-scrollbar { width:5px; }
+        #chat-scroll::-webkit-scrollbar-track { background:transparent; }
+        #chat-scroll::-webkit-scrollbar-thumb { background:#2a2b2e; border-radius:10px; }
 
         /* ── Sidebar buttons ── */
-        .sidebar-btn-sm {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            padding: 0.45rem 0.5rem;
-            border-radius: 0.6rem;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--text-primary);
-            font-size: 0.72rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.15s, border-color 0.15s;
-            font-family: 'DM Sans', sans-serif;
-        }
-        .sidebar-btn-sm:hover { background: rgba(255,255,255,0.05); border-color: var(--border-hover); }
-
         .sidebar-btn {
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--text-primary);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.875rem;
-            cursor: pointer;
-            display: flex; align-items: center; gap: 12px;
-            transition: background 0.15s, border-color 0.15s;
+            width:100%; text-align:left; padding:.75rem 1rem; border-radius:12px;
+            border:1px solid var(--border); background:transparent;
+            color:var(--text-primary); font-family:'DM Sans',sans-serif; font-size:.875rem;
+            cursor:pointer; display:flex; align-items:center; gap:12px;
+            transition:background .15s, border-color .15s;
         }
-        .sidebar-btn:hover { background: #25272b; border-color: var(--border-hover); }
-        .sidebar-btn.active {
-            background: rgba(167, 139, 250, 0.15) !important;
-            border-color: #a78bfa !important;
-            color: #ffffff !important;
-            box-shadow: 0 0 12px rgba(167, 139, 250, 0.2);
+        .sidebar-btn:hover { background:#25272b; border-color:var(--border-hover); }
+
+        .sidebar-tool-btn {
+            width:100%; display:flex; align-items:center; gap:10px;
+            padding:8px 10px; border-radius:10px; border:1px solid var(--border);
+            background:transparent; cursor:pointer;
+            transition:background .15s, border-color .15s; font-family:'DM Sans',sans-serif;
+        }
+        .sidebar-tool-btn:hover { background:rgba(255,255,255,.04); border-color:var(--border-hover); }
+        .sidebar-tool-icon {
+            width:30px; height:30px; border-radius:8px;
+            display:flex; align-items:center; justify-content:center; flex-shrink:0;
         }
 
-        /* 🎙️ Pulsierender Effekt während der Sprachaufnahme (Audio-Feature) */
-        .recording-active {
-            color: #ef4444 !important; /* Färbt das Mikrofon-Icon hellrot */
-            animation: pulse-mic 1.5s infinite ease-in-out;
-        }
+        .sidebar-divider { height:1px; background:var(--border); margin:2px 0; }
 
-        @keyframes pulse-mic {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* ── Stage pills (Ikigai) ── */
-        .stage-pill {
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            background: rgba(66,133,244,0.12);
-            border: 1px solid rgba(66,133,244,0.3);
-            color: #7ab3f8;
-            font-weight: 500;
-        }
-
-        /* ── Model badge ── */
         .model-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 20px;
-            background: rgba(52,168,83,0.1);
-            border: 1px solid rgba(52,168,83,0.25);
-            color: #5bba6f;
-            font-weight: 500;
-            letter-spacing: 0.02em;
+            font-size:10px; padding:2px 8px; border-radius:20px;
+            background:rgba(52,168,83,.1); border:1px solid rgba(52,168,83,.25);
+            color:#5bba6f; font-weight:500;
         }
-
-        /* ── Message fade-in ── */
-        .msg-enter {
-            animation: msgFade 0.35s ease both;
+        .stage-pill {
+            font-size:11px; padding:3px 10px; border-radius:20px;
+            background:rgba(66,133,244,.12); border:1px solid rgba(66,133,244,.3);
+            color:#7ab3f8; font-weight:500;
         }
-        @keyframes msgFade {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ── Mic active ── */
-        @keyframes micPulse {
-            0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
-        }
-        #mic-btn.recording {
-            background: rgba(239,68,68,0.15) !important;
-            animation: micPulse 1.5s ease-in-out infinite;
-        }
-        #mic-btn.recording i { color: #ef4444 !important; }
 
         /* ── Upload zone ── */
         .upload-zone {
-            border: 1.5px dashed var(--border-hover);
-            border-radius: 10px;
-            padding: 10px 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: var(--bg-input);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            border:1.5px dashed var(--border-hover); border-radius:10px;
+            padding:10px 12px; cursor:pointer; transition:all .2s;
+            background:var(--bg-input); display:flex; align-items:center; gap:10px;
         }
-        .upload-zone:hover { border-color: var(--accent); background: rgba(66,133,244,0.04); }
+        .upload-zone:hover { border-color:var(--accent); background:rgba(66,133,244,.04); }
 
-        /* ── Sidebar tool button (mit Icon + 2-Zeilen Text) ── */
-        .sidebar-tool-btn {
-            width: 100%;
+        /* ── Message animation ── */
+        .msg-enter { animation:msgFade .35s ease both; }
+        @keyframes msgFade {
+            from { opacity:0; transform:translateY(8px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        /* ── Mic recording ── */
+        @keyframes micPulse {
+            0%,100% { box-shadow:0 0 0 0 rgba(239,68,68,.4); }
+            50%     { box-shadow:0 0 0 8px rgba(239,68,68,0); }
+        }
+        #mic-btn.recording { background:rgba(239,68,68,.15)!important; animation:micPulse 1.5s ease-in-out infinite; }
+        #mic-btn.recording i { color:#ef4444!important; }
+        .recording-active { color:#ef4444!important; animation:pulse-mic 1.5s infinite ease-in-out; }
+        @keyframes pulse-mic {
+            0%   { transform:scale(1); opacity:1; }
+            50%  { transform:scale(1.2); opacity:.7; }
+            100% { transform:scale(1); opacity:1; }
+        }
+
+        /* ══════════════════════════════════════════
+           GEMINI-STYLE: Fixed Bottom Area
+        ══════════════════════════════════════════ */
+        #bottom-area {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 20;
+            background: linear-gradient(to top, var(--bg-main) 60%, transparent);
+            padding: 6px 16px 14px;
+        }
+
+        /* Action Nav */
+        #action-nav {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
+            gap: 6px;
+            max-width: 680px;
+            margin: 0 auto 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 8px;
             border-radius: 10px;
             border: 1px solid var(--border);
-            background: transparent;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
             cursor: pointer;
-            transition: background 0.15s, border-color 0.15s;
+            transition: all .2s ease;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
             font-family: 'DM Sans', sans-serif;
         }
-        .sidebar-tool-btn:hover { background: rgba(255,255,255,0.04); border-color: var(--border-hover); }
-        .sidebar-tool-icon {
-            width: 30px; height: 30px;
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
+        .action-btn:hover,
+        .action-btn:active  { background:rgba(255,255,255,.06); color:#fff; border-color:rgba(255,255,255,.18); }
+        .action-btn.active  { border-color:var(--accent); background:rgba(66,133,244,.13); color:#93c5fd; }
+        .action-btn .btn-icon { font-size:11px; flex-shrink:0; }
+
+        .reset-btn {
+            width:36px; height:36px; flex-shrink:0;
+            display:flex; align-items:center; justify-content:center;
+            border-radius:10px; border:1px solid var(--border);
+            background:var(--bg-card); color:var(--text-muted);
+            cursor:pointer; transition:all .2s ease;
+            -webkit-tap-highlight-color:transparent;
+        }
+        .reset-btn:hover,
+        .reset-btn:active { color:#f87171; border-color:rgba(248,113,113,.3); background:rgba(248,113,113,.06); }
+
+        /* Input wrapper */
+        #input-wrapper {
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            background: var(--bg-input);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            transition: border-color .2s;
+        }
+        #input-wrapper:focus-within { border-color: rgba(66,133,244,.6); box-shadow:0 0 0 1.5px rgba(66,133,244,.2); }
+
+        #user-input {
+            flex: 1;
+            background: transparent;
+            color: white;
+            outline: none;
+            resize: none;
+            padding: 6px 4px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 110px;
+            font-family: 'DM Sans', sans-serif;
+        }
+        #user-input::placeholder { color:var(--text-muted); }
+
+        .icon-btn {
+            width:34px; height:34px; flex-shrink:0;
+            display:flex; align-items:center; justify-content:center;
+            border-radius:10px; background:transparent;
+            color:var(--text-muted); cursor:pointer;
+            transition:all .15s; border:none;
+        }
+        .icon-btn:hover { background:rgba(255,255,255,.06); color:#9ca3af; }
+        .icon-btn.send { background:#2563eb; color:white; border-radius:10px; }
+        .icon-btn.send:hover { background:#3b82f6; }
+
+        #file-status-bar {
+            max-width:680px; margin:4px auto 0;
+            display:flex; align-items:center; justify-content:space-between; padding:0 4px;
         }
 
-        /* ── Divider ── */
-        .sidebar-divider { height: 1px; background: var(--border); margin: 2px 0; }
-    
-        /* Sanfter Puls-Effekt für den Gedulds-Text */
-        .animate-pulse-soft {
-            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        /* ══════════════════════════════════════════
+           IKIGAI AVATAR WIDGET (Bonus)
+        ══════════════════════════════════════════ */
+        #ikigai-widget {
+            display: none;
+            max-width: 680px;
+            margin: 0 auto 8px;
+            border-radius: 16px;
+            border: 1px solid rgba(96,165,250,.2);
+            background: rgba(96,165,250,.04);
+            padding: 12px 14px;
+            animation: msgFade .4s ease both;
         }
-        @keyframes pulse-soft {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .4; }
+        #ikigai-widget.active { display: block; }
+
+        @keyframes breathe {
+            0%,100% { transform:scale(1);    opacity:.85; }
+            50%      { transform:scale(1.04); opacity:1;   }
         }
+        .avatar-breathing { animation:breathe 4s ease-in-out infinite; }
+
+        /* ── Animate pulse soft ── */
+        .animate-pulse-soft { animation:pulse-soft 2s cubic-bezier(.4,0,.6,1) infinite; }
+        @keyframes pulse-soft { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+
+        /* ══════════════════════════════════════════
+           CV SCORE WIDGET
+        ══════════════════════════════════════════ */
+        .cv-score-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 10px;
+            animation: msgFade .4s ease both;
+        }
+        .cv-score-ring {
+            position: relative;
+            width: 76px; height: 76px;
+            flex-shrink: 0;
+        }
+        .cv-score-ring svg { transform: rotate(-90deg); }
+        .cv-score-ring .score-val {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; color: white;
+        }
+        .cv-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .cv-bar-label { font-size: 11px; color: var(--text-secondary); width: 130px; flex-shrink: 0; }
+        .cv-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,.07); border-radius: 10px; overflow: hidden; }
+        .cv-bar-fill  { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+        .cv-bar-num   { font-size: 10px; color: var(--text-muted); width: 28px; text-align: right; flex-shrink: 0; }
+
+        /* Verbesserungs-Chips */
+        .cv-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .cv-chip:hover { border-color: var(--accent); color: #93c5fd; background: rgba(66,133,244,.1); }
+        .cv-chip.chip-green  { border-color: rgba(52,168,83,.3);  color:#5bba6f;  background:rgba(52,168,83,.06); }
+        .cv-chip.chip-orange { border-color: rgba(245,158,11,.3); color:#fbbf24; background:rgba(245,158,11,.06); }
+        .cv-chip.chip-purple { border-color: rgba(167,139,250,.3);color:#c4b5fd; background:rgba(167,139,250,.06); }
+        .cv-chip.chip-red    { border-color: rgba(239,68,68,.3);  color:#fca5a5; background:rgba(239,68,68,.06); }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden relative">
 
+<!-- ═══════════════════════════════════════════
+     WELCOME / DSGVO MODAL  (ki-coach style, gemini look)
+═══════════════════════════════════════════ -->
 <div id="dsgvo-modal" class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-    <div class="w-full max-w-md rounded-2xl p-6 shadow-2xl border" style="background: var(--bg-card); border-color: var(--border);">
-        
-        <div class="flex items-center gap-3 mb-4">
-            <div class="w-9 h-9 g-bg rounded-xl flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-shield-alt text-white text-sm"></i>
+    <div class="w-full max-w-md rounded-2xl p-6 shadow-2xl border" style="background:var(--bg-card);border-color:var(--border)">
+
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 g-bg rounded-2xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-user-tie text-white text-sm"></i>
             </div>
             <div>
-                <h2 class="text-base font-bold text-white">Willkommen beim Tiep Coach</h2>
-                <p class="text-[11px]" style="color: var(--text-muted)">Kurzanleitung & Datenschutz</p>
+                <h2 class="text-base font-bold text-white" style="font-family:'DM Serif Display',serif">Tiep Coach</h2>
+                <p class="text-[11px]" style="color:var(--text-muted)">Dein KI-Karrierebegleiter</p>
             </div>
         </div>
 
-        <div class="space-y-2 text-xs mb-4 p-3 rounded-xl bg-white/5 border border-white/5">
-            <p class="font-medium text-gray-300"><i class="fas fa-info-circle text-blue-400 mr-1"></i> So funktioniert es:</p>
-            <ul class="list-disc list-inside space-y-1 text-gray-400 pl-1">
-                <li>Lebenslauf (PDF/Word) links hochladen für Optimierung.</li>
-                <li>Modus wählen (Interview oder Ikigai) oder direkt chatten.</li>
-                <li>Deine Daten werden nur live verarbeitet und nicht gespeichert.</li>
+        <!-- Feature Cards -->
+        <div class="grid grid-cols-3 gap-2 mb-5">
+            <div class="p-2.5 rounded-xl bg-white/3 border border-white/5 text-center">
+                <div class="w-7 h-7 rounded-lg bg-green-500/10 flex items-center justify-center mx-auto mb-1.5">
+                    <i class="fas fa-file-alt text-green-400 text-xs"></i>
+                </div>
+                <p class="text-[11px] font-medium text-white">Lebenslauf</p>
+                <p class="text-[10px] text-gray-500">Analyse</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/3 border border-white/5 text-center">
+                <div class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center mx-auto mb-1.5">
+                    <i class="fas fa-dharmachakra text-purple-400 text-xs"></i>
+                </div>
+                <p class="text-[11px] font-medium text-white">Ikigai</p>
+                <p class="text-[10px] text-gray-500">Berufung</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/3 border border-white/5 text-center">
+                <div class="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center mx-auto mb-1.5">
+                    <i class="fas fa-comments text-blue-400 text-xs"></i>
+                </div>
+                <p class="text-[11px] font-medium text-white">Interview</p>
+                <p class="text-[10px] text-gray-500">Training</p>
+            </div>
+        </div>
+
+        <div class="text-[11px] text-gray-400 mb-4 p-3 rounded-xl bg-white/3 border border-white/5">
+            <p><i class="fas fa-info-circle text-blue-400 mr-1"></i> <strong class="text-gray-300">So funktioniert es:</strong></p>
+            <ul class="list-disc list-inside space-y-1 mt-1.5 text-gray-500 pl-1">
+                <li>Lebenslauf hochladen → tiefe CV-Analyse</li>
+                <li>Ikigai entdecken, Interview üben oder Businessplan erstellen</li>
+                <li>Deine Daten werden nur temporär verarbeitet</li>
             </ul>
         </div>
 
-        <div class="space-y-3 mb-4">
-            <p class="text-xs font-medium text-gray-300">Optionale Personalisierung:</p>
+        <div class="space-y-2 mb-4">
+            <p class="text-[11px] font-medium text-gray-400">Optionale Personalisierung:</p>
             <div class="grid grid-cols-2 gap-2">
                 <div>
-                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-secondary)">Dein Name</label>
-                    <input type="text" id="user-name-input" placeholder="z. B. Max" class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all" style="background: var(--bg-input); border-color: var(--border); color: var(--text-primary);">
+                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-muted)">Dein Name</label>
+                    <input type="text" id="user-name-input" placeholder="z. B. Max"
+                        class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all"
+                        style="background:var(--bg-input);border-color:var(--border);color:var(--text-primary)">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-secondary)">Wunsch-Branche</label>
-                    <input type="text" id="user-job-input" placeholder="z. B. IT, Marketing" class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all" style="background: var(--bg-input); border-color: var(--border); color: var(--text-primary);">
+                    <label class="block text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-muted)">Wunsch-Branche</label>
+                    <input type="text" id="user-job-input" placeholder="z. B. IT, Marketing"
+                        class="w-full px-3 py-1.5 rounded-lg text-xs outline-none border transition-all"
+                        style="background:var(--bg-input);border-color:var(--border);color:var(--text-primary)">
                 </div>
             </div>
         </div>
 
-        <div class="text-[11px] text-gray-400 leading-relaxed mb-5 border-t pt-3" style="border-color: var(--border)">
-            <p>
-                <i class="fas fa-user-lock mr-1 text-green-400"></i> 
-                <strong>DSGVO-Hinweis:</strong> Mit dem Klick auf Starten erklärst du dich einverstanden, dass deine Eingaben und dein Lebenslauf temporär verarbeitet werden, um Antworten zu generieren. Es erfolgt <u>keine</u> dauerhafte Speicherung oder Weitergabe deiner Daten.
-            </p>
+        <div class="text-[10px] text-gray-600 mb-4 border-t pt-3" style="border-color:var(--border)">
+            <i class="fas fa-lock mr-1 text-green-500"></i>
+            DSGVO: Deine Eingaben werden nur live verarbeitet und nicht gespeichert.
         </div>
 
-        <button id="dsgvo-accept-btn" class="w-full py-2.5 rounded-xl text-xs font-semibold text-white g-bg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2">
-            <span>Einverstanden & Starten</span>
-            <i class="fas fa-arrow-right text-[10px]"></i>
+        <button id="dsgvo-accept-btn"
+            class="w-full py-2.5 rounded-xl text-sm font-semibold text-white g-bg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2">
+            <span>Kostenlos starten</span>
+            <i class="fas fa-arrow-right text-xs"></i>
         </button>
     </div>
 </div>
+
 <div id="overlay"></div>
 
+<!-- ═══════════════════════════════════════════
+     SIDEBAR  (ki-coach unchanged)
+═══════════════════════════════════════════ -->
 <div id="sidebar" class="flex flex-col h-full">
 
-    <!-- ── HEADER ── -->
     <div class="flex items-center justify-between px-4 py-3 flex-shrink-0" style="border-bottom:1px solid var(--border)">
         <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 g-bg rounded-xl flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-briefcase text-white text-xs"></i>
             </div>
             <div>
-                <p class="text-sm font-semibold leading-tight" style="font-family:'DM Serif Display',serif;background:linear-gradient(120deg,#4285f4,#34a853);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Tiep Coach</p>
+                <p class="text-sm font-semibold leading-tight g-text" style="font-family:'DM Serif Display',serif">Tiep Coach</p>
                 <p class="text-[10px] leading-tight" style="color:var(--text-muted)">KI-Karriereberatung</p>
             </div>
         </div>
-        <button onclick="closeSidebar()" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors" style="color:var(--text-muted)" title="Menü schließen">
+        <button onclick="closeSidebar()" class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors" style="color:var(--text-muted)">
             <i class="fas fa-times text-xs"></i>
         </button>
     </div>
 
-    <!-- ── SCROLLBARER INHALTSBEREICH ── -->
     <div class="flex-1 overflow-y-auto px-3 py-3 space-y-3">
 
-        <!-- Abschnitt: Dokumente -->
         <div>
             <p class="text-[9px] font-bold uppercase tracking-[0.12em] mb-2 px-1" style="color:var(--text-muted)">📁 Dokument hochladen</p>
-
-            <!-- Tab-Schalter -->
             <div class="flex gap-1 mb-2 p-0.5 rounded-lg" style="background:var(--bg-input);border:1px solid var(--border)">
-                <button id="type-cv-btn" onclick="setUploadType('cv')" class="flex-1 text-[11px] py-1.5 rounded-md font-semibold transition-all" style="background:var(--accent);color:#fff">
-                    Lebenslauf
-                </button>
-                <button id="type-job-btn" onclick="setUploadType('job')" class="flex-1 text-[11px] py-1.5 rounded-md font-medium transition-all" style="background:transparent;color:var(--text-muted)">
-                    Stellenbeschr.
-                </button>
+                <button id="type-cv-btn" onclick="setUploadType('cv')"
+                    class="flex-1 text-[11px] py-1.5 rounded-md font-semibold transition-all"
+                    style="background:var(--accent);color:#fff">Lebenslauf</button>
+                <button id="type-job-btn" onclick="setUploadType('job')"
+                    class="flex-1 text-[11px] py-1.5 rounded-md font-medium transition-all"
+                    style="background:transparent;color:var(--text-muted)">Stellenbeschr.</button>
             </div>
 
-            <!-- Upload-Zone -->
             <label for="resume-upload" class="upload-zone" id="upload-zone">
                 <i class="fas fa-cloud-upload-alt text-lg flex-shrink-0" style="color:var(--accent)"></i>
                 <div class="min-w-0">
@@ -404,23 +497,19 @@
             <p id="file-name" class="text-[10px] mt-1.5 text-center hidden truncate px-1" style="color:#5bba6f"></p>
         </div>
 
-        <!-- Analyse-Button (erscheint nach Upload) -->
         <button id="analyze-btn" class="sidebar-btn hidden" style="border-color:var(--accent);background:rgba(66,133,244,0.08)">
             <i class="fas fa-search-plus text-sm" style="color:var(--accent)"></i>
             <span class="font-semibold" style="color:var(--text-primary)">Lebenslauf analysieren</span>
         </button>
 
-        <!-- Trennlinie -->
         <div class="sidebar-divider"></div>
 
-        <!-- Abschnitt: Werkzeuge -->
         <div>
             <p class="text-[9px] font-bold uppercase tracking-[0.12em] mb-2 px-1" style="color:var(--text-muted)">⚡ Werkzeuge</p>
             <div class="space-y-1.5">
 
-                <!-- Interview -->
-                <button id="start-interview-btn" class="sidebar-tool-btn" style="--tool-color:#a78bfa">
-                    <div class="sidebar-tool-icon" style="background:rgba(167,139,250,0.12)">
+                <button id="start-interview-btn" class="sidebar-tool-btn">
+                    <div class="sidebar-tool-icon" style="background:rgba(167,139,250,.12)">
                         <i class="fas fa-comments text-xs" style="color:#a78bfa"></i>
                     </div>
                     <div class="text-left">
@@ -429,9 +518,8 @@
                     </div>
                 </button>
 
-                <!-- Ikigai -->
-                <button id="ikigai-btn" class="sidebar-tool-btn" style="--tool-color:#60a5fa">
-                    <div class="sidebar-tool-icon" style="background:rgba(96,165,250,0.12)">
+                <button id="ikigai-btn" class="sidebar-tool-btn">
+                    <div class="sidebar-tool-icon" style="background:rgba(96,165,250,.12)">
                         <i class="fas fa-dharmachakra text-xs" style="color:#60a5fa"></i>
                     </div>
                     <div class="text-left">
@@ -440,9 +528,8 @@
                     </div>
                 </button>
 
-                <!-- Businessplan -->
-                <button id="businessplan-btn" class="sidebar-tool-btn" style="--tool-color:#f59e0b">
-                    <div class="sidebar-tool-icon" style="background:rgba(245,158,11,0.12)">
+                <button id="businessplan-btn" class="sidebar-tool-btn">
+                    <div class="sidebar-tool-icon" style="background:rgba(245,158,11,.12)">
                         <i class="fas fa-chart-line text-xs" style="color:#f59e0b"></i>
                     </div>
                     <div class="text-left">
@@ -454,8 +541,7 @@
             </div>
         </div>
 
-        <!-- Interview Panel (nur aktiv sichtbar) -->
-        <div id="interview-panel" class="hidden rounded-xl p-3 text-center" style="background:rgba(167,139,250,0.06);border:1px dashed rgba(167,139,250,0.35)">
+        <div id="interview-panel" class="hidden rounded-xl p-3 text-center" style="background:rgba(167,139,250,.06);border:1px dashed rgba(167,139,250,.35)">
             <div class="flex items-center justify-center gap-2 mb-2">
                 <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -466,10 +552,8 @@
             <p id="interview-status" class="text-[10px]" style="color:var(--text-muted)">HR-Manager ist bereit...</p>
         </div>
 
-        <!-- Trennlinie -->
         <div class="sidebar-divider"></div>
 
-        <!-- Reset -->
         <button id="clear-btn" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-colors hover:bg-white/5" style="color:var(--text-muted)">
             <i class="fas fa-rotate-left text-xs"></i>
             <span class="text-xs">Gespräch zurücksetzen</span>
@@ -477,40 +561,60 @@
 
     </div>
 
-    <!-- ── FOOTER ── -->
     <div class="px-4 py-3 flex-shrink-0" style="border-top:1px solid var(--border);background:var(--bg-card)">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-[11px] font-medium" style="color:var(--text-secondary)">Tiep Intelligence <span style="color:var(--text-muted)">v3.0</span></p>
-                <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">
-                    <a href="https://itiep.de" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--text-muted)">itiep.de</a> &copy; 2026
+                <p class="text-[11px] font-medium" style="color:var(--text-secondary)">Tiep Intelligence <span style="color:var(--text-muted)">v4.0</span></p>
+                <p class="text-[10px] mt-0.5">
+                    <a href="https://itiep.de" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color:var(--text-muted)">itiep.de</a>
+                    <span style="color:var(--text-muted)"> &copy; 2026</span>
                 </p>
             </div>
             <span class="model-badge">kostenlos</span>
         </div>
     </div>
 
-</div>
+</div><!-- /sidebar -->
 
-<div class="flex-1 flex flex-col h-full min-w-0" style="background:var(--bg-main)">
 
-    <header class="flex items-center justify-between px-4 py-3 border-b flex-shrink-0" style="border-color:var(--border);background:var(--bg-main)">
-        <button id="menu-btn" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors">
-            <i class="fas fa-bars" style="color:var(--text-secondary)"></i>
-        </button>
+<!-- ═══════════════════════════════════════════
+     MAIN AREA
+═══════════════════════════════════════════ -->
+<div class="flex-1 flex flex-col h-full min-w-0 relative" style="background:var(--bg-main)">
 
-        <div class="flex items-center gap-2">
-            <span id="mode-label" class="stage-pill hidden">💼 Lebenslauf-Modus</span>
+    <!-- Header: hamburger always visible -->
+    <header class="flex items-center justify-between px-4 py-3 flex-shrink-0"
+        style="border-bottom:1px solid var(--border);background:rgba(15,15,16,.9);backdrop-filter:blur(8px)">
+
+        <!-- Hamburger + Mode label -->
+        <div class="flex items-center gap-2.5">
+            <button id="menu-btn"
+                class="w-9 h-9 flex items-center justify-center rounded-xl border transition-colors hover:bg-white/8"
+                style="border-color:var(--border);color:var(--text-secondary)"
+                title="Menü öffnen / schließen">
+                <i class="fas fa-bars text-sm"></i>
+            </button>
+            <span id="mode-label" class="stage-pill hidden"></span>
         </div>
 
-        <button id="toggle-audio-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors border" style="border-color:var(--border)">
+        <!-- Brand + online indicator -->
+        <div class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse-soft"></span>
+            <span class="text-[11px]" style="color:var(--text-muted)">Tiep Coach</span>
+        </div>
+
+        <!-- Audio toggle -->
+        <button id="toggle-audio-btn"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-colors border"
+            style="border-color:var(--border)">
             <i id="audio-icon" class="fas fa-volume-up text-sm" style="color:var(--accent)"></i>
             <span id="audio-label" class="text-xs" style="color:var(--text-secondary)">Audio</span>
         </button>
     </header>
 
-    <div id="chat-scroll" class="flex-1 overflow-y-auto px-4 py-6">
-        <div id="chat-history" class="max-w-2xl mx-auto space-y-6">
+    <!-- Chat scroll — pb accounts for fixed bottom area -->
+    <div id="chat-scroll" class="flex-1 overflow-y-auto px-4 py-6" style="padding-bottom:175px">
+        <div id="chat-history" class="max-w-2xl mx-auto space-y-5">
 
             <div class="msg-enter">
                 <div class="flex gap-3 items-start">
@@ -523,15 +627,18 @@
                             <span class="text-xs" style="color:var(--text-muted)">jetzt</span>
                         </div>
                         <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble" style="background:var(--bg-card);border:1px solid var(--border)">
-                            <p>Willkommen! Beruflich neu orientieren – mit deinem persönlicher KI-Karrierebegleiter</p>
-                            <p style="margin-top:0.5rem">Ich helfe dir bei:</p>
+                            <p>Willkommen! Ich bin dein <strong>Tiep Coach</strong> – dein KI-Karrierebegleiter.</p>
+                            <p style="margin-top:.5rem">Tippe eine Frage oder wähle unten eine Funktion:</p>
                             <ul>
-                                <li>📄 <strong>Lebenslauf-Optimierung</strong> – lade dein Dokument hoch</li>
-                                <li>📊 <strong>Businessplan erstellen</strong> – Schritt für Schritt</li>
-                                <li>☯️ <strong>Ikigai-Analyse</strong> – finde deine Berufung</li>
-                                <li>💬 <strong>Interview trainieren</strong> – werde sicherer im Vorstellungsgespräch.</li>
+                                <li>📄 <strong>Lebenslauf</strong> – hochladen &amp; analysieren</li>
+                                <li>☯️ <strong>Ikigai</strong> – deine Berufung entdecken</li>
+                                <li>💬 <strong>Interview</strong> – Gespräch üben</li>
+                                <li>📊 <strong>Businessplan</strong> – Schritt für Schritt</li>
                             </ul>
-                            <p style="margin-top:0.75rem;color:#9aa0a6;font-size:0.875rem">Bei tiefgreifenden Themen vermittle ich dich gerne an einen <a href="mailto:coach@tiep.de" style="color:#5bba6f">echten Coach</a>.</p>
+                            <p style="margin-top:.75rem;color:#9aa0a6;font-size:.875rem">
+                                Bei tiefgreifenden Themen vermittle ich dich gerne an einen
+                                <a href="mailto:coach@tiep.de" style="color:#5bba6f">echten Coach</a>.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -540,163 +647,426 @@
         </div>
     </div>
 
-    <div id="live-coach-cta" class="max-w-2xl mx-auto px-4 py-2 w-full">
-        <div class="rounded-2xl p-4 flex items-center gap-4 relative" style="background:rgba(52,168,83,0.08);border:1px solid rgba(52,168,83,0.25)">
-            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center" style="background:rgba(52,168,83,0.15)">
-                <i class="fas fa-user-tie" style="color:#5bba6f"></i>
+    <!-- Live Coach CTA -->
+    <div id="live-coach-cta" class="max-w-2xl mx-auto px-4 w-full absolute left-0 right-0 z-10" style="bottom:178px">
+        <div class="rounded-2xl p-3.5 flex items-center gap-3 relative" style="background:rgba(52,168,83,.08);border:1px solid rgba(52,168,83,.25)">
+            <div class="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center" style="background:rgba(52,168,83,.15)">
+                <i class="fas fa-user-tie" style="color:#5bba6f;font-size:.85rem"></i>
             </div>
             <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold" style="color:#5bba6f">Bereit für den nächsten Schritt?</p>
-                <p class="text-xs mt-0.5" style="color:var(--text-secondary)">Ein echter Coach kann dir noch gezielter helfen.</p>
+                <p class="text-xs font-semibold" style="color:#5bba6f">Bereit für den nächsten Schritt?</p>
+                <p class="text-[11px] mt-0.5" style="color:var(--text-secondary)">Ein echter Coach kann dir noch gezielter helfen.</p>
             </div>
-            <a href="mailto:coach@tiep.de" class="flex-shrink-0 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20">
-                Coach kontaktieren
-            </a>
-            <button id="cta-close-btn" onclick="document.getElementById('live-coach-cta').classList.remove('show')" class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors" title="Schließen" style="color:var(--text-muted)">
+            <a href="mailto:coach@tiep.de"
+                class="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors"
+                style="background:#059669">Kontakt</a>
+            <button onclick="document.getElementById('live-coach-cta').classList.remove('show')"
+                class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+                style="color:var(--text-muted)">
                 <i class="fas fa-times text-xs"></i>
             </button>
         </div>
     </div>
 
-    <div class="p-4 flex-shrink-0" style="background:var(--bg-main)">
-        <div class="max-w-2xl mx-auto">
-            <div class="input-wrap flex items-end gap-2 px-4 py-3">
-                <textarea id="user-input" rows="1" class="flex-1 bg-transparent outline-none resize-none text-sm" style="color:var(--text-primary);max-height:120px;overflow-y:auto;line-height:1.5" placeholder="Schreibe eine Nachricht…"></textarea>
-                <div class="flex items-center gap-1 flex-shrink-0">
-                    <button id="mic-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
-                        <i class="fas fa-microphone text-sm" style="color:var(--text-muted)"></i>
-                    </button>
-                    <button id="send-btn" class="w-9 h-9 g-bg rounded-full flex items-center justify-center hover:opacity-90 transition-opacity">
-                        <i class="fas fa-arrow-up text-white text-sm"></i>
-                    </button>
+    <!-- ═══════════════════════════════════════
+         FIXED BOTTOM AREA  (Gemini-style)
+    ═══════════════════════════════════════ -->
+    <div id="bottom-area">
+
+        <!-- Ikigai Avatar Widget (Bonus — only visible in Ikigai mode) -->
+        <div id="ikigai-widget">
+            <div class="flex items-center gap-3">
+                <!-- Avatar SVG (Duolingo-style) -->
+                <div class="flex-shrink-0">
+                    <svg id="ikigai-avatar-svg" class="w-12 h-12 avatar-breathing" viewBox="0 0 80 80">
+                        <!-- Body -->
+                        <circle cx="40" cy="40" r="36" fill="rgba(96,165,250,0.15)" stroke="rgba(96,165,250,0.3)" stroke-width="1.5"/>
+                        <!-- Head/Face -->
+                        <circle cx="40" cy="35" r="20" fill="#60a5fa" opacity="0.9"/>
+                        <!-- Eyes -->
+                        <ellipse cx="33" cy="32" rx="3" ry="3.5" fill="#0f1115"/>
+                        <ellipse cx="47" cy="32" rx="3" ry="3.5" fill="#0f1115"/>
+                        <!-- Eye shine -->
+                        <circle cx="34.5" cy="30.5" r="1.2" fill="white" opacity="0.8"/>
+                        <circle cx="48.5" cy="30.5" r="1.2" fill="white" opacity="0.8"/>
+                        <!-- Cheeks -->
+                        <circle cx="27" cy="37" r="4" fill="#f87171" opacity="0.4"/>
+                        <circle cx="53" cy="37" r="4" fill="#f87171" opacity="0.4"/>
+                        <!-- Mouth (smiling) -->
+                        <path id="avatar-mouth" d="M34,41 Q40,47 46,41" stroke="#0f1115" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+                <!-- Progress info -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1">
+                        <span id="ikigai-level-label" class="text-[11px] font-bold text-blue-400 uppercase tracking-wider">Sinnsuche · Level 1 / 4</span>
+                        <span id="ikigai-streak" class="text-[10px] text-yellow-400 flex items-center gap-1">
+                            <i class="fas fa-fire text-[9px]"></i> Auf dem Weg
+                        </span>
+                    </div>
+                    <!-- Progress bar -->
+                    <div class="w-full h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06)">
+                        <div id="ikigai-progress-bar"
+                            class="h-full rounded-full transition-all duration-700"
+                            style="width:25%;background:linear-gradient(90deg,#60a5fa,#a78bfa)"></div>
+                    </div>
+                    <p id="ikigai-coach-hint" class="text-[10px] mt-1" style="color:var(--text-muted)">
+                        Keine Noten, kein Stress – nur du und deine Gedanken 🌱
+                    </p>
                 </div>
             </div>
-            <p class="text-center text-xs mt-1.5" style="color:var(--text-muted)">Enter zum Senden • KI-Karriereberatung • Keine Speicherung</p>
+            <!-- Quick-select buttons (appear dynamically) -->
+            <div id="ikigai-quick-buttons" class="grid grid-cols-2 gap-1.5 mt-3"></div>
         </div>
-    </div>
-</div>
 
+        <!-- Action Nav: always visible -->
+        <div id="action-nav">
+            <button id="nav-cv-btn"          class="action-btn" onclick="triggerAction('cv')">
+                <i class="btn-icon fas fa-file-alt" style="color:#4ade80"></i>
+                <span>Lebenslauf</span>
+            </button>
+            <button id="nav-ikigai-btn"      class="action-btn" onclick="triggerAction('ikigai')">
+                <i class="btn-icon fas fa-dharmachakra" style="color:#a78bfa"></i>
+                <span>Ikigai</span>
+            </button>
+            <button id="nav-interview-btn"   class="action-btn" onclick="triggerAction('interview')">
+                <i class="btn-icon fas fa-comments" style="color:#fb923c"></i>
+                <span>Interview</span>
+            </button>
+            <button id="nav-business-btn"    class="action-btn" onclick="triggerAction('businessplan')">
+                <i class="btn-icon fas fa-chart-line" style="color:#fbbf24"></i>
+                <span>Business</span>
+            </button>
+            <!-- Reset / Trash -->
+            <button class="reset-btn" onclick="resetChat()" title="Gespräch löschen">
+                <i class="fas fa-trash-alt text-xs"></i>
+            </button>
+        </div>
+
+        <!-- Input wrapper (Gemini-style: paperclip + mic + textarea + send) -->
+        <div id="input-wrapper">
+            <!-- Paperclip file upload -->
+            <label for="resume-upload-bottom" class="icon-btn" title="Datei hochladen" style="cursor:pointer">
+                <i class="fas fa-paperclip text-sm"></i>
+            </label>
+            <input type="file" id="resume-upload-bottom" accept=".docx,.txt,.pdf" class="hidden">
+
+            <!-- Mic button -->
+            <button id="mic-btn" class="icon-btn" title="Spracheingabe">
+                <i class="fas fa-microphone text-sm"></i>
+            </button>
+
+            <!-- Textarea -->
+            <textarea id="user-input" rows="1"
+                placeholder="Schreibe eine Nachricht…"></textarea>
+
+            <!-- Send button -->
+            <button id="send-btn" class="icon-btn send" title="Senden">
+                <i class="fas fa-arrow-up text-xs"></i>
+            </button>
+        </div>
+
+        <!-- File status bar -->
+        <div id="file-status-bar">
+            <p id="file-name-bottom" class="text-[11px] text-green-400 font-medium hidden truncate max-w-[55%]"></p>
+            <p class="text-[10px] ml-auto" style="color:var(--text-muted)">Anonym &amp; DSGVO-konform</p>
+        </div>
+
+    </div><!-- /bottom-area -->
+
+</div><!-- /main area -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT  — All ki-coach functions + new integrations
+═══════════════════════════════════════════════════════════ -->
 <script>
-// ════════ ⚙️ CONFIG & PROMPTS ════════
+// ════════ ⚙️ CONFIG & PROMPTS (ki-coach unchanged) ════════
 const WORKER_URL = "https://ai.vuxuantiep-b2f.workers.dev";
+
 const SYSTEM_DEFAULT = `Du bist Tiep Coach, ein erfahrener, herzlicher und einfühlsamer Karriereberater. Antworte stets in einem warmen, motivierenden und professionellen Ton auf Deutsch. Strukturiere deine Nachrichten übersichtlich mit Markdown.
 
 WICHTIG – Du kennst die vollständige Oberfläche dieser App und weist den Nutzer proaktiv auf die richtigen Funktionen hin:
 
-📌 LINKE SIDEBAR – Verfügbare Werkzeuge:
-1. **Lebenslauf hochladen** (Upload-Zone, oben): Tab "Lebenslauf" wählen → PDF, Word (.docx) oder .txt hochladen. Danach erscheint automatisch der Button "Lebenslauf analysieren".
-2. **Stellenbeschreibung hochladen**: Tab "Stellenbeschr." in derselben Upload-Zone wählen → für maßgeschneiderte Bewerbungstipps und Interview-Vorbereitung.
-3. **Lebenslauf analysieren**: Erscheint nach dem Lebenslauf-Upload. Startet eine tiefe, strukturierte CV-Analyse.
-4. **Interview trainieren**: Simuliert ein realistisches Vorstellungsgespräch. Funktioniert am besten mit hochgeladenem Lebenslauf.
-5. **Ikigai entdecken**: Geführte Selbstreflexions-Analyse zur Berufsfindung.
-6. **Businessplan erstellen**: Hilft beim Aufbau eines professionellen Businessplans Schritt für Schritt.
-7. **Gespräch zurücksetzen**: Löscht den aktuellen Chat-Verlauf.
-
-Erkennungsregeln – Wenn der Nutzer fragt oder schreibt:
-- "Lebenslauf hochladen / analysieren / optimieren" → Weise auf die Upload-Zone oben links hin: Tab "Lebenslauf" wählen, Datei hochladen, dann "Lebenslauf analysieren" klicken.
-- "Stellenanzeige / Jobdescription einreichen" → Tab "Stellenbeschr." in der Sidebar.
-- "Interview üben / Bewerbungsgespräch trainieren" → Button "Interview trainieren" in der Sidebar.
-- "Businessplan / Geschäftsplan erstellen" → Button "Businessplan erstellen" in der Sidebar.
-- "Berufung / Sinn / was soll ich machen" → Button "Ikigai entdecken" in der Sidebar.
+📌 UNTEN – Verfügbare Aktionsbuttons:
+1. **Lebenslauf** → Lebenslauf hochladen & analysieren lassen
+2. **Ikigai** → Berufliche Selbstreflexion starten
+3. **Interview** → Vorstellungsgespräch simulieren
+4. **Business** → Businessplan erstellen
+5. **Hamburger-Menü (☰ oben links)** → Sidebar mit allen Optionen
 
 Ermutige den Nutzer aktiv und vermittle am Ende diskret, dass bei tiefgehenden Karrierefragen ein echter Coach wertvolle Unterstützung bieten kann.`;
+
 const SYSTEM_BUSINESSPLAN = `Du bist ein erfahrener Unternehmensberater und Business-Coach. Begleite den Nutzer Schritt für Schritt bei der Erstellung eines professionellen Businessplans auf Deutsch.
 
-Struktur eines vollständigen Businessplans:
-1. Executive Summary (Kurzübersicht der Geschäftsidee)
-2. Geschäftsidee & Vision
-3. Marktanalyse & Zielgruppe
-4. Wettbewerbsanalyse
-5. Geschäftsmodell & Leistungsangebot
-6. Marketing & Vertriebsstrategie
-7. Operativer Plan (Team, Prozesse, Ressourcen)
-8. Finanzplanung (Investitionen, Umsatzprognose, Break-even)
-9. Risikobewertung & Gegenmaßnahmen
+Struktur: Executive Summary → Geschäftsidee → Marktanalyse → Wettbewerb → Geschäftsmodell → Marketing → Operativer Plan → Finanzplanung → Risikobewertung.
+Stelle immer nur EINE gezielte Frage auf einmal. Fasse am Ende jedes Abschnitts das Ergebnis kurz zusammen.`;
 
-Beginne damit, die Geschäftsidee und Branche des Nutzers kennenzulernen. Stelle immer nur EINE gezielte Frage auf einmal und baue den Plan iterativ auf. Sei direkt, strukturiert und motivierend. Fasse am Ende jedes Abschnitts das Ergebnis kurz zusammen.`;
-const SYSTEM_CV = `Du bist ein professioneller HR-Recruiter und Karriere-Coach. Deine Aufgabe ist es, den bereitgestellten Lebenslauf tiefgehend zu analysieren und eine strukturierte Optimierung durchzuführen. Strukturiere deine Antwort streng nach folgenden Punkten:\n1. Gesamteinschätzung (Wie wirkt der CV auf Personaler?)\n2. Stärken & markante Kompetenzen\n3. Schwachstellen, Lücken oder formale Fehler\n4. Konkrete Formulierungsvorschläge für Bulletpoints im CV\n5. Nächste Schritte (z.B. Anschreiben-Entwurf oder Vorbereitung auf Interviews).\n\nBleibe motivierend, aber absolut ehrlich und detailorientiert.`;
-const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager und Interviewer. Du simulierst mit dem Nutzer ein realistisches, professionelles Vorstellungsgespräch für seine Wunschbranche basierend auf seinem eingereichten Lebenslauf.\n\nRichtlinien:\n1. Stelle immer nur GENAU EINE Frage auf einmal.\n2. Warte die Antwort des Nutzers ab, bevor du reagierst.\n3. Reagiere authentisch auf die Antworten: Gehe auf das Gesagte ein, hake bei Unklarheiten nach oder stelle tiefergehende Fachfragen.\n4. Gib wertvolles, direktes Feedback zu den Antworten (hinterfrage Lücken im Lebenslauf passend zur Stelle, lobe starke Praxisbeispiele).\n5. Kürze: Fasse dich kurz (maximal 2-3 prägnante Sätze pro Runde), um ein echtes Gespräch zu simulieren.`;
-const SYSTEM_IKIGAI = "Du bist ein einfühlsamer Ikigai-Coach. Begleite den Nutzer feinfühlig Schritt für Schritt. Stelle immer nur GENAU EINE Frage auf einmal, um den Nutzer nicht zu überfordern. Sei herzlich, reagiere auf die Antworten eingehend und bestärkend.";
+const SYSTEM_CV = `Du bist ein erfahrener HR-Recruiter, Karriere-Coach und ATS-Experte. Analysiere den Lebenslauf tiefgehend und strukturiert.
 
-// ════════ 📊 STATE MANAGEMENT ════════
+AUSGABE-FORMAT (immer exakt so):
+
+## 🎯 Gesamteinschätzung
+Kurze Bewertung wie ein echter Recruiter (2-3 Sätze, direkt und ehrlich). Nenne das Erfahrungslevel und den Gesamteindruck.
+
+## 📊 CV-Score
+Bewerte diese 5 Dimensionen mit einer Zahl von 0-100:
+- **Struktur & Format**: [Zahl]/100 — [1 Satz Begründung]
+- **Klarheit & Sprache**: [Zahl]/100 — [1 Satz Begründung]
+- **Relevanz & Keywords**: [Zahl]/100 — [1 Satz Begründung]
+- **Erfolge & Wirkung**: [Zahl]/100 — [1 Satz Begründung]
+- **ATS-Kompatibilität**: [Zahl]/100 — [1 Satz Begründung]
+
+## ✅ Top 3 Stärken
+Nenne die 3 stärksten Punkte des CVs. Sei konkret, verweise auf echte Inhalte des Dokuments.
+
+## ⚠️ Top 3 Schwachstellen
+Nenne die 3 wichtigsten Probleme. Sei direkt – schönreden hilft nicht.
+
+## 🔧 Konkrete Verbesserungen
+Gib 3-5 direkt umsetzbare Maßnahmen. Format: **Problem → Lösung → Beispiel**.
+
+## 🚀 Nächste Schritte
+2-3 priorisierte Handlungsempfehlungen. Was sollte der Nutzer JETZT als Erstes tun?
+
+WICHTIG: Sei motivierend aber absolut ehrlich. Verweise auf konkrete Stellen im Lebenslauf.`;
+
+// Erweiterte Analyse-Prompts für spezifische Vertiefungen
+const CV_DEEP_PROMPTS = {
+    ats:       `Analysiere meinen Lebenslauf speziell auf ATS-Kompatibilität (Applicant Tracking Systems). Prüfe: Keywords, Dateiformat-Hinweise, Sonderzeichen, Tabellenstrukturen, Schriftarten und Abschnittsnamen. Gib eine Bewertung von 0-100 und konkrete ATS-Optimierungsschritte.`,
+    formulierung: `Gib mir 5-7 konkrete Formulierungsvorschläge für Bulletpoints in meinem Lebenslauf. Zeige immer das Original und die verbesserte Version. Nutze starke Verben und messe Erfolge in Zahlen (%, €, Zeit).`,
+    keywords:  `Analysiere welche wichtigen Branchen-Keywords in meinem Lebenslauf fehlen. Schlage 10-15 relevante Keywords vor, die ich ergänzen sollte, damit Recruiter und ATS-Systeme mich besser finden.`,
+    anschreiben: `Erstelle auf Basis meines Lebenslaufs ein professionelles Anschreiben-Template. Nutze meine stärksten Punkte. Das Template soll für verschiedene Stellenanzeigen leicht anpassbar sein.`,
+    linkedin:  `Optimiere mein LinkedIn-Profil auf Basis meines Lebenslaufs. Gib mir: optimierten Headline-Vorschlag, About-Sektion (150-200 Wörter), und 5 Skills die ich hinzufügen sollte.`,
+    luecken:   `Analysiere Lücken oder unklare Stellen in meinem Lebenslauf (Zeitlücken, fehlende Begründungen, unklare Jobwechsel). Erkläre wie ich diese professionell kommunizieren oder kaschieren kann.`,
+};
+
+const SYSTEM_INTERVIEW = `Du bist ein erfahrener HR-Manager. Simuliere ein realistisches Vorstellungsgespräch.\n1. Stelle immer nur GENAU EINE Frage.\n2. Reagiere authentisch auf Antworten.\n3. Gib kurzes Feedback (max. 2-3 Sätze).\n4. Kürze dich.`;
+
+const SYSTEM_IKIGAI = `Du bist ein einfühlsamer Ikigai-Begleiter. Dein Stil: warmherzig, spielerisch, neugierig – wie ein guter Freund, der wirklich zuhört.
+Nach JEDER Antwort: 
+1. Gib ein kurzes, ehrliches emotionales Feedback (1 Satz, authentisch – nicht fake).
+2. Stelle dann genau EINE tiefe Reflexionsfrage aus dem Ikigai-Rahmen.
+Kategorien (in dieser Reihenfolge): Leidenschaft → Stärken → Werte → Monetarisierung.
+Antworte warm, kurz und dialogisch. Keine langen Listen.`;
+
+// ════════ 📊 STATE (ki-coach unchanged) ════════
 let conversationHistory = [];
-let extractedText = "";
-let jobDescText = ""; // Hält die hochgeladene Stellenbeschreibung
-let uploadType = "cv"; // Aktuelle Auswahl: "cv" oder "job"
-let audioActive = true;
-let currentMode = "default";
-let messageCount = 0;
-let isTyping = false; // Verhindert Klicks während der Typewriter-Animation
+let extractedText   = "";
+let jobDescText     = "";
+let uploadType      = "cv";
+let audioActive     = true;
+let currentMode     = "default";
+let messageCount    = 0;
+let isTyping        = false;
+let ikigaiLevel     = 1; // for avatar progress
 
-// ════════ 🔍 UI ELEMENTS DOM REFERENCE ════════
-const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-const clearBtn = document.getElementById('clear-btn');
-const chatScroll = document.getElementById('chat-scroll');
-const menuBtn = document.getElementById('menu-btn');
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
-const fileInput = document.getElementById('resume-upload');
-const uploadZone = document.getElementById('upload-zone');
-const fileNameEl = document.getElementById('file-name');
-const uploadTitle = document.getElementById('upload-title');
-const uploadSubtitle = document.getElementById('upload-subtitle');
-const modeLabel = document.getElementById('mode-label');
-const analyzeBtn = document.getElementById('analyze-btn');
-const ikigaiBtn = document.getElementById('ikigai-btn');
+// ════════ 🔍 UI REFERENCES ════════
+const userInput       = document.getElementById('user-input');
+const sendBtn         = document.getElementById('send-btn');
+const clearBtn        = document.getElementById('clear-btn');
+const chatScroll      = document.getElementById('chat-scroll');
+const menuBtn         = document.getElementById('menu-btn');
+const sidebar         = document.getElementById('sidebar');
+const overlay         = document.getElementById('overlay');
+const fileInput       = document.getElementById('resume-upload');
+const uploadZone      = document.getElementById('upload-zone');
+const fileNameEl      = document.getElementById('file-name');
+const uploadTitle     = document.getElementById('upload-title');
+const uploadSubtitle  = document.getElementById('upload-subtitle');
+const modeLabel       = document.getElementById('mode-label');
+const analyzeBtn      = document.getElementById('analyze-btn');
+const ikigaiBtn       = document.getElementById('ikigai-btn');
 const startInterviewBtn = document.getElementById('start-interview-btn');
 const businessplanBtn = document.getElementById('businessplan-btn');
-const interviewPanel = document.getElementById('interview-panel');
+const interviewPanel  = document.getElementById('interview-panel');
 const interviewStatus = document.getElementById('interview-status');
-const micBtn = document.getElementById('mic-btn');
-const audioBtn = document.getElementById('toggle-audio-btn');
-const audioIcon = document.getElementById('audio-icon');
-const audioLabel = document.getElementById('audio-label');
-const ctaEl = document.getElementById('live-coach-cta');
+const micBtn          = document.getElementById('mic-btn');
+const audioBtn        = document.getElementById('toggle-audio-btn');
+const audioIcon       = document.getElementById('audio-icon');
+const audioLabel      = document.getElementById('audio-label');
+const ctaEl           = document.getElementById('live-coach-cta');
+const chatHistory     = document.getElementById('chat-history');
 
-// ════════ 🔊 AUDIO SYSTEM (TTS) ════════
-function speakText(text) {
-    if (!audioActive || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel(); // Stoppt laufende Sprachausgaben
+// ════════ 🎯 NEW: TRIGGER ACTION DISPATCHER ════════
+// This is the central dispatcher for the bottom action nav.
+// Vu: replace the bodies here to hook in your own AI calls.
+function triggerAction(mode) {
+    closeSidebar();
+    setActiveNavBtn(mode);
 
-    let clean = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
-    clean = clean.replace(/[*#_`>]/g, ' ').replace(/\s+/g, ' ').trim();
-    
-    const utterance = new SpeechSynthesisUtterance(clean);
-    utterance.lang = 'de-DE';
-
-    const setBestVoice = () => {
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length === 0) return false;
-        const voice = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('natural')) ||
-                      voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('google')) ||
-                      voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('microsoft')) ||
-                      voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes('anna')) ||
-                      voices.find(v => v.lang.startsWith('de'));
-        if (voice) {
-            utterance.voice = voice;
-            return true;
+    if (mode === 'cv') {
+        if (!extractedText) {
+            addMessage('ai', CV_UPLOAD_HINT);
+            return;
         }
-        return false;
-    };
+        setMode('cv');
+        addMessage('user', 'Analysiere bitte meinen Lebenslauf.');
+        // Show the visual score widget first, then ask AI
+        showCVScoreWidget();
+        askAI('Führe eine vollständige strukturierte Lebenslaufanalyse durch. Halte das Format exakt ein.', SYSTEM_CV)
+            .then(() => {
+                // After analysis, inject the improvement chips
+                injectCVImprovementChips();
+            });
 
-    if (!setBestVoice()) {
-        window.speechSynthesis.onvoiceschanged = () => {
-            setBestVoice();
-            utterance.rate = 1.05;
-            utterance.pitch = 1.00;
-            window.speechSynthesis.speak(utterance);
-        };
-    } else {
-        utterance.rate = 1.05;
-        utterance.pitch = 1.00;
-        window.speechSynthesis.speak(utterance);
+    } else if (mode === 'ikigai') {
+        setMode('ikigai');
+        ikigaiLevel = 1;
+        conversationHistory = [];
+        chatHistory.innerHTML = '';
+        updateIkigaiWidget(1);
+        document.getElementById('ikigai-widget').classList.add('active');
+        addMessage('user', 'Ich möchte meine Ikigai-Berufung entdecken.');
+        askAI('Starte die Ikigai-Reise. Begrüße mich herzlich und stelle die erste Frage zu meiner Leidenschaft – spielerisch und kurz.', SYSTEM_IKIGAI);
+        injectIkigaiQuickButtons(1);
+
+    } else if (mode === 'interview') {
+        if (!extractedText) {
+            addMessage('ai', INTERVIEW_UPLOAD_HINT);
+            return;
+        }
+        setMode('interview');
+        conversationHistory = [];
+        chatHistory.innerHTML = '';
+        document.getElementById('interview-panel')?.classList.remove('hidden');
+        if (interviewStatus) interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
+        addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
+        let intro = 'Begrüße mich als HR-Manager und stelle die erste Frage.';
+        if (jobDescText) intro += ' Beziehe dich auf die Stellenbeschreibung.';
+        askAI(intro, SYSTEM_INTERVIEW);
+
+    } else if (mode === 'businessplan') {
+        if (!extractedText) {
+            addMessage('ai', BUSINESS_UPLOAD_HINT);
+        }
+        setMode('businessplan');
+        conversationHistory = [];
+        chatHistory.innerHTML = '';
+        addMessage('user', 'Ich möchte einen Businessplan erstellen.');
+        askAI('Begrüße mich kurz und stelle die erste Frage: Was ist meine Geschäftsidee?', SYSTEM_BUSINESSPLAN);
     }
 }
 
+function setActiveNavBtn(mode) {
+    ['cv','ikigai','interview','business'].forEach(m => {
+        const btn = document.getElementById(`nav-${m}-btn`);
+        if (btn) btn.classList.toggle('active', m === mode || (m === 'business' && mode === 'businessplan'));
+    });
+}
+
+// ════════ 🔄 RESET CHAT ════════
+function resetChat() {
+    if (clearBtn) clearBtn.click();
+    setActiveNavBtn(null);
+    document.getElementById('ikigai-widget')?.classList.remove('active');
+    document.getElementById('ikigai-quick-buttons').innerHTML = '';
+    ikigaiLevel = 1;
+}
+
+// ════════ 🎮 IKIGAI AVATAR ════════
+const IKIGAI_QUICK_OPTIONS = {
+    1: [{ t:"Kreativ & Gestalten", i:"🎨" },{ t:"Probleme lösen", i:"🧩" },{ t:"Mit Menschen", i:"🤝" },{ t:"Natur & Bewegung", i:"🌿" }],
+    2: [{ t:"Struktur & Ordnung", i:"📊" },{ t:"Einfühlungsvermögen", i:"❤️" },{ t:"Technik & Logik", i:"💻" },{ t:"Reden & Präsentieren", i:"📢" }],
+    3: [{ t:"Nachhaltigkeit", i:"🌍" },{ t:"Gerechtigkeit & Bildung", i:"⚖️" },{ t:"Gesundheit", i:"🍃" },{ t:"Innovation", i:"🚀" }],
+    4: [{ t:"Festes Gehalt", i:"🏦" },{ t:"Freelance", i:"💼" },{ t:"Eigenes Startup", i:"🎯" },{ t:"Hybrid / beides", i:"⚡" }]
+};
+
+const IKIGAI_AVATAR_MOUTHS = {
+    thinking: "M34,43 Q40,43 46,43",
+    smiling:  "M34,41 Q40,47 46,41",
+    happy:    "M31,40 Q40,50 49,40",
+    surprised:"M37,40 Q40,35 43,40 Q40,46 37,40"
+};
+
+function setAvatarMood(mood) {
+    const path = document.getElementById('avatar-mouth');
+    if (path && IKIGAI_AVATAR_MOUTHS[mood]) {
+        path.setAttribute('d', IKIGAI_AVATAR_MOUTHS[mood]);
+    }
+}
+
+function updateIkigaiWidget(level) {
+    const bar   = document.getElementById('ikigai-progress-bar');
+    const label = document.getElementById('ikigai-level-label');
+    const hint  = document.getElementById('ikigai-coach-hint');
+    const pct   = level * 25;
+
+    if (bar)   bar.style.width = `${pct}%`;
+    if (label) label.textContent = `Sinnsuche · Level ${Math.min(level,4)} / 4`;
+
+    const hints = [
+        "Keine Noten, kein Stress – nur du und deine Gedanken 🌱",
+        "Super! Du entdeckst, was dir Energie gibt 💪",
+        "Halbzeit! Deine innere Karte wird klarer ✨",
+        "Fast da! Was wirklich zählt, zeigt sich jetzt 🎯"
+    ];
+    if (hint) hint.textContent = hints[Math.min(level-1, 3)];
+
+    if (level <= 3) setAvatarMood('smiling');
+    if (level === 4) {
+        setAvatarMood('happy');
+        label.textContent = "Ikigai freigeschaltet! ☯️";
+    }
+}
+
+function injectIkigaiQuickButtons(level) {
+    const container = document.getElementById('ikigai-quick-buttons');
+    if (!container) return;
+    container.innerHTML = '';
+    const opts = IKIGAI_QUICK_OPTIONS[level] || [];
+    opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'py-1.5 px-2.5 rounded-xl border text-xs font-medium transition-all text-left flex items-center gap-1.5 hover:border-blue-500/40 hover:bg-blue-500/10';
+        btn.style.cssText = 'background:var(--bg-card);border-color:var(--border);color:var(--text-secondary);font-family:"DM Sans",sans-serif';
+        btn.innerHTML = `<span>${opt.i}</span><span>${opt.t}</span>`;
+        btn.onclick = () => {
+            if (sendBtn.disabled) return;
+            userInput.value = `${opt.i} ${opt.t}`;
+            handleSend();
+            // advance level after response
+            setTimeout(() => {
+                if (ikigaiLevel < 4) {
+                    ikigaiLevel++;
+                    updateIkigaiWidget(ikigaiLevel);
+                    injectIkigaiQuickButtons(ikigaiLevel);
+                } else {
+                    container.innerHTML = '';
+                }
+            }, 800);
+        };
+        container.appendChild(btn);
+    });
+}
+
+// ════════ 🔊 AUDIO SYSTEM (ki-coach unchanged) ════════
+function speakText(text) {
+    if (!audioActive || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    let clean = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+    clean = clean.replace(/[*#_`>]/g,' ').replace(/\s+/g,' ').trim();
+    const utterance = new SpeechSynthesisUtterance(clean);
+    utterance.lang = 'de-DE';
+    const setBestVoice = () => {
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices.length) return false;
+        const v = voices.find(v=>v.lang.startsWith('de')&&v.name.toLowerCase().includes('natural'))
+               || voices.find(v=>v.lang.startsWith('de')&&v.name.toLowerCase().includes('google'))
+               || voices.find(v=>v.lang.startsWith('de')&&v.name.toLowerCase().includes('microsoft'))
+               || voices.find(v=>v.lang.startsWith('de'));
+        if (v) { utterance.voice = v; return true; }
+        return false;
+    };
+    if (!setBestVoice()) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            setBestVoice(); utterance.rate=1.05; utterance.pitch=1.00;
+            window.speechSynthesis.speak(utterance);
+        };
+    } else { utterance.rate=1.05; utterance.pitch=1.00; window.speechSynthesis.speak(utterance); }
+}
 if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 
-// ════════ 🎙️ SPEECH RECOGNITION (STT) ════════
+// ════════ 🎙️ SPEECH RECOGNITION (ki-coach unchanged) ════════
 let recognition = null;
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechObj = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -704,81 +1074,41 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     recognition.lang = 'de-DE';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
-
     recognition.onstart = () => {
         micBtn.classList.add('recording');
         micBtn.querySelector('i').className = 'fas fa-microphone recording-active';
     };
-
-    recognition.onerror = () => {
-        stopMicStyles();
-    };
-
-    recognition.onend = () => {
-        stopMicStyles();
-    };
-
+    recognition.onerror = () => stopMicStyles();
+    recognition.onend   = () => stopMicStyles();
     recognition.onresult = (event) => {
-        const speechToText = event.results[0][0].transcript;
-        if (userInput) {
-            userInput.value = speechToText;
-            userInput.dispatchEvent(new Event('input'));
-            handleSend();
-        }
+        const txt = event.results[0][0].transcript;
+        if (userInput) { userInput.value = txt; userInput.dispatchEvent(new Event('input')); handleSend(); }
     };
 }
-
 function stopMicStyles() {
-    if (micBtn) {
-        micBtn.classList.remove('recording');
-        micBtn.querySelector('i').className = 'fas fa-microphone text-gray-400';
-    }
+    if (micBtn) { micBtn.classList.remove('recording'); micBtn.querySelector('i').className = 'fas fa-microphone text-sm'; }
 }
-
 if (micBtn) {
     micBtn.addEventListener('click', () => {
-        if (!recognition) {
-            alert("Spracherkennung wird von deinem Browser leider nicht unterstützt.");
-            return;
-        }
-        if (micBtn.classList.contains('recording')) {
-            recognition.stop();
-        } else {
-            recognition.start();
-        }
+        if (!recognition) return alert("Spracherkennung nicht unterstützt.");
+        micBtn.classList.contains('recording') ? recognition.stop() : recognition.start();
     });
 }
 
-// ════════ 🛠️ UTILITIES ════════
-function escHtml(text) {
-    if (!text) return '';
-    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// ════════ 🛠️ UTILITIES (ki-coach unchanged) ════════
+function escHtml(t) {
+    if (!t) return '';
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-
 function parseMarkdown(text) {
-    if (window.marked && typeof window.marked.parse === 'function') {
-        return window.marked.parse(text);
-    }
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-               .replace(/\*(.*?)\*/g, '<em>$1</em>')
-               .replace(/\n/g, '<br>');
+    if (window.marked && typeof window.marked.parse === 'function') return window.marked.parse(text);
+    return text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>');
 }
+function getTime() { return new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}); }
+function scrollToBottom() { if (chatScroll) setTimeout(() => chatScroll.scrollTop = chatScroll.scrollHeight, 60); }
 
-function getTime() {
-    return new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-}
-
-function scrollToBottom() {
-    if (chatScroll) {
-        setTimeout(() => {
-            chatScroll.scrollTop = chatScroll.scrollHeight;
-        }, 60);
-    }
-}
-
-// CTA nur nach echten Analyse-Ergebnissen anzeigen (CV, Interview, Businessplan)
 function checkShowCTA() {
-    if (['cv', 'interview', 'businessplan'].includes(currentMode) && !ctaEl.classList.contains('show')) {
+    if (['cv','interview','businessplan'].includes(currentMode) && !ctaEl.classList.contains('show')) {
         ctaEl.classList.add('show');
     }
 }
@@ -786,108 +1116,79 @@ function checkShowCTA() {
 function setMode(mode) {
     currentMode = mode;
     if (!modeLabel) return;
-    if (mode === 'cv') {
-        modeLabel.textContent = "📄 Lebenslauf-Optimierung";
-        modeLabel.classList.remove('hidden');
-    } else if (mode === 'interview') {
-        modeLabel.textContent = "💼 Interview-Simulation";
-        modeLabel.classList.remove('hidden');
-    } else if (mode === 'ikigai') {
-        modeLabel.textContent = "☯️ Ikigai-Analyse";
-        modeLabel.classList.remove('hidden');
-    } else if (mode === 'businessplan') {
-        modeLabel.textContent = "📊 Businessplan-Erstellung";
+    const labels = {
+        cv:           '📄 Lebenslauf',
+        interview:    '💬 Interview',
+        ikigai:       '☯️ Ikigai',
+        businessplan: '📊 Businessplan'
+    };
+    if (labels[mode]) {
+        modeLabel.textContent = labels[mode];
         modeLabel.classList.remove('hidden');
     } else {
         modeLabel.classList.add('hidden');
         if (interviewPanel) interviewPanel.classList.add('hidden');
+        document.getElementById('ikigai-widget')?.classList.remove('active');
     }
 }
 
-// ════════ 🤖 ASK AI CORE FUNCTION ════════
-let currentAbortController = null; // Globaler AbortController für manuellen Abbruch
+// ════════ 🤖 ASK AI (ki-coach unchanged — model fallback sequence) ════════
+let currentAbortController = null;
 
 async function askAI(userMsg, systemMsg) {
-    conversationHistory.push({ role: 'user', content: userMsg });
+    conversationHistory.push({ role:'user', content:userMsg });
     showThinking();
-
     sendBtn.disabled = true;
     userInput.disabled = true;
     userInput.placeholder = "Tiep Coach analysiert…";
-    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-sm"></i>';
-    sendBtn.classList.add('opacity-40', 'cursor-not-allowed');
+    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-xs"></i>';
+    sendBtn.classList.add('opacity-40','cursor-not-allowed');
 
     const finalPrompt = extractedText
-        ? `[Lebenslauf des Nutzers]\n${extractedText}${jobDescText ? '\n\n[Hochgeladene Stellenbeschreibung]\n' + jobDescText : ''}\n\n[Anfrage]\n${userMsg}`
-        : (jobDescText ? `[Hochgeladene Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
+        ? `[Lebenslauf]\n${extractedText}${jobDescText ? '\n\n[Stellenbeschreibung]\n'+jobDescText : ''}\n\n[Anfrage]\n${userMsg}`
+        : (jobDescText ? `[Stellenbeschreibung]\n${jobDescText}\n\n[Anfrage]\n${userMsg}` : userMsg);
     const historyToSend = [...conversationHistory];
-    if (extractedText || jobDescText) {
-        historyToSend[historyToSend.length - 1] = { role: 'user', content: finalPrompt };
-    }
+    if (extractedText || jobDescText) historyToSend[historyToSend.length-1] = { role:'user', content:finalPrompt };
 
-    // Fallback-Modelle: erst freier Router, dann gezielt stabile Gratis-Modelle
-    const MODEL_SEQUENCE = [
-        'openrouter/free',
-        'meta-llama/llama-3-8b-instruct:free',
-        'mistralai/mistral-7b-instruct:free'
-    ];
-    const TIMEOUT_MS = 90000; // 90 Sekunden pro Versuch
-
+    const MODEL_SEQUENCE = ['openrouter/free','meta-llama/llama-3-8b-instruct:free','mistralai/mistral-7b-instruct:free'];
+    const TIMEOUT_MS = 90000;
     let aiReply = null;
     let lastError = null;
     let userCancelled = false;
 
     for (let attempt = 0; attempt < MODEL_SEQUENCE.length; attempt++) {
         if (userCancelled) break;
-
         const model = MODEL_SEQUENCE[attempt];
         currentAbortController = new AbortController();
-
-        // Statustext in der Thinking-Bubble aktualisieren
         updateThinkingStatus(attempt);
-
-        // Harter Timeout: nach 90s automatisch abbrechen und nächstes Modell versuchen
-        const timeoutId = setTimeout(() => {
-            if (currentAbortController) currentAbortController.abort();
-        }, TIMEOUT_MS);
+        const timeoutId = setTimeout(() => { if (currentAbortController) currentAbortController.abort(); }, TIMEOUT_MS);
 
         try {
             if (attempt > 0) {
-                userInput.placeholder = `Suche alternatives Modell (${attempt + 1}/${MODEL_SEQUENCE.length})…`;
-                await new Promise(r => setTimeout(r, 2000)); // 2s Pause zwischen Versuchen
+                userInput.placeholder = `Suche alternatives Modell (${attempt+1}/${MODEL_SEQUENCE.length})…`;
+                await new Promise(r => setTimeout(r, 2000));
             }
-
             const res = await fetch(`${WORKER_URL}/chat`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type':'application/json' },
                 signal: currentAbortController.signal,
-                body: JSON.stringify({
-                    model,
-                    messages: [
-                        { role: 'system', content: systemMsg },
-                        ...historyToSend
-                    ]
-                })
+                body: JSON.stringify({ model, messages:[{ role:'system', content:systemMsg },...historyToSend] })
             });
-
             clearTimeout(timeoutId);
-
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
 
-            if (data.choices?.[0]?.message?.content)              aiReply = data.choices[0].message.content;
-            else if (typeof data.reply === 'string' && data.reply.trim())    aiReply = data.reply;
-            else if (typeof data.content === 'string' && data.content.trim()) aiReply = data.content;
-            else if (typeof data.message === 'string' && data.message.trim()) aiReply = data.message;
-            else if (typeof data.text === 'string' && data.text.trim())       aiReply = data.text;
+            if (data.choices?.[0]?.message?.content)                aiReply = data.choices[0].message.content;
+            else if (typeof data.reply==='string'&&data.reply.trim())    aiReply = data.reply;
+            else if (typeof data.content==='string'&&data.content.trim()) aiReply = data.content;
+            else if (typeof data.message==='string'&&data.message.trim()) aiReply = data.message;
+            else if (typeof data.text==='string'&&data.text.trim())       aiReply = data.text;
 
-            if (!aiReply) throw new Error('Leere Antwort vom Server.');
-
-            break; // Erfolg – Schleife beenden
-
-        } catch (err) {
+            if (!aiReply) throw new Error('Leere Antwort.');
+            break;
+        } catch(err) {
             clearTimeout(timeoutId);
-            if (err.name === 'AbortError' && userCancelled) break;
+            if (err.name==='AbortError' && userCancelled) break;
             lastError = err;
             console.warn(`[Tiep Coach] Modell ${model} fehlgeschlagen:`, err.message);
         }
@@ -897,32 +1198,30 @@ async function askAI(userMsg, systemMsg) {
 
     if (aiReply) {
         removeThinking();
-        conversationHistory.push({ role: 'assistant', content: aiReply });
+        conversationHistory.push({ role:'assistant', content:aiReply });
         messageCount++;
-        if (interviewPanel && currentMode === 'interview' && interviewStatus) {
-            interviewStatus.textContent = "HR-Manager hat gesprochen.";
-        }
-        await addMessageTypewriter('ai', aiReply, systemMsg === SYSTEM_CV);
+        if (interviewPanel && currentMode==='interview' && interviewStatus) interviewStatus.textContent = "HR-Manager hat gesprochen.";
+        // Avatar mood during ikigai
+        if (currentMode === 'ikigai') setAvatarMood('smiling');
+        await addMessageTypewriter('ai', aiReply, systemMsg===SYSTEM_CV);
         speakText(aiReply);
     } else if (userCancelled) {
         removeThinking();
-        addMessage('ai', '⏹️ **Anfrage abgebrochen.** Du kannst jederzeit eine neue Frage stellen.');
+        addMessage('ai','⏹️ **Abgebrochen.** Du kannst jederzeit eine neue Frage stellen.');
     } else {
         removeThinking();
-        addMessage('ai', `⚠️ **Alle KI-Modelle sind aktuell überlastet.**\n\nBitte warte 30–60 Sekunden und versuche es dann erneut. Das ist ein temporäres Problem der kostenlosen Server.\n\n*Fehlerdetail: ${lastError?.message || 'Keine Antwort'}*`);
+        addMessage('ai',`⚠️ **Alle KI-Modelle sind aktuell überlastet.**\n\nBitte warte 30–60 Sekunden und versuche es dann erneut.\n\n*Fehlerdetail: ${lastError?.message||'Keine Antwort'}*`);
     }
 
     sendBtn.disabled = false;
     userInput.disabled = false;
     userInput.placeholder = "Schreibe eine Nachricht…";
-    sendBtn.innerHTML = '<i class="fas fa-arrow-up text-white text-sm"></i>';
-    sendBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+    sendBtn.innerHTML = '<i class="fas fa-arrow-up text-xs"></i>';
+    sendBtn.classList.remove('opacity-40','cursor-not-allowed');
     scrollToBottom();
 }
 
-// ════════ 💬 CHAT RENDERING ENGINE ════════
-const chatHistory = document.getElementById('chat-history');
-
+// ════════ 💬 CHAT RENDERING (gemini style) ════════
 function addMessage(role, text) {
     const div = document.createElement('div');
     div.className = 'msg-enter';
@@ -930,18 +1229,14 @@ function addMessage(role, text) {
         div.innerHTML = `
         <div class="flex gap-3 items-start justify-end">
             <div class="flex-1 flex flex-col items-end">
-                <div class="flex items-center gap-2 mb-1.5">
-                    <span class="text-xs" style="color:var(--text-muted)">Du</span>
-                </div>
-                <div class="rounded-2xl rounded-tl-sm px-4 py-3 max-w-sm" style="background:#1e3a5f;border:1px solid #2a4a7f">
+                <div class="rounded-2xl rounded-tr-sm px-4 py-2.5 max-w-xs md:max-w-sm" style="background:#1e3a5f;border:1px solid #2a4a7f">
                     <p class="text-sm" style="white-space:pre-wrap;color:var(--text-primary)">${escHtml(text)}</p>
                 </div>
             </div>
-            <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold mt-0.5" style="background:#25272b;border:1px solid var(--border);color:var(--text-secondary)">DU</div>
         </div>`;
     } else {
         div.innerHTML = `
-        <div class="flex gap-3 items-start">
+        <div class="flex gap-3 items-start max-w-2xl">
             <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
                 <i class="fas fa-robot text-white text-xs"></i>
             </div>
@@ -960,12 +1255,11 @@ function addMessage(role, text) {
     scrollToBottom();
 }
 
-// ⌨️ Fortschrittlicher Typewriter-Effekt für Markdown-Text (Erweitert für interaktive Buttons)
-function addMessageTypewriter(role, text, isAnalysis = false) {
+// Typewriter effect (ki-coach unchanged)
+function addMessageTypewriter(role, text, isAnalysis=false) {
     return new Promise((resolve) => {
         const div = document.createElement('div');
         div.className = 'msg-enter';
-        
         div.innerHTML = `
         <div class="flex gap-3 items-start">
             <div class="w-8 h-8 g-bg rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
@@ -980,29 +1274,26 @@ function addMessageTypewriter(role, text, isAnalysis = false) {
                 <div class="options-container mt-3 hidden flex flex-wrap gap-2"></div>
             </div>
         </div>`;
-        
         chatHistory.appendChild(div);
         const container = div.querySelector('.prose-bubble-live');
         const optionsContainer = div.querySelector('.options-container');
-        
         let currentLen = 0;
-        const speed = text.length > 200 ? 5 : 15; // Beschleunigt die Ausgabe bei langen Antworten
-        
+        const speed = text.length > 200 ? 5 : 15;
         function type() {
             if (currentLen < text.length) {
-                currentLen += 3; // Rendert Blöcke für eine flüssige Animation
-                container.innerHTML = parseMarkdown(text.slice(0, currentLen));
+                currentLen += 3;
+                container.innerHTML = parseMarkdown(text.slice(0,currentLen));
                 scrollToBottom();
                 setTimeout(type, speed);
             } else {
                 container.className = 'rounded-2xl rounded-tl-sm p-4 prose-bubble';
                 container.innerHTML = parseMarkdown(text);
-                
-                // Falls es sich um die Lebenslauf-Analyse handelt, füge die gewünschten Interaktionsmöglichkeiten an
-                if (isAnalysis && optionsContainer) {
-                    injectAnalysisOptions(optionsContainer, text);
+                if (isAnalysis && optionsContainer) injectAnalysisOptions(optionsContainer, text);
+                // Parse CV scores and update the widget
+                if (isAnalysis && currentMode === 'cv') {
+                    const scores = parseCVScores(text);
+                    updateCVScoreWidget(scores);
                 }
-                
                 resolve();
             }
         }
@@ -1010,136 +1301,230 @@ function addMessageTypewriter(role, text, isAnalysis = false) {
     });
 }
 
-// Hilfsfunktion: Injiziert die klickbaren Action-Buttons nahtlos am Nachrichten-Ende
+// ════════ 📊 CV SCORE WIDGET ════════
+// Parses KI-Antwort nach dem Scoring-Muster und rendert einen visuellen Score-Block
+function parseCVScores(text) {
+    const dims = [
+        { label:'Struktur & Format',     key:'Struktur',   color:'#4285f4' },
+        { label:'Klarheit & Sprache',     key:'Klarheit',   color:'#34a853' },
+        { label:'Relevanz & Keywords',    key:'Relevanz',   color:'#a78bfa' },
+        { label:'Erfolge & Wirkung',      key:'Erfolge',    color:'#f59e0b' },
+        { label:'ATS-Kompatibilität',     key:'ATS',        color:'#f87171' },
+    ];
+    const scores = dims.map(d => {
+        const rx = new RegExp(d.key + '[^:]*?[:\\s]*(\\d{1,3})\\s*/\\s*100', 'i');
+        const m  = text.match(rx);
+        return { ...d, score: m ? Math.min(100, parseInt(m[1])) : null };
+    });
+    return scores;
+}
+
+function showCVScoreWidget() {
+    // Placeholder widget shown immediately while AI works
+    const wrapper = document.createElement('div');
+    wrapper.id = 'cv-score-widget';
+    wrapper.className = 'cv-score-card msg-enter max-w-2xl mx-auto';
+    wrapper.innerHTML = `
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(66,133,244,.15)">
+                <i class="fas fa-chart-bar text-xs" style="color:var(--accent)"></i>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-white">CV-Analyse läuft…</p>
+                <p class="text-[10px]" style="color:var(--text-muted)">Score wird berechnet</p>
+            </div>
+            <div class="ml-auto flex gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse-soft"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse-soft" style="animation-delay:.3s"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse-soft" style="animation-delay:.6s"></span>
+            </div>
+        </div>
+        <div id="cv-score-bars" class="space-y-2 opacity-30">
+            ${['Struktur & Format','Klarheit & Sprache','Relevanz & Keywords','Erfolge & Wirkung','ATS-Kompatibilität'].map(l => `
+            <div class="cv-bar-row">
+                <span class="cv-bar-label">${l}</span>
+                <div class="cv-bar-track"><div class="cv-bar-fill" style="width:0%;background:#2a2b2e"></div></div>
+                <span class="cv-bar-num">–</span>
+            </div>`).join('')}
+        </div>`;
+    chatHistory.appendChild(wrapper);
+    scrollToBottom();
+}
+
+function updateCVScoreWidget(scores) {
+    const widget = document.getElementById('cv-score-widget');
+    if (!widget) return;
+
+    const validScores = scores.filter(s => s.score !== null);
+    const avgScore    = validScores.length
+        ? Math.round(validScores.reduce((a,s) => a+s.score, 0) / validScores.length)
+        : null;
+
+    const gradeColor = avgScore >= 75 ? '#34a853' : avgScore >= 50 ? '#f59e0b' : '#f87171';
+    const gradeLabel = avgScore >= 80 ? 'Sehr gut' : avgScore >= 65 ? 'Gut' : avgScore >= 50 ? 'Ausbaufähig' : 'Überarbeitung nötig';
+
+    widget.innerHTML = `
+        <div class="flex items-start gap-4 mb-4">
+            <!-- Radial Score Ring -->
+            <div class="cv-score-ring">
+                <svg width="76" height="76" viewBox="0 0 76 76">
+                    <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
+                    <circle cx="38" cy="38" r="32" fill="none" stroke="${gradeColor}" stroke-width="7"
+                        stroke-dasharray="${2*Math.PI*32}" stroke-dashoffset="${2*Math.PI*32*(1-(avgScore||0)/100)}"
+                        stroke-linecap="round" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
+                </svg>
+                <div class="score-val">${avgScore ?? '?'}</div>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold" style="color:${gradeColor}">${gradeLabel}</p>
+                <p class="text-[10px] mt-0.5" style="color:var(--text-muted)">Gesamt-CV-Score (Ø aus 5 Dimensionen)</p>
+                <div class="mt-2 flex flex-wrap gap-1">
+                    ${validScores.length === 0 ? '<span class="text-[10px] text-gray-500">Scores werden berechnet…</span>' : ''}
+                    ${validScores.filter(s=>s.score>=75).length > 0 ? `<span class="cv-chip chip-green"><i class="fas fa-check-circle text-[9px]"></i>${validScores.filter(s=>s.score>=75).length} stark</span>` : ''}
+                    ${validScores.filter(s=>s.score<50).length > 0 ? `<span class="cv-chip chip-red"><i class="fas fa-exclamation-circle text-[9px]"></i>${validScores.filter(s=>s.score<50).length} kritisch</span>` : ''}
+                </div>
+            </div>
+        </div>
+        <div id="cv-score-bars" class="space-y-2">
+            ${scores.map(s => `
+            <div class="cv-bar-row">
+                <span class="cv-bar-label" style="font-size:11px">${s.label}</span>
+                <div class="cv-bar-track">
+                    <div class="cv-bar-fill" style="width:${s.score ?? 0}%;background:${s.color}"></div>
+                </div>
+                <span class="cv-bar-num">${s.score ?? '?'}</span>
+            </div>`).join('')}
+        </div>`;
+    scrollToBottom();
+}
+
+// ════════ 🔧 CV IMPROVEMENT CHIPS ════════
+// Erscheint nach der Analyse als klickbare Vertiefungs-Buttons
+function injectCVImprovementChips() {
+    const div = document.createElement('div');
+    div.className = 'msg-enter max-w-2xl mx-auto mt-2';
+    div.innerHTML = `
+        <div class="rounded-2xl p-3.5" style="background:var(--bg-card);border:1px solid var(--border)">
+            <p class="text-[11px] font-semibold mb-2.5" style="color:var(--text-secondary)">
+                <i class="fas fa-wand-magic-sparkles mr-1" style="color:var(--accent)"></i>
+                Tiefergehende Analyse – klicke was dich interessiert:
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+                <button class="cv-chip chip-orange" onclick="askCVDeep('ats')">
+                    <i class="fas fa-robot text-[9px]"></i> ATS-Check
+                </button>
+                <button class="cv-chip chip-green" onclick="askCVDeep('formulierung')">
+                    <i class="fas fa-pen text-[9px]"></i> Bulletpoints verbessern
+                </button>
+                <button class="cv-chip" onclick="askCVDeep('keywords')">
+                    <i class="fas fa-key text-[9px]"></i> Keywords ergänzen
+                </button>
+                <button class="cv-chip chip-purple" onclick="askCVDeep('anschreiben')">
+                    <i class="fas fa-envelope text-[9px]"></i> Anschreiben erstellen
+                </button>
+                <button class="cv-chip" onclick="askCVDeep('linkedin')">
+                    <i class="fab fa-linkedin text-[9px]"></i> LinkedIn optimieren
+                </button>
+                <button class="cv-chip chip-red" onclick="askCVDeep('luecken')">
+                    <i class="fas fa-search text-[9px]"></i> Lücken erklären
+                </button>
+            </div>
+        </div>`;
+    chatHistory.appendChild(div);
+    scrollToBottom();
+}
+
+// Tiefe CV-Analyse-Funktion (aufgerufen durch Chip-Klick)
+function askCVDeep(topic) {
+    if (sendBtn.disabled) return;
+    const prompt = CV_DEEP_PROMPTS[topic];
+    if (!prompt) return;
+    const labels = {
+        ats:'ATS-Kompatibilität prüfen',
+        formulierung:'Bulletpoints verbessern',
+        keywords:'Fehlende Keywords finden',
+        anschreiben:'Anschreiben erstellen',
+        linkedin:'LinkedIn-Profil optimieren',
+        luecken:'Lücken im Lebenslauf erklären'
+    };
+    addMessage('user', labels[topic] || prompt.slice(0,60) + '…');
+    askAI(prompt, SYSTEM_CV);
+}
+
+// ════════ 📄 ENHANCED injectAnalysisOptions ════════
 function injectAnalysisOptions(container, analyticalText) {
     container.classList.remove('hidden');
-    
-    // Element für Option 1 erzeugen
     const option1Wrap = document.createElement('div');
     option1Wrap.className = 'relative inline-block';
     option1Wrap.innerHTML = `
-        <button class="px-3 py-1.5 rounded-xl text-xs font-medium border text-white flex items-center gap-1.5 transition-colors" style="background:#25272b; border-color:var(--border); font-family:'DM Sans', sans-serif;">
+        <button class="px-3 py-1.5 rounded-xl text-xs font-medium border text-white flex items-center gap-1.5 transition-colors" style="background:#25272b;border-color:var(--border);font-family:'DM Sans',sans-serif">
             <i class="fas fa-share-alt text-blue-400"></i>
-            <span>Option 1: Exportieren / Teilen</span>
+            <span>Exportieren / Teilen</span>
             <i class="fas fa-chevron-down text-[10px] opacity-60"></i>
         </button>
-        <div class="dropdown-menu hidden absolute left-0 bottom-full mb-2 w-56 rounded-xl shadow-xl border p-1 z-50 flex flex-col gap-0.5" style="background:var(--bg-card); border-color:var(--border);">
-            <button class="download-pdf-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200 transition-colors">
+        <div class="dropdown-menu hidden absolute left-0 bottom-full mb-2 w-56 rounded-xl shadow-xl border p-1 z-50 flex flex-col gap-0.5" style="background:var(--bg-card);border-color:var(--border)">
+            <button class="download-pdf-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200">
                 <i class="fas fa-file-pdf text-red-400"></i> Als PDF speichern
             </button>
-            <button class="email-coach-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200 transition-colors">
+            <button class="email-coach-btn w-full text-left px-3 py-2 text-xs rounded-lg flex items-center gap-2 hover:bg-white/5 text-gray-200">
                 <i class="fas fa-envelope text-green-400"></i> An echten Coach senden
             </button>
-        </div>
-    `;
-    
-    // Element für Option 2 erzeugen
+        </div>`;
     const option2Btn = document.createElement('button');
     option2Btn.className = 'px-3 py-1.5 rounded-xl text-xs font-medium border text-white flex items-center gap-1.5 transition-colors';
-    option2Btn.style.cssText = 'background:rgba(66,133,244,0.08); border-color:var(--accent); font-family:\'DM Sans\', sans-serif;';
-    option2Btn.innerHTML = `
-        <i class="fas fa-comment-dots text-blue-400"></i>
-        <span>Option 2: Analyse fortführen & weitersprechen</span>
-    `;
-    
-    // Dropdown Event-Handling für Option 1
+    option2Btn.style.cssText = "background:rgba(66,133,244,0.08);border-color:var(--accent);font-family:'DM Sans',sans-serif";
+    option2Btn.innerHTML = `<i class="fas fa-comment-dots text-blue-400"></i><span>Analyse fortführen</span>`;
+
     const mainTrigger = option1Wrap.querySelector('button');
-    const dropdown = option1Wrap.querySelector('.dropdown-menu');
-    
-    mainTrigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdown.classList.toggle('hidden');
-    });
-    
+    const dropdown    = option1Wrap.querySelector('.dropdown-menu');
+    mainTrigger.addEventListener('click', e => { e.stopPropagation(); dropdown.classList.toggle('hidden'); });
     document.addEventListener('click', () => dropdown.classList.add('hidden'));
-    
-    // Klick auf "Als PDF speichern"
+
     option1Wrap.querySelector('.download-pdf-btn').addEventListener('click', () => {
         try {
-            const modeLabels = { cv: 'Lebenslauf-Analyse', interview: 'Interview-Auswertung', businessplan: 'Businessplan', default: 'Karriere-Analyse' };
-            const title = `Tiep Coach – ${modeLabels[currentMode] || modeLabels.default}`;
-            const date = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-            // Markdown → sauberes HTML für den Print-Dialog
+            const modeLabels = { cv:'Lebenslauf-Analyse', interview:'Interview-Auswertung', businessplan:'Businessplan', default:'Karriere-Analyse' };
+            const title = `Tiep Coach – ${modeLabels[currentMode]||modeLabels.default}`;
+            const date  = new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
             const contentHtml = window.marked ? window.marked.parse(analyticalText) : analyticalText.replace(/\n/g,'<br>');
-
-            const printWin = window.open('', '_blank', 'width=800,height=900');
-            printWin.document.write(`<!DOCTYPE html><html lang="de"><head>
-<meta charset="UTF-8">
-<title>${title}</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;color:#1a1a1a;background:#fff;padding:40px 50px}
-  header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #4285f4;padding-bottom:12px;margin-bottom:24px}
-  header h1{font-family:'DM Serif Display',serif;font-size:20px;color:#4285f4}
-  header span{font-size:11px;color:#666}
-  h1,h2,h3{font-family:'DM Serif Display',serif;color:#1a1a1a;margin:16px 0 6px}
-  h2{font-size:15px;border-bottom:1px solid #e0e0e0;padding-bottom:4px}
-  h3{font-size:13px;color:#4285f4}
-  p{margin:6px 0}
-  ul,ol{padding-left:18px;margin:6px 0}
-  li{margin:3px 0}
-  strong{font-weight:600;color:#1a1a1a}
-  em{color:#555}
-  hr{border:none;border-top:1px solid #e0e0e0;margin:16px 0}
-  blockquote{border-left:3px solid #4285f4;padding-left:12px;color:#555;margin:8px 0}
-  footer{margin-top:32px;padding-top:10px;border-top:1px solid #e0e0e0;font-size:10px;color:#999;text-align:center}
-  @media print{body{padding:20px 30px}@page{margin:15mm}}
-</style>
-</head><body>
-<header>
-  <h1>Tiep Coach – ${modeLabels[currentMode] || modeLabels.default}</h1>
-  <span>Erstellt am ${date} &nbsp;|&nbsp; itiep.de</span>
-</header>
-<main>${contentHtml}</main>
-<footer>Dieses Dokument wurde automatisch von Tiep Coach (KI-Karriereberatung) erstellt. &copy; ${new Date().getFullYear()} vuxuantiep &ndash; itiep.de</footer>
-</body></html>`);
+            const printWin = window.open('','_blank','width=800,height=900');
+            printWin.document.write(`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>${title}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;color:#1a1a1a;background:#fff;padding:40px 50px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #4285f4;padding-bottom:12px;margin-bottom:24px}header h1{font-size:20px;color:#4285f4}h2{font-size:15px;margin:16px 0 6px;border-bottom:1px solid #e0e0e0;padding-bottom:4px}p{margin:6px 0}ul,ol{padding-left:18px;margin:6px 0}li{margin:3px 0}strong{font-weight:600}blockquote{border-left:3px solid #4285f4;padding-left:12px;color:#555;margin:8px 0}footer{margin-top:32px;padding-top:10px;border-top:1px solid #e0e0e0;font-size:10px;color:#999;text-align:center}@media print{body{padding:20px 30px}}</style>
+</head><body><header><h1>${title}</h1><span>${date} | itiep.de</span></header><main>${contentHtml}</main>
+<footer>Tiep Coach – itiep.de &copy; ${new Date().getFullYear()}</footer></body></html>`);
             printWin.document.close();
-            printWin.onload = () => {
-                printWin.focus();
-                printWin.print();
-            };
-        } catch (err) {
-            console.error('PDF-Export Fehler:', err);
-        }
+            printWin.onload = () => { printWin.focus(); printWin.print(); };
+        } catch(err) { console.error(err); }
     });
-    
-    // Klick auf "Per E-Mail weiterleiten"
     option1Wrap.querySelector('.email-coach-btn').addEventListener('click', () => {
-        const mailtoSubject = encodeURIComponent("Tiep Coach - Auswertung meiner Lebenslauf-Analyse");
-        const mailtoBody = encodeURIComponent("Hallo Coach,\n\nhier ist das Ergebnis meiner automatischen Lebenslauf-Analyse vom Tiep Coach:\n\n" + analyticalText);
-        window.location.href = `mailto:coach@tiep.de?subject=${mailtoSubject}&body=${mailtoBody}`;
+        const s = encodeURIComponent("Tiep Coach – Lebenslauf-Analyse");
+        const b = encodeURIComponent("Hallo Coach,\n\n" + analyticalText);
+        window.location.href = `mailto:coach@tiep.de?subject=${s}&body=${b}`;
     });
-    
-    // Klick auf Option 2: Fokussiert das Textfeld und setzt einen Prompt-Vorschlag
     option2Btn.addEventListener('click', () => {
         if (userInput) {
-            userInput.value = "Lass uns die Analyse vertiefen. Ich habe noch Fragen zu den vorgeschlagenen Schritten…";
+            userInput.value = "Lass uns die Analyse vertiefen…";
             userInput.focus();
-            userInput.dispatchEvent(new Event('input'));
         }
     });
-    
     container.appendChild(option1Wrap);
     container.appendChild(option2Btn);
     scrollToBottom();
 }
 
-// ════════ ⚙️ THINKING-BUBBLE MIT ABBRECHEN-BUTTON ════════
+// ════════ 💭 THINKING BUBBLE (ki-coach unchanged) ════════
 let patienceTimer = null;
 const THINKING_STAGES = [
-    { delay: 0,     text: 'Verbinde mit KI-Server…' },
-    { delay: 8000,  text: 'Warte auf freies KI-Modell…' },
-    { delay: 20000, text: 'Modell lädt – kann bis zu 30 Sek. dauern…' },
-    { delay: 40000, text: 'Noch aktiv – suche alternatives Modell…' },
-    { delay: 65000, text: 'Fast fertig – letzter Versuch läuft…' },
+    {delay:0,    text:'Verbinde mit KI-Server…'},
+    {delay:8000, text:'Warte auf freies KI-Modell…'},
+    {delay:20000,text:'Modell lädt – kann bis 30 Sek. dauern…'},
+    {delay:40000,text:'Noch aktiv – suche alternatives Modell…'},
+    {delay:65000,text:'Fast fertig – letzter Versuch…'},
 ];
 
 function updateThinkingStatus(attemptIndex) {
     const el = document.querySelector('#thinking-status-text');
     if (!el) return;
-    const msgs = ['Analysiere deine Anfrage…', 'Versuche alternatives Modell…', 'Letzter Versuch mit stabilem Modell…'];
+    const msgs = ['Analysiere deine Anfrage…','Versuche alternatives Modell…','Letzter Versuch mit stabilem Modell…'];
     el.textContent = msgs[attemptIndex] || msgs[0];
 }
 
@@ -1159,262 +1544,145 @@ function showThinking() {
                     <span></span><span></span><span></span>
                 </div>
                 <div class="flex items-center gap-2 pl-1">
-                    <span id="thinking-status-text" class="text-[11px] italic transition-all duration-500" style="color:var(--text-muted)">Verbinde mit KI-Server…</span>
-                    <button id="thinking-cancel-btn" onclick="cancelThinking()" class="text-[10px] px-2 py-0.5 rounded-full border transition-colors hover:bg-red-500/10" style="color:#ef4444;border-color:rgba(239,68,68,0.3)">
-                        Abbrechen
-                    </button>
+                    <span id="thinking-status-text" class="text-[11px] italic" style="color:var(--text-muted)">Verbinde mit KI-Server…</span>
+                    <button onclick="cancelThinking()" class="text-[10px] px-2 py-0.5 rounded-full border transition-colors hover:bg-red-500/10" style="color:#ef4444;border-color:rgba(239,68,68,.3)">Abbrechen</button>
                 </div>
             </div>
         </div>
     </div>`;
     chatHistory.appendChild(div);
     scrollToBottom();
-
-    // Stufenweise Statusmeldungen
     patienceTimer = [];
-    THINKING_STAGES.forEach(({ delay, text }) => {
+    THINKING_STAGES.forEach(({delay,text}) => {
         patienceTimer.push(setTimeout(() => {
             const el = document.querySelector('#thinking-status-text');
             if (el) el.textContent = text;
         }, delay));
     });
+    if (currentMode === 'ikigai') setAvatarMood('thinking');
 }
 
 function cancelThinking() {
-    if (currentAbortController) {
-        currentAbortController.abort();
-        // Flag setzen damit askAI weiß: User hat abgebrochen
-        currentAbortController._userCancelled = true;
-    }
+    if (currentAbortController) { currentAbortController.abort(); currentAbortController._userCancelled = true; }
     removeThinking();
-    // Eingabe wieder freigeben
     sendBtn.disabled = false;
     userInput.disabled = false;
     userInput.placeholder = "Schreibe eine Nachricht…";
-    sendBtn.innerHTML = '<i class="fas fa-arrow-up text-white text-sm"></i>';
-    sendBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-    addMessage('ai', '⏹️ **Abgebrochen.** Du kannst jederzeit eine neue Frage stellen.');
+    sendBtn.innerHTML = '<i class="fas fa-arrow-up text-xs"></i>';
+    sendBtn.classList.remove('opacity-40','cursor-not-allowed');
+    addMessage('ai','⏹️ **Abgebrochen.** Du kannst jederzeit eine neue Frage stellen.');
     scrollToBottom();
 }
 
 function removeThinking() {
-    if (Array.isArray(patienceTimer)) {
-        patienceTimer.forEach(clearTimeout);
-    } else if (patienceTimer) {
-        clearTimeout(patienceTimer);
-    }
+    if (Array.isArray(patienceTimer)) patienceTimer.forEach(clearTimeout);
+    else if (patienceTimer) clearTimeout(patienceTimer);
     patienceTimer = null;
     const el = document.getElementById('thinking-bubble');
     if (el) el.remove();
 }
 
-// ════════ 💬 LOKALE ANTWORTEN – kein API-Call für Standardfragen ════════
-// ════════════════════════════════════════════════════════════════
-// 💬 LOKALE ANTWORTEN – HIER KANNST DU SELBST PFLEGEN!
-// ════════════════════════════════════════════════════════════════
-//
-// WIE ES FUNKTIONIERT:
-//   Jeder Eintrag hat:
-//     patterns: [ /regulärer ausdruck/i ]  ← Texte die erkannt werden
-//     reply: `Antworttext in Markdown`      ← Was der Coach antwortet
-//
-// NEUEN EINTRAG HINZUFÜGEN – einfach ans Ende der Liste kopieren:
-//   {
-//     patterns: [/dein muster/i, /alternatives muster/i],
-//     reply: `Deine Antwort hier. **Fett**, *kursiv*, Listen mit -`
-//   },
-//
-// REGEX-TIPPS:
-//   /text/i         → Groß-/Kleinschreibung egal
-//   /hallo|hi|hey/i → Mehrere Wörter = ODER
-//   /^hallo$/i      → Exakt nur "hallo" (^ = Anfang, $ = Ende)
-//   /lebenslauf/i   → Enthält das Wort "lebenslauf" irgendwo
-// ════════════════════════════════════════════════════════════════
+// ════════ 💬 LOCAL RESPONSES (ki-coach unchanged) ════════
 const LOCAL_RESPONSES = [
-    // ── Begrüßungen ──
-    {
-        patterns: [/^(hallo|hi|hey|guten tag|guten morgen|guten abend|servus|moin|na|hej|salut)[\s!?.,]*$/i],
-        reply: `👋 **Hallo!** Schön, dass du da bist.\n\nIch bin **Tiep Coach** – dein KI-Karrierebegleiter. Womit kann ich dir heute helfen?\n\n- 📄 **Lebenslauf hochladen & analysieren** → Tab "Lebenslauf" links\n- 💼 **Interview trainieren** → Button links\n- 📊 **Businessplan erstellen** → Button links\n- ☯️ **Ikigai entdecken** → Button links\n\nOder stelle mir direkt deine Karrierefrage! 🚀`
-    },
-    // ── Was kannst du / Funktionen ──
-    {
-        patterns: [/was kannst du( mir)?( (helfen|anbieten|machen|tun))?/i, /wie (kannst|kann) (du|ich) (mir |dir )?helfen/i, /wobei (hilfst|kannst) du/i, /was (bietest|hast) du an/i],
-        reply: `Ich bin **Tiep Coach** – dein KI-Karrierebegleiter! Hier ist, was ich für dich tun kann: 💼\n\n- 📄 **Lebenslauf analysieren & optimieren** – lade dein PDF oder Word-Dokument im linken Menü hoch\n- 💼 **Interview-Simulation** – übe ein echtes Vorstellungsgespräch mit HR-Feedback\n- 📊 **Businessplan erstellen** – Schritt für Schritt strukturiert aufbauen\n- ☯️ **Ikigai-Analyse** – finde heraus, welcher Beruf wirklich zu dir passt\n- 💬 **Karrierefragen** – Gehaltsverhandlung, Jobwechsel, Bewerbungsstrategie und mehr\n\nAlle Werkzeuge findest du im **☰ Menü** (oben links). Womit möchtest du starten?`
-    },
-    // ── Wer bist du ──
-    {
-        patterns: [/^(wer bist du|was bist du|wie funktionierst du)[\s!?.,]*$/i],
-        reply: `Ich bin **Tiep Coach**, ein KI-gestützter Karriereberater von [itiep.de](https://itiep.de). 🤖\n\nIch helfe dir bei Lebenslauf, Interview, Businessplan und Karriereplanung. Alles kostenlos und ohne Datenspeicherung.\n\nSchreib mir einfach, was dich beschäftigt!`
-    },
-    // ── Wie geht's ──
-    {
-        patterns: [/^(wie geht('s| es)( dir)?|wie läuft('s| es)|alles gut\??|alles okay\??)[\s!?.,]*$/i],
-        reply: `Mir geht es bestens – bereit für deine Karrierefragen! 💪\n\nWas beschäftigt dich heute?`
-    },
-    // ── Danke ──
-    {
-        patterns: [/^(danke|danke schön|dankeschön|vielen dank|merci|thx|thanks|ty)[\s!?.,]*$/i],
-        reply: `😊 **Sehr gerne!** Ich freue mich, wenn ich helfen konnte.\n\nGibt es noch etwas, wobei ich dich unterstützen kann?`
-    },
-    // ── Hilfe / Wo anfangen ──
-    {
-        patterns: [/^(hilfe|help|hilf mir|wie fange ich an|wo fange ich an|was soll ich (tun|machen))[\s!?.,]*$/i],
-        reply: `Kein Problem! So startest du am besten: 😊\n\n1. **Lebenslauf hochladen** → ☰ Menü öffnen → Tab **"Lebenslauf"** → Datei hochladen\n2. Auf **"Lebenslauf analysieren"** klicken → du erhältst sofort detailliertes Feedback\n3. Oder direkt eine Frage stellen – z. B. *"Wie optimiere ich meinen Lebenslauf für IT-Jobs?"*\n\nWas ist dein Ziel heute?`
-    },
-    // ── Tschüss / Auf Wiedersehen ──
-    {
-        patterns: [/^(tschüss|tschüs|auf wiedersehen|bye|ciao|bis dann|bis bald|good ?bye)[\s!?.,]*$/i],
-        reply: `Bis bald! 👋 Ich wünsche dir viel Erfolg bei deiner Karriere.\n\nWenn du wieder Hilfe brauchst – ich bin immer hier. 🚀`
-    },
-    // ── Gehaltsverhandlung ──
-    {
-        patterns: [/gehalt(sverhandlung)?|gehaltserhöhung|lohn(erhöhung)?|vergütung|was (soll|kann) ich verdienen/i],
-        reply: `Gehaltsverhandlung ist ein wichtiges Thema! 💰 Hier ein schneller Überblick:\n\n**Vorbereitung:**\n- Recherchiere Marktgehälter (Glassdoor, Gehaltsreporter, Stepstone)\n- Kenne deinen Marktwert (Erfahrung, Skills, Region)\n- Setze dir eine klare Zielspanne (Wunsch + Minimum)\n\n**Im Gespräch:**\n- Nenne als Erster eine Zahl – wer zuerst nennt, setzt den Anker\n- Begründe mit Mehrwert, nicht mit persönlichem Bedarf\n- Verhandle auch über Benefits (Home Office, Weiterbildung, Urlaub)\n\nMöchtest du, dass ich eine **konkrete Verhandlungsstrategie** für deine Situation ausarbeite?`
-    },
-    // ── Jobwechsel ──
-    {
-        patterns: [/jobwechsel|stelle wechseln|neuen job|neue stelle|kündigen|kündigung|arbeitgeber wechseln/i],
-        reply: `Ein Jobwechsel ist eine große Entscheidung – lass uns das strukturiert angehen! 🔄\n\n**Gute Gründe für einen Wechsel:**\n- Kein Wachstum / keine Entwicklungsmöglichkeiten\n- Unterbezahlung trotz Gespräch\n- Toxische Arbeitsatmosphäre\n- Karriereziele nicht erreichbar\n\n**Meine Empfehlung:**\n1. Lade deinen Lebenslauf hoch → ich analysiere dein Profil\n2. Wir entwickeln eine Wechselstrategie für deine Branche\n3. Optional: Interview-Training für Vorstellungsgespräche\n\nMöchtest du starten?`
-    },
-
-    // ════ HIER KANNST DU NEUE EINTRÄGE HINZUFÜGEN ════
-    // Kopiere das Muster oben und füge es vor dieser Zeile ein.
-
+    { patterns:[/^(hallo|hi|hey|guten tag|guten morgen|guten abend|servus|moin|na|hej|salut)[\s!?.,]*$/i],
+      reply:`👋 **Hallo!** Schön, dass du da bist.\n\nIch bin **Tiep Coach** – dein KI-Karrierebegleiter. Womit kann ich dir heute helfen?\n\nNutze einfach die Buttons unten oder schreib mir direkt! 🚀` },
+    { patterns:[/was kannst du( mir)?( (helfen|anbieten|machen|tun))?/i,/wie (kannst|kann) (du|ich) (mir |dir )?helfen/i],
+      reply:`Ich bin **Tiep Coach**! Hier ist, was ich für dich tun kann:\n\n- 📄 **Lebenslauf analysieren** – lade dein PDF/Word hoch\n- 💬 **Interview simulieren** – mit HR-Feedback\n- ☯️ **Ikigai-Analyse** – finde deine Berufung\n- 📊 **Businessplan** – Schritt für Schritt\n- 💬 **Karrierefragen** – Gehaltsverhandlung, Jobwechsel & mehr\n\nNutze die **Buttons unten** oder das **☰ Menü** links! 🚀` },
+    { patterns:[/^(wer bist du|was bist du|wie funktionierst du)[\s!?.,]*$/i],
+      reply:`Ich bin **Tiep Coach**, ein KI-Karriereberater von [itiep.de](https://itiep.de). 🤖\n\nAlles kostenlos, ohne Datenspeicherung. Schreib mir einfach!` },
+    { patterns:[/^(wie geht('s| es)( dir)?|alles gut\??)[\s!?.,]*$/i],
+      reply:`Mir geht es bestens – bereit für deine Karrierefragen! 💪 Was beschäftigt dich heute?` },
+    { patterns:[/^(danke|danke schön|vielen dank|thx|thanks)[\s!?.,]*$/i],
+      reply:`😊 **Sehr gerne!** Gibt es noch etwas, wobei ich dich unterstützen kann?` },
+    { patterns:[/^(hilfe|help|hilf mir|wie fange ich an|wo fange ich an)[\s!?.,]*$/i],
+      reply:`Kein Problem! Tippe direkt eine Frage oder nutze die **Aktionsbuttons unten**:\n\n- **Lebenslauf** → Datei hochladen & analysieren\n- **Ikigai** → Berufsfindung starten\n- **Interview** → Gesprächstraining\n- **Business** → Businessplan erstellen` },
+    { patterns:[/^(tschüss|tschüs|auf wiedersehen|bye|ciao|bis dann|bis bald)[\s!?.,]*$/i],
+      reply:`Bis bald! 👋 Viel Erfolg bei deiner Karriere. Wenn du wieder Hilfe brauchst – ich bin hier. 🚀` },
+    { patterns:[/gehalt(sverhandlung)?|gehaltserhöhung|lohn|vergütung/i],
+      reply:`Gehaltsverhandlung ist wichtig! 💰\n\n**Vorbereitung:**\n- Recherchiere Marktgehälter (Glassdoor, Stepstone)\n- Kenne deinen Marktwert\n- Setze eine klare Zielspanne\n\n**Im Gespräch:**\n- Nenne zuerst eine Zahl (setzt den Anker)\n- Begründe mit Mehrwert\n- Verhandle auch Benefits\n\nMöchtest du eine konkrete Strategie für deine Situation?` },
+    { patterns:[/jobwechsel|stelle wechseln|neuen job|kündigen/i],
+      reply:`Ein Jobwechsel ist eine große Entscheidung! 🔄\n\n1. Lade deinen **Lebenslauf** hoch → ich analysiere dein Profil\n2. Entwickeln wir eine Wechselstrategie\n3. Optional: **Interview-Training** aktivieren\n\nMöchtest du starten?` },
 ];
 
-// CV-bezogene Fragen – Muster
-const CV_PATTERNS = [
-    /lebenslauf/i, /cv\b/i, /bewerbung/i, /bewerbungsunterlagen/i,
-    /optimier/i, /analysier/i, /verbessern/i, /überarbeiten/i,
-    /anschreiben/i, /stellenbeschreibung/i, /profil (schärfen|optimieren)/i,
-    /mein (cv|lebenslauf)/i, /meinen (cv|lebenslauf)/i
-];
+const CV_PATTERNS       = [/lebenslauf/i,/cv\b/i,/bewerbung/i,/optimier/i,/analysier/i,/verbessern/i];
+const INTERVIEW_PATTERNS = [/interview/i,/vorstellungsgespräch/i,/gespräch (üben|trainieren)/i];
+const BUSINESS_PATTERNS  = [/businessplan/i,/geschäftsplan/i,/startup/i,/selbstständig/i,/unternehmen gründen/i];
 
-// Interview-bezogene Fragen – Muster
-const INTERVIEW_PATTERNS = [
-    /interview/i, /vorstellungsgespräch/i, /gespräch (üben|trainieren|simulieren)/i,
-    /interview (üben|trainieren|simulieren)/i, /bewerbungsgespräch/i
-];
-
-// Businessplan-bezogene Fragen – Muster
-const BUSINESS_PATTERNS = [
-    /businessplan/i, /business plan/i, /geschäftsplan/i, /geschäftsidee/i,
-    /unternehmen (gründen|aufbauen|planen)/i, /startup/i, /selbstständig/i
-];
-
-const CV_UPLOAD_HINT = `📂 **Lebenslauf noch nicht hochgeladen**\n\nUm dir bei deinem Lebenslauf helfen zu können, brauche ich zuerst dein Dokument.\n\n**So geht's:**\n1. Öffne das **☰ Menü** (oben links)\n2. Wähle den Tab **"Lebenslauf"**\n3. Lade deine Datei hoch (**PDF, Word oder .txt**)\n4. Klicke danach auf **"Lebenslauf analysieren"**\n\nSobald du das getan hast, kann ich deinen CV detailliert analysieren und konkrete Verbesserungsvorschläge geben! 💪`;
-
-const INTERVIEW_UPLOAD_HINT = `📂 **Lebenslauf fehlt noch**\n\nFür eine realistische Interview-Simulation benötige ich zuerst deinen Lebenslauf – damit ich als HR-Manager gezielt auf **dein Profil, deine Stärken und deine Lücken** eingehen kann.\n\n**So startest du:**\n1. Öffne das **☰ Menü** (oben links)\n2. Tab **"Lebenslauf"** wählen → Datei hochladen\n3. Dann den Button **"Interview trainieren"** klicken\n\nNach dem Upload startet die Simulation automatisch auf dich zugeschnitten! 🎤`;
-
-const BUSINESS_UPLOAD_HINT = `📂 **Lebenslauf für den Businessplan empfohlen**\n\nMit deinem Lebenslauf kann ich deinen Businessplan viel besser auf deine **bisherigen Erfahrungen, Stärken und Kompetenzen** abstimmen.\n\n**Empfehlung:**\n1. Öffne das **☰ Menü** (oben links)\n2. Tab **"Lebenslauf"** wählen → Datei hochladen\n3. Dann den Button **"Businessplan erstellen"** klicken\n\nOder klicke einfach direkt auf **"Businessplan erstellen"** im Menü – ohne Lebenslauf starten wir allgemein. Du entscheidest! 📊`;
+const CV_UPLOAD_HINT       = `📂 **Lebenslauf noch nicht hochgeladen**\n\nÖffne das **☰ Menü** (oben links), wähle Tab **"Lebenslauf"** und lade dein PDF/Word hoch.\nDanach klicke auf **"Lebenslauf analysieren"** oder tippe direkt auf den **Lebenslauf-Button** unten. 💪`;
+const INTERVIEW_UPLOAD_HINT = `📂 **Lebenslauf fehlt noch**\n\nFür eine realistische Simulation brauche ich zuerst deinen Lebenslauf.\n\n**So startest du:** ☰ Menü → Tab **"Lebenslauf"** → Datei hochladen → dann **Interview** unten.`;
+const BUSINESS_UPLOAD_HINT  = `📂 **Lebenslauf empfohlen**\n\nMit deinem Lebenslauf kann ich den Plan besser auf dich abstimmen.\n\nOder klicke einfach nochmal auf **Business** unten – wir starten allgemein! 📊`;
 
 function tryLocalResponse(text) {
-    const trimmed = text.trim();
-
-    // Feste Standardantworten zuerst prüfen
-    for (const entry of LOCAL_RESPONSES) {
-        if (entry.patterns.some(p => p.test(trimmed))) {
-            return entry.reply;
-        }
-    }
-
-    // CV-Fragen ohne hochgeladenen Lebenslauf → Upload-Hinweis
-    if (!extractedText && CV_PATTERNS.some(p => p.test(trimmed))) {
-        return CV_UPLOAD_HINT;
-    }
-
-    // Interview-Fragen ohne Lebenslauf → freundlicher Hinweis
-    if (!extractedText && INTERVIEW_PATTERNS.some(p => p.test(trimmed))) {
-        return INTERVIEW_UPLOAD_HINT;
-    }
-
-    // Businessplan-Fragen ohne Lebenslauf → Empfehlung
-    if (!extractedText && BUSINESS_PATTERNS.some(p => p.test(trimmed))) {
-        return BUSINESS_UPLOAD_HINT;
-    }
-
+    const t = text.trim();
+    for (const e of LOCAL_RESPONSES) if (e.patterns.some(p=>p.test(t))) return e.reply;
+    if (!extractedText && CV_PATTERNS.some(p=>p.test(t)))       return CV_UPLOAD_HINT;
+    if (!extractedText && INTERVIEW_PATTERNS.some(p=>p.test(t))) return INTERVIEW_UPLOAD_HINT;
+    if (!extractedText && BUSINESS_PATTERNS.some(p=>p.test(t)))  return BUSINESS_UPLOAD_HINT;
     return null;
 }
 
-// ════════ 🚀 USER CORE INTERACTIONS (KORRIGIERT) ════════
+// ════════ 🚀 HANDLE SEND (ki-coach logic + textarea fix) ════════
 async function handleSend() {
     const text = userInput.value.trim();
     if (!text || sendBtn.disabled) return;
-
     userInput.value = "";
-    userInput.rows = 1;
+    userInput.style.height = 'auto';
     addMessage('user', text);
 
-    // Lokale Antwort – kein API-Call nötig
     const localReply = tryLocalResponse(text);
-    if (localReply && currentMode === 'default') {
+    if (localReply && currentMode==='default') {
         await addMessageTypewriter('ai', localReply, false);
         messageCount++;
         checkShowCTA();
         return;
     }
 
-    let activeSystemPrompt = SYSTEM_DEFAULT;
-    if (currentMode === 'cv') activeSystemPrompt = SYSTEM_CV;
-    else if (currentMode === 'interview') activeSystemPrompt = SYSTEM_INTERVIEW;
-    else if (currentMode === 'ikigai') activeSystemPrompt = SYSTEM_IKIGAI;
-    else if (currentMode === 'businessplan') activeSystemPrompt = SYSTEM_BUSINESSPLAN;
+    let sys = SYSTEM_DEFAULT;
+    if (currentMode==='cv')          sys = SYSTEM_CV;
+    else if (currentMode==='interview')   sys = SYSTEM_INTERVIEW;
+    else if (currentMode==='ikigai')      sys = SYSTEM_IKIGAI;
+    else if (currentMode==='businessplan') sys = SYSTEM_BUSINESSPLAN;
 
-    await askAI(text, activeSystemPrompt);
+    await askAI(text, sys);
     checkShowCTA();
 }
 
 sendBtn.addEventListener('click', handleSend);
-userInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-    }
+userInput.addEventListener('keydown', e => {
+    if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
 });
-
-// Dynamische Textarea-Höhe beim Tippen
 userInput.addEventListener('input', () => {
     userInput.style.height = 'auto';
-    userInput.style.height = userInput.scrollHeight + 'px';
+    userInput.style.height = Math.min(userInput.scrollHeight, 110) + 'px';
 });
 
-// ════════ 🔄 MODE CHANGING / SELECTION ════════
+// ════════ 🔄 UPLOAD TYPE TOGGLE (ki-coach unchanged) ════════
 function setUploadType(type) {
     uploadType = type;
-    const cvBtn = document.getElementById('type-cv-btn');
+    const cvBtn  = document.getElementById('type-cv-btn');
     const jobBtn = document.getElementById('type-job-btn');
-    
     if (type === 'cv') {
-        cvBtn.style.background = 'var(--accent)';
-        cvBtn.style.color = '#fff';
-        jobBtn.style.background = 'transparent';
-        jobBtn.style.color = 'var(--text-muted)';
+        cvBtn.style.background  = 'var(--accent)'; cvBtn.style.color  = '#fff';
+        jobBtn.style.background = 'transparent';   jobBtn.style.color = 'var(--text-muted)';
         if (uploadTitle) uploadTitle.textContent = 'Lebenslauf hochladen';
-        if (uploadSubtitle) uploadSubtitle.textContent = 'PDF, Word oder .txt';
     } else {
-        jobBtn.style.background = 'var(--accent)';
-        jobBtn.style.color = '#fff';
-        cvBtn.style.background = 'transparent';
-        cvBtn.style.color = 'var(--text-muted)';
+        jobBtn.style.background = 'var(--accent)'; jobBtn.style.color  = '#fff';
+        cvBtn.style.background  = 'transparent';   cvBtn.style.color  = 'var(--text-muted)';
         if (uploadTitle) uploadTitle.textContent = 'Stellenbeschr. hochladen';
-        if (uploadSubtitle) uploadSubtitle.textContent = 'PDF, Word oder .txt';
     }
-    
     if (fileInput) fileInput.value = '';
     if (fileNameEl) fileNameEl.classList.add('hidden');
 }
 
-// ════════ 📂 PARSING ENGINE (PDF, DOCX, TXT) ════════
-fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
+// ════════ 📂 FILE PARSING (ki-coach unchanged + bottom input mirror) ════════
+async function processUpload(file, fromBottom=false) {
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = async (ev) => {
         try {
             let text = '';
             if (file.name.endsWith('.docx')) {
-                const res = await mammoth.extractRawText({ arrayBuffer: ev.target.result });
+                const res = await mammoth.extractRawText({ arrayBuffer:ev.target.result });
                 text = res.value;
             } else if (file.name.endsWith('.pdf')) {
                 text = await parsePdfText(ev.target.result);
@@ -1422,182 +1690,130 @@ fileInput.addEventListener('change', async (e) => {
                 text = ev.target.result;
             }
 
-            if (uploadType === 'cv') {
+            if (uploadType === 'cv' || fromBottom) {
                 extractedText = text;
                 setMode('cv');
-                if (fileNameEl) {
-                    fileNameEl.textContent = `📄 CV geladen: ${file.name}`;
-                    fileNameEl.classList.remove('hidden');
-                }
+                if (fileNameEl) { fileNameEl.textContent=`📄 ${file.name}`; fileNameEl.classList.remove('hidden'); }
+                // Update bottom status
+                const bn = document.getElementById('file-name-bottom');
+                if (bn) { bn.textContent=`📄 ${file.name}`; bn.classList.remove('hidden'); }
                 if (analyzeBtn) analyzeBtn.classList.remove('hidden');
-                addMessage('ai', `Dein Lebenslauf **(${file.name})** wurde erfolgreich geladen! Du kannst ihn nun über den Button links analysieren lassen oder direkt das Interview-Training starten.`);
+                addMessage('ai',`Lebenslauf **(${file.name})** geladen ✓ — Klicke auf **Lebenslauf** unten oder schreibe mir direkt.`);
             } else {
                 jobDescText = text;
-                if (fileNameEl) {
-                    fileNameEl.textContent = `💼 Jobbeschreibung geladen: ${file.name}`;
-                    fileNameEl.classList.remove('hidden');
-                }
-                addMessage('ai', `Die Stellenbeschreibung **(${file.name})** wurde erfolgreich importiert! Wenn du nun die Interview-Simulation startest, passe ich mich präzise an diese Anforderungen an.`);
+                if (fileNameEl) { fileNameEl.textContent=`💼 Stelle: ${file.name}`; fileNameEl.classList.remove('hidden'); }
+                addMessage('ai',`Stellenbeschreibung **(${file.name})** importiert ✓`);
             }
-
-        } catch (err) {
-            console.error(err);
-            alert("Fehler beim Lesen des Dokuments.");
-        }
+        } catch(err) { console.error(err); alert("Fehler beim Lesen des Dokuments."); }
     };
-
-    if (file.name.endsWith('.docx') || file.name.endsWith('.pdf')) {
-        reader.readAsArrayBuffer(file);
-    } else {
-        reader.readAsText(file, 'UTF-8');
-    }
+    if (file.name.endsWith('.docx') || file.name.endsWith('.pdf')) reader.readAsArrayBuffer(file);
+    else reader.readAsText(file,'UTF-8');
     if (window.innerWidth < 768) closeSidebar();
+}
+
+// Sidebar upload (existing)
+fileInput.addEventListener('change', async (e) => { await processUpload(e.target.files[0]); });
+
+// Bottom paperclip upload (new)
+document.getElementById('resume-upload-bottom').addEventListener('change', async (e) => {
+    await processUpload(e.target.files[0], true);
 });
 
-// Behilfsmäßiger clientseitiger PDF-Text-Extraktor
 async function parsePdfText(arrayBuffer) {
     try {
         if (!window.pdfjsLib) {
             await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js");
             window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
         }
-        const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const pdf = await window.pdfjsLib.getDocument({data:arrayBuffer}).promise;
         let fullText = "";
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
+        for (let i=1; i<=pdf.numPages; i++) {
+            const page   = await pdf.getPage(i);
             const txtDoc = await page.getTextContent();
-            fullText += txtDoc.items.map(item => item.str).join(" ") + "\n";
+            fullText += txtDoc.items.map(x=>x.str).join(" ") + "\n";
         }
         return fullText;
-    } catch (e) {
-        console.error("PDF-Parsing-Fehler:", e);
-        return "Fehler bei der PDF-Textextraktion.";
-    }
+    } catch(e) { console.error(e); return "Fehler bei der PDF-Textextraktion."; }
 }
 
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const s = document.createElement('script');
-        s.src = src;
-        s.onload = resolve;
-        s.onerror = reject;
+        s.src = src; s.onload = resolve; s.onerror = reject;
         document.head.appendChild(s);
     });
 }
 
-// Drag & Drop Features für die Upload-Zone
-if (uploadZone) {
-    ['dragenter', 'dragover'].forEach(name => {
-        uploadZone.addEventListener(name, (e) => { e.preventDefault(); uploadZone.style.borderColor = "var(--accent)"; }, false);
-    });
-    ['dragleave', 'drop'].forEach(name => {
-        uploadZone.addEventListener(name, (e) => { e.preventDefault(); uploadZone.style.borderColor = "var(--border)"; }, false);
-    });
-    uploadZone.addEventListener('drop', (e) => {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        if (files.length && fileInput) {
-            fileInput.files = files;
-            fileInput.dispatchEvent(new Event('change'));
-        }
-    }, false);
-}
-
-// ════════ 🎛️ SIDEBAR SIDE ACTIONS (ANALYZE, IKIGAI, INTERVIEW) ════════
+// ════════ 🎛️ SIDEBAR BUTTON ACTIONS (ki-coach unchanged) ════════
 if (analyzeBtn) {
     analyzeBtn.addEventListener('click', () => {
         if (window.innerWidth < 768) closeSidebar();
         if (!extractedText) return;
         setMode('cv');
-        addMessage('user', 'Analysiere bitte meinen Lebenslauf.');
-        askAI('Führe eine strukturierte Lebenslaufanalyse basierend auf meinem Profil durch.', SYSTEM_CV);
+        setActiveNavBtn('cv');
+        addMessage('user','Analysiere bitte meinen Lebenslauf.');
+        showCVScoreWidget();
+        askAI('Führe eine vollständige strukturierte Lebenslaufanalyse durch. Halte das Format exakt ein.', SYSTEM_CV)
+            .then(() => injectCVImprovementChips());
     });
 }
 
 if (ikigaiBtn) {
     ikigaiBtn.addEventListener('click', () => {
         if (window.innerWidth < 768) closeSidebar();
-        setMode('ikigai');
-        conversationHistory = [];
-        chatHistory.innerHTML = '';
-        addMessage('user', 'Ich möchte meine Ikigai-Berufung entdecken.');
-        askAI('Starte die Ikigai-Analyse. Beginne mit einer kurzen Einführung, was Ikigai is, und stelle dann die erste Frage.', SYSTEM_IKIGAI);
+        triggerAction('ikigai');
     });
 }
 
 if (businessplanBtn) {
     businessplanBtn.addEventListener('click', () => {
         if (window.innerWidth < 768) closeSidebar();
-        if (!extractedText || extractedText.trim() === '') {
+        if (!extractedText || extractedText.trim()==='') {
             addMessage('ai', BUSINESS_UPLOAD_HINT);
-            scrollToBottom();
-            return;
         }
-        setMode('businessplan');
-        conversationHistory = [];
-        chatHistory.innerHTML = '';
-        addMessage('user', 'Ich möchte einen Businessplan erstellen.');
-        askAI('Begrüße mich kurz und erkläre in 2 Sätzen, wie wir vorgehen werden. Stelle dann die erste Frage: Was ist meine Geschäftsidee und in welcher Branche möchte ich tätig sein?', SYSTEM_BUSINESSPLAN);
+        triggerAction('businessplan');
     });
 }
 
 if (startInterviewBtn) {
     startInterviewBtn.addEventListener('click', () => {
         if (window.innerWidth < 768) closeSidebar();
-        if (!extractedText || extractedText.trim() === '') {
-            addMessage('ai', INTERVIEW_UPLOAD_HINT);
-            scrollToBottom();
-            return;
-        }
-        setMode('interview');
-        conversationHistory = [];
-        chatHistory.innerHTML = '';
-        if (interviewPanel) {
-            interviewPanel.classList.remove('hidden');
-        }
-        if (interviewStatus) {
-            interviewStatus.textContent = "HR-Manager stellt die Einstiegsfrage...";
-        }
-        addMessage('user', 'Ich bin bereit für das Vorstellungsgespräch.');
-        
-        let introPrompt = 'Begrüße mich freundlich als HR-Manager basierend auf meinem Profil. Stelle mir dann die Einstiegsfrage: Auf welche konkrete Stelle ich mich bewerben möchte und warum.';
-        if (jobDescText) {
-            introPrompt += ' Beziehe dich dabei konkret auf die von mir bereitgestellte Stellenbeschreibung.';
-        } else {
-            introPrompt += ' Frage mich außerdem aktiv, ob ich bereits ein konkretes Stellenangebot gefunden habe und sage mir, dass ich den Text der Ausschreibung oder Anforderungen einfach hier hineinkopieren kann.';
-        }
-        askAI(introPrompt, SYSTEM_INTERVIEW);
+        triggerAction('interview');
     });
 }
 
-// Audio-Toggle Button Handler
+// Audio toggle
 if (audioBtn) {
     audioBtn.addEventListener('click', () => {
         audioActive = !audioActive;
         if (audioActive) {
-            audioIcon.className = 'fas fa-volume-up text-sm';
-            audioIcon.style.color = 'var(--accent)';
-            audioLabel.textContent = 'Audio';
+            audioIcon.className = 'fas fa-volume-up text-sm'; audioIcon.style.color='var(--accent)'; audioLabel.textContent='Audio';
         } else {
-            audioIcon.className = 'fas fa-volume-mute text-sm';
-            audioIcon.style.color = 'var(--text-muted)';
-            audioLabel.textContent = 'Stumm';
+            audioIcon.className = 'fas fa-volume-mute text-sm'; audioIcon.style.color='var(--text-muted)'; audioLabel.textContent='Stumm';
             if (window.speechSynthesis) window.speechSynthesis.cancel();
         }
     });
 }
 
-// Reset Button Handler
+// Clear / Reset button (sidebar)
 if (clearBtn) {
     clearBtn.addEventListener('click', () => {
         conversationHistory = [];
         extractedText = "";
         jobDescText = "";
         messageCount = 0;
+        ikigaiLevel = 1;
         setMode('default');
         if (fileNameEl) fileNameEl.classList.add('hidden');
         if (fileInput) fileInput.value = '';
+        const bn = document.getElementById('file-name-bottom');
+        if (bn) bn.classList.add('hidden');
         if (analyzeBtn) analyzeBtn.classList.add('hidden');
+        if (ctaEl) ctaEl.classList.remove('show');
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        setActiveNavBtn(null);
+        document.getElementById('ikigai-widget')?.classList.remove('active');
+        document.getElementById('ikigai-quick-buttons').innerHTML = '';
         chatHistory.innerHTML = `
         <div class="msg-enter">
             <div class="flex gap-3 items-start">
@@ -1610,35 +1826,40 @@ if (clearBtn) {
                         <span class="text-xs" style="color:var(--text-muted)">jetzt</span>
                     </div>
                     <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble" style="background:var(--bg-card);border:1px solid var(--border)">
-                        <p>Das Gespräch wurde erfolgreich zurückgesetzt. Wie kann ich dir heute bei deiner Karriere helfen?</p>
+                        <p>Gespräch zurückgesetzt. Wie kann ich dir heute bei deiner Karriere helfen?</p>
                     </div>
                 </div>
             </div>
         </div>`;
-        if (ctaEl) ctaEl.classList.remove('show');
-        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        closeSidebar();
     });
 }
 
-// ════════ 📱 SIDEBAR RESPONSIVE ACTIONS ════════
+// ════════ 📱 SIDEBAR (ki-coach unchanged) ════════
 function toggleSidebar() {
-    if (sidebar && overlay) {
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('show');
-    }
+    if (sidebar && overlay) { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); }
 }
-
 function closeSidebar() {
-    if (sidebar && overlay) {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('show');
-    }
+    if (sidebar && overlay) { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
 }
-
 if (menuBtn) menuBtn.addEventListener('click', toggleSidebar);
 if (overlay) overlay.addEventListener('click', closeSidebar);
 
-// ════════ 🔐 DSGVO & WILLKOMMEN LOGIK ════════
+// Drag & Drop on sidebar upload zone
+if (uploadZone) {
+    ['dragenter','dragover'].forEach(n => {
+        uploadZone.addEventListener(n, e => { e.preventDefault(); uploadZone.style.borderColor='var(--accent)'; });
+    });
+    ['dragleave','drop'].forEach(n => {
+        uploadZone.addEventListener(n, e => { e.preventDefault(); uploadZone.style.borderColor='var(--border)'; });
+    });
+    uploadZone.addEventListener('drop', e => {
+        const files = e.dataTransfer.files;
+        if (files.length && fileInput) { fileInput.files = files; fileInput.dispatchEvent(new Event('change')); }
+    });
+}
+
+// ════════ 🔐 DSGVO & WELCOME (ki-coach unchanged) ════════
 document.addEventListener('DOMContentLoaded', () => {
     const dsgvoModal = document.getElementById('dsgvo-modal');
     const dsgvoBtn   = document.getElementById('dsgvo-accept-btn');
@@ -1648,20 +1869,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dsgvoBtn && dsgvoModal) {
         dsgvoBtn.addEventListener('click', () => {
             const userName = nameInput ? nameInput.value.trim() : '';
-            const userJob  = jobInput ? jobInput.value.trim() : '';
-
-            // Schließt das DSGVO-Fenster unsichtbar
+            const userJob  = jobInput  ? jobInput.value.trim()  : '';
             dsgvoModal.style.display = 'none';
 
-            // Wenn Name oder Branche ausgefüllt wurden, passe die Begrüßung an
             if (userName || userJob) {
-                let welcomeText = `Hallo **${userName || 'Gast'}**! 👋 Schön, dass du da bist.`;
-                if (userJob) {
-                    welcomeText += ` Ich habe notiert, dass du dich für den Bereich **${userJob}** interessierst.`;
-                }
-                welcomeText += `\n\nDein System ist jetzt startbereit. Lade links deinen Lebenslauf hoch oder leg direkt los!\n\n⚠️ **Wichtiger Hinweis:** Bitte hab bei deinen Anfragen etwas Geduld. Da die KI-Modelle in dieser kostenlosen Version laufen, sind sie zeitweise sehr schnell ausgelastet. Eine Antwort kann daher manchmal 10–15 Sekunden dauern.`;
-                
-                // Chat-Verlauf leeren und neue personalisierte Nachricht anzeigen
+                let welcomeText = `Hallo **${userName||'Gast'}**! 👋 Schön, dass du da bist.`;
+                if (userJob) welcomeText += ` Ich habe notiert, dass du dich für den Bereich **${userJob}** interessierst.`;
+                welcomeText += `\n\nDein Coach ist startbereit. Lade links deinen Lebenslauf hoch oder wähle unten eine Funktion!\n\n⚠️ **Tipp:** Die KI-Modelle sind kostenlos – eine Antwort kann 10–30 Sek. dauern.`;
                 chatHistory.innerHTML = '';
                 addMessage('ai', welcomeText);
             }
