@@ -523,13 +523,13 @@
                             <span class="text-xs" style="color:var(--text-muted)">jetzt</span>
                         </div>
                         <div class="rounded-2xl rounded-tl-sm p-4 prose-bubble" style="background:var(--bg-card);border:1px solid var(--border)">
-                            <p>Willkommen! Ich bin dein <strong>Tiep Coach</strong> – dein KI-Karrierebegleiter.</p>
+                            <p>Willkommen! Beruflich neu orientieren – mit deinem persönlicher KI-Karrierebegleiter</p>
                             <p style="margin-top:0.5rem">Ich helfe dir bei:</p>
                             <ul>
                                 <li>📄 <strong>Lebenslauf-Optimierung</strong> – lade dein Dokument hoch</li>
                                 <li>📊 <strong>Businessplan erstellen</strong> – Schritt für Schritt</li>
                                 <li>☯️ <strong>Ikigai-Analyse</strong> – finde deine Berufung</li>
-                                <li>💬 <strong>Karriereberatung</strong> – stell mir deine Fragen</li>
+                                <li>💬 <strong>Interview trainieren</strong> – werde sicherer im Vorstellungsgespräch.</li>
                             </ul>
                             <p style="margin-top:0.75rem;color:#9aa0a6;font-size:0.875rem">Bei tiefgreifenden Themen vermittle ich dich gerne an einen <a href="mailto:coach@tiep.de" style="color:#5bba6f">echten Coach</a>.</p>
                         </div>
@@ -558,25 +558,22 @@
         </div>
     </div>
 
-    <div class="p-6 border-t border-[#2a2b2e] bg-[#0f0f10]">
-    <div class="max-w-4xl mx-auto relative flex items-center bg-[#1e1f21] rounded-2xl border border-[#2a2b2e] focus-within:border-[#4285f4] transition-all duration-200 shadow-lg px-4 py-3">
-        
-        <input 
-            type="text" 
-            id="user-input" 
-            class="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none pr-12 text-base" 
-            placeholder="Schreibe eine Nachricht…"
-        >
-        
-        <button 
-            id="send-btn" 
-            class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#4285f4] hover:bg-[#3574de] active:scale-95 text-white rounded-xl flex items-center justify-center transition-all shadow-md"
-        >
-            <i class="fas fa-arrow-up text-white text-sm"></i>
-        </button>
-
+    <div class="p-4 flex-shrink-0" style="background:var(--bg-main)">
+        <div class="max-w-2xl mx-auto">
+            <div class="input-wrap flex items-end gap-2 px-4 py-3">
+                <textarea id="user-input" rows="1" class="flex-1 bg-transparent outline-none resize-none text-sm" style="color:var(--text-primary);max-height:120px;overflow-y:auto;line-height:1.5" placeholder="Schreibe eine Nachricht…"></textarea>
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <button id="mic-btn" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors">
+                        <i class="fas fa-microphone text-sm" style="color:var(--text-muted)"></i>
+                    </button>
+                    <button id="send-btn" class="w-9 h-9 g-bg rounded-full flex items-center justify-center hover:opacity-90 transition-opacity">
+                        <i class="fas fa-arrow-up text-white text-sm"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="text-center text-xs mt-1.5" style="color:var(--text-muted)">Enter zum Senden • KI-Karriereberatung • Keine Speicherung</p>
+        </div>
     </div>
-</div>
 </div>
 
 <script>
