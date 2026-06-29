@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tiep Vu Xuan - Bald wieder online!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .message {
+            color: #555;
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .status {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        .greeting {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .message {
+                font-size: 1.1em;
+            }
+            .container {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🏗️</div>
+        <h1>Tiep Vu Xuan</h1>
+        <div class="message">
+            Entschuldigung! Unsere Website befindet sich gerade im Neubau.
+            <br><br>
+            Wir arbeiten mit voller Energie daran, Ihnen bald ein noch besseres Erlebnis zu bieten.
+        </div>
+        <div class="status">
+            🚧 In Arbeit – Bald wieder da!
+        </div>
+        <div class="greeting">
+            Vielen Dank für Ihren Besuch!<br>
+            Besuchen Sie uns bald wieder – wir freuen uns auf Sie! 👋
+        </div>
+            <footer>
+                © 2026 Tiep Vu Xuan
+            </footer>
+    </div>
+
+    <script>
+        // Optional: Automatische Weiterleitung in 10 Sekunden
+        // setTimeout(() => {
+        //     window.location.href = '/';
+        // }, 10000);
+        
+        console.log('Tiep Vu Xuan - Bald wieder online! 🚀');
+    </script>
+</body>
+</html>
